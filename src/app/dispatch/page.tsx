@@ -1,15 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { findOptimalHospital, MOCK_HOSPITALS, PatientRequest, MatchResult } from "@/lib/matching";
 
 export default function DispatchCommandPage() {
   return (
-    <div className="p-4 h-full grid grid-cols-12 gap-4 overflow-hidden">
+    <div className="p-4 h-full flex flex-col lg:grid lg:grid-cols-12 gap-4 overflow-y-auto lg:overflow-hidden pb-8 lg:pb-4">
       {/* Left: Asset Monitor */}
-      <section className="col-span-3 flex flex-col gap-4 h-full">
+      <section className="lg:col-span-3 flex flex-col gap-4 lg:h-full min-h-[400px] lg:min-h-0 order-2 lg:order-1">
         <div className="glass-panel p-6 rounded-lg flex flex-col h-full overflow-hidden">
-          <div className="flex justify-between items-center mb-6">
+          <div className="flex justify-between items-center mb-6 shrink-0">
             <h2 className="font-caps text-tertiary uppercase text-sm tracking-widest font-bold">Asset Monitor</h2>
             <span className="material-symbols-outlined text-tertiary">sensors</span>
           </div>
@@ -74,7 +73,7 @@ export default function DispatchCommandPage() {
       </section>
 
       {/* Center: Real-Time Tactical Map */}
-      <section className="col-span-6 relative h-full">
+      <section className="lg:col-span-6 relative h-[400px] lg:h-full min-h-[400px] shrink-0 order-1 lg:order-2">
         <div className="absolute inset-0 rounded-xl overflow-hidden glass-panel border-primary/30 shadow-[0_0_40px_rgba(239,68,68,0.1)] flex flex-col">
           <div className="absolute inset-0 z-0 bg-[#0a0a0a]">
             <img 
@@ -85,15 +84,15 @@ export default function DispatchCommandPage() {
           </div>
           
           {/* Map UI Overlays */}
-          <div className="absolute inset-0 pointer-events-none p-6 flex flex-col">
-            <div className="flex justify-between shrink-0">
-              <div className="bg-black/60 backdrop-blur-md p-4 border-b border-r border-white/10">
-                <p className="text-[10px] text-secondary tracking-[0.2em] font-caps uppercase font-bold">Coordinates</p>
-                <p className="font-mono font-medium text-white text-xs mt-1">6°27&apos;11&quot;N 3°23&apos;45&quot;E</p>
+          <div className="absolute inset-0 pointer-events-none p-4 md:p-6 flex flex-col">
+            <div className="flex flex-col sm:flex-row justify-between shrink-0 gap-2 sm:gap-0">
+              <div className="bg-black/60 backdrop-blur-md p-3 md:p-4 border-b border-r border-white/10 w-fit">
+                <p className="text-[8px] md:text-[10px] text-secondary tracking-[0.2em] font-caps uppercase font-bold">Coordinates</p>
+                <p className="font-mono font-medium text-white text-[10px] md:text-xs mt-1">6°27&apos;11&quot;N 3°23&apos;45&quot;E</p>
               </div>
-              <div className="bg-black/60 backdrop-blur-md p-4 border-b border-l border-white/10 text-right">
-                <p className="text-[10px] text-tertiary tracking-[0.2em] font-caps uppercase font-bold">Signal Strength</p>
-                <p className="font-mono font-medium text-white text-xs mt-1">99.8% CRYPTO-LINK</p>
+              <div className="bg-black/60 backdrop-blur-md p-3 md:p-4 border-b border-l border-white/10 text-left sm:text-right w-fit self-end sm:self-auto">
+                <p className="text-[8px] md:text-[10px] text-tertiary tracking-[0.2em] font-caps uppercase font-bold">Signal Strength</p>
+                <p className="font-mono font-medium text-white text-[10px] md:text-xs mt-1">99.8% CRYPTO-LINK</p>
               </div>
             </div>
             
@@ -125,18 +124,18 @@ export default function DispatchCommandPage() {
             </div>
             
             <div className="mt-auto flex justify-center pb-2 shrink-0 pointer-events-auto">
-              <div className="bg-black/80 backdrop-blur-xl border border-white/10 px-6 py-3 rounded-full flex gap-8">
+              <div className="bg-black/80 backdrop-blur-xl border border-white/10 px-4 md:px-6 py-2 md:py-3 rounded-xl md:rounded-full flex flex-wrap justify-center gap-4 md:gap-8">
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-primary"></span>
-                  <span className="text-[10px] text-white font-caps uppercase font-bold tracking-widest">Fleet</span>
+                  <span className="text-[8px] md:text-[10px] text-white font-caps uppercase font-bold tracking-widest">Fleet</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-tertiary"></span>
-                  <span className="text-[10px] text-white font-caps uppercase font-bold tracking-widest">Medical Hubs</span>
+                  <span className="text-[8px] md:text-[10px] text-white font-caps uppercase font-bold tracking-widest">Medical Hubs</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-secondary"></span>
-                  <span className="text-[10px] text-white font-caps uppercase font-bold tracking-widest">Active Incidents</span>
+                  <span className="text-[8px] md:text-[10px] text-white font-caps uppercase font-bold tracking-widest">Active Incidents</span>
                 </div>
               </div>
             </div>
@@ -145,9 +144,9 @@ export default function DispatchCommandPage() {
       </section>
 
       {/* Right: Live Alerts Feed */}
-      <section className="col-span-3 flex flex-col gap-4 h-full">
+      <section className="lg:col-span-3 flex flex-col gap-4 lg:h-full min-h-[400px] lg:min-h-0 order-3 lg:order-3">
         <div className="glass-panel p-6 rounded-lg flex flex-col h-full overflow-hidden">
-          <div className="flex justify-between items-center mb-6">
+          <div className="flex justify-between items-center mb-6 shrink-0">
             <h2 className="font-caps text-primary uppercase text-sm tracking-widest font-bold">Live Alerts</h2>
             <span className="material-symbols-outlined text-primary heartbeat">wifi_tethering</span>
           </div>
@@ -171,7 +170,7 @@ export default function DispatchCommandPage() {
                 <p className="text-[9px] text-slate-400">ICU Bed 04 Available | Cardiology Team On-Site</p>
               </div>
               <div className="flex gap-2">
-                <button className="flex-grow bg-primary text-white text-[10px] font-bold py-2.5 rounded uppercase tracking-widest hover:glow-red transition-all font-caps">Dispatch Amber 01</button>
+                <button className="flex-grow bg-primary text-white text-[10px] font-bold py-2.5 rounded uppercase tracking-widest hover:glow-red transition-all font-caps shadow-lg shadow-primary/20">Dispatch Amber 01</button>
                 <button className="p-2 border border-white/10 rounded text-slate-400 hover:text-white transition-colors">
                   <span className="material-symbols-outlined text-sm">more_vert</span>
                 </button>
@@ -209,7 +208,7 @@ export default function DispatchCommandPage() {
       </section>
       
       {/* Visual Footer Accent */}
-      <footer className="fixed bottom-0 left-64 right-0 h-1 bg-gradient-to-r from-transparent via-primary/20 to-transparent"></footer>
+      <footer className="fixed bottom-0 md:left-64 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary/20 to-transparent z-50"></footer>
     </div>
   );
 }
