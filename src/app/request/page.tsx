@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { AmberLogo } from "@/components/amber-logo";
+import { MapHUD } from "@/components/MapHUD";
+import { mockStore } from "@/lib/mock-store";
 import Link from "next/link";
 
 type Stage = "request" | "matching" | "tracking" | "arrived";
@@ -55,13 +57,12 @@ export default function RequestPage() {
         return newDist > 0 ? parseFloat(newDist.toFixed(2)) : 0;
       });
 
-      // Vary speed slightly for realism
       setSpeed(() => {
         const base = 84;
-        const jitter = Math.floor(Math.random() * 12) - 6;
+        const jitter = Math.floor(Math.random() * 10) - 5;
         return base + jitter;
       });
-    }, 250); // 4x faster: 4 min in-app ≈ 1 min real time
+    }, 1000); // 1:1 real-time for believability
 
     return () => clearInterval(interval);
   }, [stage]);
@@ -94,6 +95,18 @@ export default function RequestPage() {
           setDistance(2.4);
           setSpeed(84);
           setStage("tracking");
+
+          // Dispatch to global network
+          if (mockStore) {
+            mockStore.dispatchIncident({
+              id: "INC-" + Math.floor(Math.random() * 10000),
+              type: EMERGENCY_TYPES[selectedType].label,
+              location: location,
+              eta: "04:00",
+              hospital: "Blue Cross Hospital, Apapa",
+              patient: "Priority Member #1204"
+            });
+          }
         }, 1000);
       }
     }, 1200);
@@ -108,9 +121,14 @@ export default function RequestPage() {
     return (
       <div className="min-h-screen bg-slate-50 selection:bg-primary/30">
         <header className="sticky top-0 z-50 bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between">
-          <Link href="/">
-            <AmberLogo className="h-10 w-auto" />
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link href="/" className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-slate-50 text-slate-400 hover:text-slate-900 transition-all">
+              <span className="material-symbols-outlined text-xl">chevron_left</span>
+            </Link>
+            <Link href="/">
+              <AmberLogo className="h-10 w-auto" />
+            </Link>
+          </div>
           <Link href="/login" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors">
             Sign In
           </Link>
@@ -221,11 +239,20 @@ export default function RequestPage() {
           {/* Steps */}
           <div className="space-y-4 text-left">
             {MATCH_STEPS.map((step, i) => (
-              <div key={step} className={`flex items-center gap-3 text-sm transition-opacity duration-300 ${i <= matchStep ? "opacity-100" : "opacity-30"}`}>
-                <span className={`material-symbols-outlined text-lg ${i < matchStep ? "text-emerald-500" : i === matchStep ? "text-primary" : "text-slate-300"}`}>
-                  {i < matchStep ? "check_circle" : i === matchStep ? "pending" : "radio_button_unchecked"}
-                </span>
-                <span className={i <= matchStep ? "text-slate-900 font-medium" : "text-slate-400"}>{step}</span>
+              <div key={step} className={`flex flex-col gap-1 transition-opacity duration-300 ${i <= matchStep ? "opacity-100" : "opacity-30"}`}>
+                <div className="flex items-center gap-3 text-sm">
+                  <span className={`material-symbols-outlined text-lg ${i < matchStep ? "text-emerald-500" : i === matchStep ? "text-primary" : "text-slate-300"}`}>
+                    {i < matchStep ? "check_circle" : i === matchStep ? "pending" : "radio_button_unchecked"}
+                  </span>
+                  <span className={i <= matchStep ? "text-slate-900 font-medium" : "text-slate-400"}>{step}</span>
+                </div>
+                {i === matchStep && i < 3 && (
+                  <div className="ml-8 text-[10px] text-slate-400 font-mono animate-in slide-in-from-left-2">
+                    {i === 0 && "> Scanning 12 facilities in Sector 4..."}
+                    {i === 1 && "> Analyzing Reddington: 92% Match (Trauma Specialist)"}
+                    {i === 2 && "> Specialist On-Call: Dr. Okafor (Available)"}
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -313,100 +340,104 @@ export default function RequestPage() {
   const eta = formatEta(etaSeconds);
 
   return (
-    <div className="min-h-screen bg-slate-50 selection:bg-primary/30">
-      <header className="sticky top-0 z-50 bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between">
-        <Link href="/">
-          <AmberLogo className="h-10 w-auto" />
-        </Link>
-        <div className="flex items-center gap-2 text-emerald-600 text-sm font-semibold">
-          <span className="inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+    <div className="min-h-screen bg-slate-50 selection:bg-primary/30 font-body">
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100 px-6 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Link href="/" className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-slate-50 text-slate-400 hover:text-slate-900 transition-all">
+            <span className="material-symbols-outlined text-xl">chevron_left</span>
+          </Link>
+          <Link href="/">
+            <AmberLogo className="h-8 w-auto" />
+          </Link>
+        </div>
+        <div className="flex items-center gap-2 text-emerald-600 text-[10px] font-black uppercase tracking-widest font-caps">
+          <span className="inline-flex rounded-full h-2 w-2 bg-emerald-500 heartbeat"></span>
           Ambulance en route
         </div>
       </header>
 
-      <div className="max-w-lg mx-auto px-6 py-8">
-        {/* Map */}
-        <div className="aspect-video bg-slate-200 rounded-2xl mb-6 relative overflow-hidden border border-slate-200">
-          <img
-            alt="Map"
-            className="absolute inset-0 w-full h-full object-cover opacity-70"
-            src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80"
+      <div className="max-w-lg mx-auto px-6 py-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+        {/* Map Upgrade */}
+        <div className="aspect-[4/3] sm:aspect-video bg-slate-200 rounded-3xl mb-6 relative overflow-hidden shadow-2xl shadow-slate-200 border border-white">
+          <MapHUD 
+            className="absolute inset-0"
+            zoom={14}
+            center={[6.48, 3.37]}
+            simulateMovement={true}
+            markers={[
+              { id: 'user', lng: 3.37, lat: 6.48, type: 'incident', label: 'My Location' },
+              { id: 'ambulance', lng: 3.38, lat: 6.49, type: 'ambulance', label: 'AMB-01' }
+            ]}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-white/60 to-transparent" />
-          <div className="absolute top-4 left-4 bg-white border border-slate-200 rounded-lg px-3 py-1.5 shadow-sm">
-            <span className="font-mono font-medium text-[10px] text-slate-700">Apapa Wharf, Lagos</span>
-          </div>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-14 h-14 border border-primary bg-primary/10 rounded-full flex items-center justify-center shadow-lg shadow-primary/20">
-              <span className="material-symbols-outlined text-primary text-3xl">ambulance</span>
-            </div>
+          <div className="absolute top-4 left-4 bg-white/90 backdrop-blur border border-slate-100 rounded-xl px-4 py-2 shadow-xl">
+            <span className="font-caps font-black text-[10px] text-slate-900 uppercase tracking-widest">{location || "Apapa Wharf, Lagos"}</span>
           </div>
         </div>
 
-        {/* ETA Card */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-lg mb-4">
-          <div className="flex items-center justify-between mb-4">
+        {/* ETA Card Upgrade */}
+        <div className="bg-white border border-slate-100 rounded-3xl p-8 shadow-xl shadow-slate-200/50 mb-6 relative overflow-hidden">
+          <div className="flex items-center justify-between mb-8">
             <div>
-              <p className="text-xs text-slate-500 font-medium">Arriving in</p>
-              <div className="flex items-baseline gap-1">
-                <span className="text-4xl font-display font-bold text-slate-900">{eta.mins}</span>
-                <span className="text-lg text-slate-400 font-medium">min</span>
-                <span className="text-4xl font-display font-bold text-slate-900 ml-1">{eta.secs.toString().padStart(2, "0")}</span>
-                <span className="text-lg text-slate-400 font-medium">sec</span>
+              <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] mb-1">Arriving in</p>
+              <div className="flex items-baseline gap-2">
+                <span className="text-5xl font-display font-black text-slate-900 leading-none">{eta.mins}</span>
+                <span className="text-sm text-slate-400 font-bold uppercase tracking-widest">min</span>
+                <span className="text-5xl font-display font-black text-slate-900 leading-none ml-2">{eta.secs.toString().padStart(2, "0")}</span>
+                <span className="text-sm text-slate-400 font-bold uppercase tracking-widest">sec</span>
               </div>
             </div>
             <div className="text-right">
-              <p className="font-mono font-semibold text-slate-900">AMB-01</p>
-              <p className="text-xs text-emerald-600 font-medium">En route to you</p>
+              <p className="font-display font-black text-slate-900 text-lg">AMB-01</p>
+              <p className="text-[10px] text-emerald-500 font-black uppercase tracking-widest">En route to you</p>
             </div>
           </div>
 
-          {/* Progress bar */}
-          <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden mb-6">
+          {/* Progress bar upgrade to Red */}
+          <div className="h-1.5 bg-slate-50 rounded-full overflow-hidden mb-8">
             <div
-              className="h-full bg-primary rounded-full transition-all duration-1000 ease-linear"
+              className="h-full bg-primary rounded-full transition-all duration-1000 ease-linear shadow-[0_0_10px_rgba(239,68,68,0.5)]"
               style={{ width: `${progressPercent}%` }}
             ></div>
           </div>
 
-          <div className="grid grid-cols-3 gap-4 text-center border-t border-slate-100 pt-4">
-            <div>
-              <p className="text-xs text-slate-500">Speed</p>
-              <p className="font-mono font-semibold text-slate-900">{speed} km/h</p>
+          <div className="grid grid-cols-3 gap-6 text-center border-t border-slate-50 pt-8">
+            <div className="space-y-1">
+              <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest">Speed</p>
+              <p className="font-mono font-black text-slate-900">{speed} <span className="text-[10px] text-slate-400">km/h</span></p>
             </div>
-            <div>
-              <p className="text-xs text-slate-500">Distance</p>
-              <p className="font-mono font-semibold text-slate-900">{distance} km</p>
+            <div className="space-y-1 border-x border-slate-50">
+              <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest">Distance</p>
+              <p className="font-mono font-black text-slate-900">{distance} <span className="text-[10px] text-slate-400">km</span></p>
             </div>
-            <div>
-              <p className="text-xs text-slate-500">Unit</p>
-              <p className="font-mono font-semibold text-slate-900">AMB-01</p>
+            <div className="space-y-1">
+              <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest">Unit</p>
+              <p className="font-mono font-black text-slate-900">AMB-01</p>
             </div>
           </div>
         </div>
 
-        {/* Crew + Hospital info */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm mb-4">
-          <div className="flex items-center gap-4 mb-4 pb-4 border-b border-slate-100">
-            <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center">
-              <span className="material-symbols-outlined text-slate-600">person</span>
+        {/* Crew + Hospital info Upgrade */}
+        <div className="bg-white border border-slate-100 rounded-3xl p-4 shadow-xl shadow-slate-200/50 mb-8 space-y-4">
+          <div className="flex items-center gap-4 p-4 bg-slate-50/50 rounded-2xl">
+            <div className="w-14 h-14 bg-white border border-slate-100 rounded-full flex items-center justify-center shadow-sm">
+              <span className="material-symbols-outlined text-slate-400 text-3xl">person</span>
             </div>
-            <div>
-              <p className="font-semibold text-slate-900 text-sm">Sgt. Tunde Bakare</p>
-              <p className="text-xs text-slate-500">Lead Paramedic · AMB-01</p>
+            <div className="flex-1">
+              <p className="font-display font-black text-slate-900 text-sm uppercase">Sgt. Tunde Bakare</p>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Lead Paramedic · AMB-01</p>
             </div>
-            <a href="tel:+2341234567890" className="ml-auto w-10 h-10 bg-emerald-50 border border-emerald-200 rounded-full flex items-center justify-center">
-              <span className="material-symbols-outlined text-emerald-600 text-lg">call</span>
+            <a href="tel:+2341234567890" className="w-12 h-12 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/10 hover:scale-105 transition-transform active:scale-95">
+              <span className="material-symbols-outlined text-xl">call</span>
             </a>
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-              <span className="material-symbols-outlined text-primary">local_hospital</span>
+          <div className="flex items-center gap-4 p-4">
+            <div className="w-14 h-14 bg-primary/5 rounded-2xl flex items-center justify-center text-primary border border-primary/10">
+              <span className="material-symbols-outlined text-3xl">local_hospital</span>
             </div>
             <div>
-              <p className="font-semibold text-slate-900 text-sm">Blue Cross Hospital, Apapa</p>
-              <p className="text-xs text-slate-500">ER Bed confirmed · Dr. Ngozi Okafor (Trauma)</p>
+              <p className="font-display font-black text-slate-900 text-sm uppercase">Blue Cross Hospital, Apapa</p>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">ER Bed confirmed · Dr. Ngozi Okafor</p>
             </div>
           </div>
         </div>
@@ -414,13 +445,15 @@ export default function RequestPage() {
         {/* Cancel */}
         <button
           onClick={() => {
-            setStage("request");
-            setSelectedType(null);
-            setLocation("");
-            setDetails("");
-            setEtaSeconds(240);
+            if (confirm("Are you sure you want to cancel this emergency request?")) {
+              setStage("request");
+              setSelectedType(null);
+              setLocation("");
+              setDetails("");
+              setEtaSeconds(240);
+            }
           }}
-          className="w-full py-3 text-sm font-medium text-slate-500 hover:text-primary transition-colors"
+          className="w-full py-4 text-[10px] font-black text-slate-400 hover:text-primary transition-all uppercase tracking-[0.3em] font-caps"
         >
           Cancel request
         </button>

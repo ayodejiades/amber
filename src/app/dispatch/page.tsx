@@ -2,6 +2,8 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import { MapHUD } from "@/components/MapHUD";
+import { mockStore } from "@/lib/mock-store";
 
 const EMERGENCY_TYPES = [
   { label: "Road Accident", icon: "car_crash" },
@@ -13,9 +15,9 @@ const EMERGENCY_TYPES = [
 ];
 
 const AVAILABLE_UNITS = [
-  { id: "AMB-05", location: "Hub 4, Surulere", eta: "6 min" },
-  { id: "AMB-08", location: "Costain, Apapa", eta: "3 min" },
-  { id: "AMB-14", location: "Orile Depot", eta: "9 min" },
+  { id: "AMB-05", location: "Hub 4, Surulere", eta: "6 min", lng: 3.36, lat: 6.50 },
+  { id: "AMB-08", location: "Costain, Apapa", eta: "3 min", lng: 3.37, lat: 6.48 },
+  { id: "AMB-14", location: "Orile Depot", eta: "9 min", lng: 3.34, lat: 6.49 },
 ];
 
 export default function DispatchOverviewPage() {
@@ -33,6 +35,7 @@ function DispatchContent() {
   const [selectedType, setSelectedType] = useState<number | null>(null);
   const [incidentLocation, setIncidentLocation] = useState("");
   const [selectedUnit, setSelectedUnit] = useState<number | null>(null);
+  const [showHeatmap, setShowHeatmap] = useState(false);
 
   useEffect(() => {
     if (searchParams.get("newEmergency") === "true") {
@@ -48,7 +51,7 @@ function DispatchContent() {
     setSelectedUnit(null);
   };
 
-  const handleDispatch = () => {
+  const handleDispatchAction = () => {
     if (selectedType === null || !incidentLocation) return;
     setModalStep("matching");
 
@@ -56,6 +59,18 @@ function DispatchContent() {
     setTimeout(() => {
       setSelectedUnit(1); // Auto-select AMB-08 (closest)
       setModalStep("dispatched");
+      
+      // Send to mock store for cross-portal handshake
+      if (mockStore) {
+        mockStore.dispatchIncident({
+          id: "INC-" + Math.floor(Math.random() * 10000),
+          type: EMERGENCY_TYPES[selectedType].label,
+          location: incidentLocation,
+          eta: "03:00",
+          hospital: "Blue Cross Hospital, Apapa",
+          patient: "Priority Member #1204"
+        });
+      }
     }, 2500);
   };
 
@@ -82,7 +97,7 @@ function DispatchContent() {
                 </div>
                 <span className="text-[10px] text-slate-500 font-bold font-mono">ETA 04m</span>
               </div>
-              <div className="text-xs text-slate-600 mb-2 font-mono">
+              <div className="text-xs text-slate-600 mb-2 font-mono truncate">
                 TO: APAPA WHARF
               </div>
               <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
@@ -119,67 +134,35 @@ function DispatchContent() {
         </div>
       </section>
 
-      {/* Center: Live Network Monitor */}
+      {/* Center: Live Network Monitor (Mapbox) */}
       <section className="lg:col-span-6 flex flex-col gap-4">
-        <div className="bg-white border border-slate-200 rounded-xl flex-1 relative overflow-hidden shadow-sm flex flex-col min-h-[400px]">
-          <div className="absolute inset-0 z-0">
-            <img 
-              alt="Map" 
-              className="w-full h-full object-cover opacity-50 grayscale" 
-              src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80" 
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-white/90 via-transparent to-white/90"></div>
-          </div>
-          
-          <div className="relative z-10 p-4 flex justify-between items-start shrink-0">
-            <h2 className="font-display font-bold text-slate-900 text-sm flex items-center gap-2 bg-white/80 px-3 py-1.5 rounded-lg border border-slate-200">
-              <span className="material-symbols-outlined text-primary text-base">my_location</span> Live Network Monitor
-            </h2>
-            <div className="flex gap-2">
-              <span className="bg-white border border-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-[10px] font-semibold flex items-center gap-2 shadow-sm">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                Connected
-              </span>
+        <MapHUD 
+          className="flex-1 min-h-[400px]"
+          simulateMovement={true}
+          showHeatmap={showHeatmap}
+          markers={[
+            { id: 'amb-01', lng: 3.37, lat: 6.51, type: 'ambulance', label: 'AMB-01' },
+            { id: 'luth', lng: 3.36, lat: 6.52, type: 'hospital', label: 'LUTH' },
+            { id: 'incident-1', lng: 3.38, lat: 6.50, type: 'incident', label: 'Cardiac VI' }
+          ]}
+        />
+        
+        <div className="bg-white border border-slate-200 p-4 rounded-xl flex flex-col sm:flex-row justify-between items-center gap-4 shadow-lg shrink-0">
+          <div>
+            <p className="text-[10px] font-semibold text-slate-500 mb-1">Selected Unit</p>
+            <div className="flex items-center gap-3">
+              <span className="font-display font-bold text-xl text-slate-900">AMB-01</span>
+              <span className="bg-primary/10 text-primary px-2 py-0.5 rounded text-[10px] font-semibold border border-primary/20">Critical</span>
             </div>
           </div>
-
-          {/* Map Entities */}
-          <div className="relative z-10 flex-1 w-full h-full">
-            {/* Active Incident */}
-            <div className="absolute top-1/2 left-1/3 transform -translate-x-1/2 -translate-y-1/2">
-              <div className="w-12 h-12 border border-primary bg-primary/10 rounded-full flex items-center justify-center relative z-10 text-primary">
-                <span className="material-symbols-outlined text-2xl">emergency</span>
-              </div>
+          <div className="flex gap-4 md:gap-6 text-right w-full sm:w-auto justify-between sm:justify-end border-t border-slate-100 sm:border-0 pt-3 sm:pt-0">
+            <div>
+              <span className="block text-[10px] font-medium text-slate-500">ETA</span>
+              <span className="font-mono font-bold text-lg text-primary">04:12</span>
             </div>
-
-            {/* Hospital Node */}
-            <div className="absolute top-1/4 right-1/4 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
-              <div className="w-8 h-8 border border-emerald-500 bg-white rounded-lg flex items-center justify-center shadow-lg relative z-10 text-emerald-600">
-                <span className="material-symbols-outlined text-lg">local_hospital</span>
-              </div>
-              <span className="mt-1 bg-white border border-slate-200 text-slate-700 text-[8px] font-bold px-1.5 py-0.5 rounded shadow-sm">LUTH</span>
-            </div>
-          </div>
-
-          <div className="relative z-10 p-4 shrink-0">
-            <div className="bg-white border border-slate-200 p-4 rounded-xl flex flex-col sm:flex-row justify-between items-center gap-4 shadow-lg">
-              <div>
-                <p className="text-[10px] font-semibold text-slate-500 mb-1">Selected Unit</p>
-                <div className="flex items-center gap-3">
-                  <span className="font-display font-bold text-xl text-slate-900">AMB-01</span>
-                  <span className="bg-primary/10 text-primary px-2 py-0.5 rounded text-[10px] font-semibold border border-primary/20">Critical</span>
-                </div>
-              </div>
-              <div className="flex gap-4 md:gap-6 text-right w-full sm:w-auto justify-between sm:justify-end border-t border-slate-100 sm:border-0 pt-3 sm:pt-0">
-                <div>
-                  <span className="block text-[10px] font-medium text-slate-500">ETA</span>
-                  <span className="font-mono font-bold text-lg text-primary">04:12</span>
-                </div>
-                <div>
-                  <span className="block text-[10px] font-medium text-slate-500">Speed</span>
-                  <span className="font-mono font-bold text-lg text-slate-900">84 km/h</span>
-                </div>
-              </div>
+            <div>
+              <span className="block text-[10px] font-medium text-slate-500">Speed</span>
+              <span className="font-mono font-bold text-lg text-slate-900">84 km/h</span>
             </div>
           </div>
         </div>
@@ -223,9 +206,22 @@ function DispatchContent() {
               </div>
             </div>
             
-            <div className="pt-4 border-t border-slate-100">
-              <button className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-4 rounded-lg text-xs shadow-lg shadow-primary/20 transition-colors flex items-center justify-center gap-2">
-                <span className="material-symbols-outlined text-sm">send</span> Send Amber 01
+            <div className="pt-4 border-t border-slate-100 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Predictive Heatmap</span>
+                <button 
+                  onClick={() => setShowHeatmap(!showHeatmap)}
+                  className={`w-10 h-5 rounded-full relative transition-colors ${showHeatmap ? 'bg-primary' : 'bg-slate-200'}`}
+                >
+                  <div className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-all ${showHeatmap ? 'left-6' : 'left-1'}`}></div>
+                </button>
+              </div>
+              
+              <button 
+                onClick={openModal}
+                className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-4 rounded-lg text-xs shadow-lg shadow-primary/20 transition-colors flex items-center justify-center gap-2 uppercase tracking-widest font-caps"
+              >
+                <span className="material-symbols-outlined text-sm">add</span> New Emergency
               </button>
             </div>
           </div>
@@ -235,8 +231,8 @@ function DispatchContent() {
       {/* New Emergency Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/40" onClick={() => setShowModal(false)}></div>
-          <div className="relative bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md max-h-[90vh] overflow-y-auto">
+          <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={() => setShowModal(false)}></div>
+          <div className="relative bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in duration-200">
             
             {/* Modal Header */}
             <div className="sticky top-0 bg-white border-b border-slate-100 p-5 flex justify-between items-center rounded-t-2xl z-10">
@@ -245,8 +241,8 @@ function DispatchContent() {
                   <span className="material-symbols-outlined text-primary">emergency</span>
                 </div>
                 <div>
-                  <h2 className="font-display font-bold text-slate-900">New Emergency</h2>
-                  <p className="text-xs text-slate-500">Dispatch an ambulance to the scene</p>
+                  <h2 className="font-display font-bold text-slate-900">Protocol Initiation</h2>
+                  <p className="text-xs text-slate-500">Manual dispatch override</p>
                 </div>
               </div>
               <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-600 transition-colors">
@@ -260,17 +256,17 @@ function DispatchContent() {
                 <div className="space-y-5">
                   {/* Emergency Type Grid */}
                   <div className="space-y-2">
-                    <label className="text-xs font-semibold text-slate-500">Emergency Type</label>
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-widest">Incident Type</label>
                     <div className="grid grid-cols-3 gap-2">
                       {EMERGENCY_TYPES.map((type, i) => (
                         <button
                           key={type.label}
                           type="button"
                           onClick={() => setSelectedType(i)}
-                          className={`flex flex-col items-center gap-1.5 px-3 py-3 rounded-xl border text-xs font-medium transition-colors ${
+                          className={`flex flex-col items-center gap-1.5 px-3 py-3 rounded-xl border text-[10px] font-bold transition-all uppercase tracking-tight ${
                             selectedType === i
                               ? "border-primary bg-primary/5 text-primary"
-                              : "border-slate-200 bg-white text-slate-600 hover:border-slate-300"
+                              : "border-slate-100 bg-slate-50 text-slate-500 hover:border-slate-200"
                           }`}
                         >
                           <span className="material-symbols-outlined text-lg">{type.icon}</span>
@@ -282,64 +278,64 @@ function DispatchContent() {
 
                   {/* Incident Location */}
                   <div className="space-y-2">
-                    <label className="text-xs font-semibold text-slate-500">Incident Location</label>
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-widest">Scene Coordinates / Address</label>
                     <div className="relative">
                       <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">location_on</span>
                       <input
                         type="text"
                         value={incidentLocation}
                         onChange={(e) => setIncidentLocation(e.target.value)}
-                        placeholder="Enter address or landmark"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-10 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 text-sm text-slate-900 placeholder:text-slate-400"
+                        placeholder="Enter scene location..."
+                        className="w-full bg-slate-50 border border-slate-100 rounded-xl px-10 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm text-slate-900 placeholder:text-slate-400 font-medium"
                       />
                     </div>
                   </div>
 
                   {/* Patient Info */}
                   <div className="space-y-2">
-                    <label className="text-xs font-semibold text-slate-500">Caller Info <span className="text-slate-400 font-normal">(optional)</span></label>
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-widest">Initial Assessment <span className="text-slate-300 font-normal">(optional)</span></label>
                     <textarea
-                      placeholder="Patient details, vitals, number of casualties..."
+                      placeholder="Enter patient status or triage notes..."
                       rows={2}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 text-sm text-slate-900 placeholder:text-slate-400 resize-none"
+                      className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm text-slate-900 placeholder:text-slate-400 resize-none font-medium"
                     />
                   </div>
 
                   {/* Dispatch Button */}
                   <button
-                    onClick={handleDispatch}
+                    onClick={handleDispatchAction}
                     disabled={selectedType === null || !incidentLocation}
-                    className="w-full py-3.5 bg-primary text-white rounded-xl font-semibold text-sm shadow-lg shadow-primary/20 hover:bg-primary/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="w-full py-4 bg-primary text-white rounded-xl font-bold text-sm shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 uppercase tracking-widest font-caps"
                   >
-                    <span className="material-symbols-outlined text-lg">search</span>
-                    Find Ambulance & Hospital
+                    <span className="material-symbols-outlined text-lg">bolt</span>
+                    Identify Hub & Dispatch
                   </button>
                 </div>
               )}
 
               {/* Step 2: Matching */}
               {modalStep === "matching" && (
-                <div className="py-8 text-center">
+                <div className="py-8 text-center animate-pulse">
                   <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <span className="material-symbols-outlined text-primary text-3xl">search</span>
+                    <span className="material-symbols-outlined text-primary text-3xl">radar</span>
                   </div>
-                  <h3 className="font-display font-bold text-slate-900 mb-2">Matching in progress</h3>
-                  <p className="text-sm text-slate-500 mb-8">Scanning hospitals and ambulances...</p>
-                  <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
-                    <div className="h-full bg-primary rounded-full w-2/3 transition-all duration-1000"></div>
+                  <h3 className="font-display font-bold text-slate-900 mb-2 uppercase tracking-tight">System Matching</h3>
+                  <p className="text-xs text-slate-500 mb-8 uppercase font-caps tracking-widest">Scanning Network Assets...</p>
+                  <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-primary rounded-full w-2/3 animate-progress"></div>
                   </div>
-                  <div className="mt-6 space-y-3 text-left text-sm">
+                  <div className="mt-6 space-y-3 text-left text-[11px] font-medium uppercase font-caps tracking-wide">
                     <div className="flex items-center gap-2 text-emerald-600">
-                      <span className="material-symbols-outlined text-lg">check_circle</span>
-                      <span className="font-medium">3 hospitals within range</span>
+                      <span className="material-symbols-outlined text-base">check_circle</span>
+                      <span>Verified: 3 Hospitals within 5km</span>
                     </div>
                     <div className="flex items-center gap-2 text-emerald-600">
-                      <span className="material-symbols-outlined text-lg">check_circle</span>
-                      <span className="font-medium">Blue Cross Hospital — ER bed available</span>
+                      <span className="material-symbols-outlined text-base">check_circle</span>
+                      <span>Matching: Blue Cross VI (Optimal)</span>
                     </div>
                     <div className="flex items-center gap-2 text-primary">
-                      <span className="material-symbols-outlined text-lg">pending</span>
-                      <span className="font-medium">Selecting nearest ambulance...</span>
+                      <span className="material-symbols-outlined text-base animate-spin">sync</span>
+                      <span>Assigning nearest unit...</span>
                     </div>
                   </div>
                 </div>
@@ -349,53 +345,48 @@ function DispatchContent() {
               {modalStep === "dispatched" && (
                 <div className="py-4">
                   <div className="text-center mb-6">
-                    <div className="w-16 h-16 bg-emerald-50 border-2 border-emerald-200 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <span className="material-symbols-outlined text-emerald-600 text-3xl">check</span>
+                    <div className="w-16 h-16 bg-emerald-50 border border-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <span className="material-symbols-outlined text-emerald-600 text-3xl">verified</span>
                     </div>
-                    <h3 className="font-display font-bold text-slate-900 mb-1">Ambulance Dispatched</h3>
-                    <p className="text-sm text-slate-500">Unit assigned and en route to scene.</p>
+                    <h3 className="font-display font-bold text-slate-900 mb-1 uppercase tracking-tight">Unit Dispatched</h3>
+                    <p className="text-xs text-slate-500 font-caps tracking-widest uppercase">Protocol Active · Fleet Synced</p>
                   </div>
 
                   {/* Assignment Summary */}
                   <div className="space-y-3">
-                    <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
-                      <p className="text-xs text-slate-500 font-medium mb-2">Assigned Unit</p>
+                    <div className="bg-slate-50 border border-slate-100 rounded-xl p-4">
+                      <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-3">Assigned Asset</p>
                       <div className="flex justify-between items-center">
                         <div>
-                          <span className="font-mono font-bold text-lg text-slate-900">AMB-08</span>
-                          <p className="text-xs text-slate-500">Costain, Apapa</p>
+                          <span className="font-mono font-black text-xl text-slate-900">AMB-08</span>
+                          <p className="text-[10px] text-slate-500 font-bold uppercase">Sector: Apapa</p>
                         </div>
                         <div className="text-right">
-                          <span className="font-mono font-bold text-lg text-primary">03:00</span>
-                          <p className="text-xs text-slate-500">ETA</p>
+                          <span className="font-mono font-black text-xl text-primary">03:00</span>
+                          <p className="text-[10px] text-slate-500 font-bold uppercase">Live ETA</p>
                         </div>
                       </div>
                     </div>
 
-                    <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
-                      <p className="text-xs text-slate-500 font-medium mb-2">Destination Hospital</p>
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-emerald-50 border border-emerald-200 rounded-full flex items-center justify-center">
-                          <span className="material-symbols-outlined text-emerald-600">local_hospital</span>
+                    <div className="bg-slate-50 border border-slate-100 rounded-xl p-4">
+                      <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-3">Destination Facility</p>
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 bg-emerald-50 border border-emerald-100 rounded-lg flex items-center justify-center text-emerald-600 shrink-0">
+                          <span className="material-symbols-outlined text-2xl">local_hospital</span>
                         </div>
-                        <div>
-                          <p className="font-semibold text-slate-900 text-sm">Blue Cross Hospital, Apapa</p>
-                          <p className="text-xs text-slate-500">ER Bed reserved · Dr. Ngozi Okafor</p>
+                        <div className="min-w-0">
+                          <p className="font-bold text-slate-900 text-sm uppercase truncate">Blue Cross Hospital, VI</p>
+                          <p className="text-[10px] text-emerald-600 font-bold uppercase">ER Bed #04 Reserved</p>
                         </div>
                       </div>
-                    </div>
-
-                    <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-xs text-emerald-700 flex items-center gap-2">
-                      <span className="material-symbols-outlined text-sm">info</span>
-                      Pre-arrival alert sent to hospital. Trauma team notified.
                     </div>
                   </div>
 
                   <button
                     onClick={() => setShowModal(false)}
-                    className="w-full mt-5 py-3.5 bg-slate-900 text-white rounded-xl font-semibold text-sm hover:bg-slate-800 transition-colors"
+                    className="w-full mt-6 py-4 bg-slate-900 text-white rounded-xl font-bold text-xs uppercase tracking-widest font-caps hover:bg-slate-800 transition-all shadow-xl"
                   >
-                    Close
+                    Confirm & Track
                   </button>
                 </div>
               )}
@@ -403,14 +394,6 @@ function DispatchContent() {
           </div>
         </div>
       )}
-
-      {/* Floating New Emergency Button - replaces the sidebar one */}
-      <button
-        onClick={openModal}
-        className="fixed bottom-6 left-6 z-40 lg:hidden bg-primary text-white px-6 py-4 rounded-full font-semibold text-sm shadow-xl shadow-primary/30 hover:bg-primary/90 transition-colors flex items-center gap-2"
-      >
-        <span className="material-symbols-outlined">add</span> New Emergency
-      </button>
     </div>
   );
 }

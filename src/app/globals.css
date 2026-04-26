@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
 
 @theme {
   --color-primary: #EF4444;
@@ -49,6 +50,22 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* ─── Leaflet Map Fixes ─────────────────────────────────────── */
+/* Must live here — <style jsx global> is unsupported in App Router */
+.leaflet-container {
+  width: 100% !important;
+  height: 100% !important;
+  background: #e2e8f0 !important;
+  z-index: 1 !important;
+}
+.leaflet-tile-pane { z-index: 2 !important; }
+.leaflet-marker-pane { z-index: 600 !important; }
+.leaflet-popup-pane { z-index: 700 !important; }
+.leaflet-control { z-index: 800 !important; }
+.leaflet-tile { visibility: visible !important; }
+.custom-div-icon { background: transparent !important; border: none !important; }
+
+/* ─── Utilities ─────────────────────────────────────────────── */
 /* Utilities */
 
 .heartbeat {
