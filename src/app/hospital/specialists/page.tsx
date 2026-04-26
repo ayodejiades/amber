@@ -1,49 +1,49 @@
 "use client";
 
-import { MockDataNotice } from "@/components/mock-data-notice";
-
 export default function HospitalSpecialistsPage() {
   const specialists = [
-    { name: "Dr. Sarah Chen", spec: "Trauma Surgeon", status: "On-Site", phone: "+234 801 234 5678", img: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=100" },
-    { name: "Dr. Marcus Webb", spec: "Cardiologist", status: "On-Site", phone: "+234 802 345 6789", img: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=100" },
-    { name: "Dr. Elena Rostova", spec: "Neurologist", status: "In Surgery", phone: "N/A", img: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&q=80&w=100" },
-    { name: "Dr. John Doe", spec: "ER Specialist", status: "Off-Duty", phone: "+234 803 456 7890", img: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=100" }
+    { name: "Dr. Ngozi Okafor", role: "Trauma Surgeon", status: "Available", dept: "Surgery" },
+    { name: "Dr. Emeka Nwosu", role: "Cardiologist", status: "Available", dept: "Cardiology" },
+    { name: "Dr. Aisha Bello", role: "Neurologist", status: "In Surgery", dept: "Neurology" },
+    { name: "Dr. Chinedu Eze", role: "ER Physician", status: "Available", dept: "Emergency" },
+    { name: "Dr. Folake Adeyemi", role: "Anesthesiologist", status: "On Call", dept: "Anesthesiology" },
   ];
 
   return (
-    <div className="p-0">
-      <div className="mb-8 flex justify-between items-end">
-        <div>
-          <h1 className="font-display text-3xl font-bold text-white uppercase tracking-tighter">Specialist Roster</h1>
-          <p className="text-slate-400 text-sm">Verified shift tracking and availability.</p>
-        </div>
+    <div className="p-6 h-full overflow-y-auto custom-scrollbar bg-slate-50">
+      <div className="mb-8">
+        <h1 className="font-display text-3xl font-bold text-slate-900 uppercase tracking-tighter">Specialist Directory</h1>
+        <p className="text-slate-600 text-sm">On-duty specialists available for incoming transfers.</p>
       </div>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {specialists.map((s, i) => (
-          <div key={i} className="glass-panel p-6 rounded-lg border-white/5 flex flex-col items-center text-center">
-            <div className="w-20 h-20 rounded-full bg-surface-container-high overflow-hidden border-2 border-white/10 mb-4 relative">
-              <img alt={s.name} className={`w-full h-full object-cover ${s.status === 'Off-Duty' ? 'grayscale' : ''}`} src={s.img} />
-              <div className={`absolute bottom-0 right-0 w-4 h-4 rounded-full border-2 border-slate-950 ${s.status === 'On-Site' ? 'bg-emerald-500' : s.status === 'In Surgery' ? 'bg-secondary animate-pulse' : 'bg-slate-500'}`}></div>
+          <div key={i} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center text-center">
+            <div className="w-20 h-20 bg-slate-100 rounded-full border border-slate-200 mb-4 flex items-center justify-center overflow-hidden">
+               <span className="material-symbols-outlined text-3xl text-slate-400">person</span>
             </div>
-            <h3 className="font-display text-lg font-bold text-white uppercase mb-1">{s.name}</h3>
-            <p className="font-caps text-[10px] font-bold tracking-widest text-secondary mb-4 uppercase">{s.spec}</p>
-            <div className="w-full pt-4 border-t border-white/5 space-y-2">
-              <div className="flex justify-between text-[10px] font-caps font-bold">
-                <span className="text-slate-500">Status</span>
-                <span className={s.status === 'On-Site' ? 'text-emerald-500' : s.status === 'In Surgery' ? 'text-secondary' : 'text-slate-500'}>{s.status}</span>
-              </div>
-              <div className="flex justify-between text-[10px] font-caps font-bold">
-                <span className="text-slate-500">Contact</span>
-                <span className="text-white font-mono">{s.phone}</span>
-              </div>
+            <h3 className="font-display text-lg font-bold text-slate-900 mb-1">{s.name}</h3>
+            <p className="text-xs text-primary font-semibold tracking-widest uppercase mb-4">{s.role}</p>
+            
+            <div className="flex gap-2 w-full mb-6 justify-center">
+              <span className={`text-[10px] font-semibold px-2 py-1 rounded tracking-widest uppercase ${
+                s.status === 'Available' ? 'bg-emerald-100 text-emerald-700' : 
+                s.status === 'In Surgery' ? 'bg-amber-100 text-amber-700' : 
+                'bg-slate-100 text-slate-600'
+              }`}>
+                {s.status}
+              </span>
+              <span className="text-[10px] bg-slate-50 border border-slate-200 text-slate-600 font-semibold px-2 py-1 rounded tracking-widest uppercase">
+                {s.dept}
+              </span>
             </div>
-            <button className="w-full mt-6 py-2 bg-white/5 border border-white/10 hover:bg-white/10 text-white font-caps font-bold text-[10px] uppercase tracking-widest transition-all">Page Specialist</button>
+
+            <button className="w-full bg-slate-50 border border-slate-200 text-slate-700 py-2 rounded-lg text-xs font-semibold uppercase tracking-widest hover:bg-slate-100 transition-colors">
+              Contact
+            </button>
           </div>
         ))}
       </div>
-
-      <MockDataNotice />
     </div>
   );
 }

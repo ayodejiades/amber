@@ -142,7 +142,7 @@ export const MOCK_HOSPITALS: Hospital[] = [
   },
   {
     id: "h3",
-    name: "Reddington (VI)",
+    name: "Blue Cross (Apapa)",
     location: { lat: 6.4333, lng: 3.4333 },
     beds: { er: 8, icu: 5, total: 60 },
     specialists: ["Cardiologist", "Trauma Surgeon", "Neurologist (Stroke)"],

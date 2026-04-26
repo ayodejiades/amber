@@ -1,50 +1,55 @@
 "use client";
 
-import { MockDataNotice } from "@/components/mock-data-notice";
-
 export default function HospitalLogsPage() {
   const logs = [
-    { time: "09:42", event: "Patient Handover", unit: "AMB-01", status: "Complete" },
-    { time: "09:15", event: "ICU Bed Reserved", unit: "AMB-09", status: "Pending" },
-    { time: "08:30", event: "ER Admission", unit: "AMB-12", status: "Complete" },
-    { time: "07:45", event: "Cardiac Pre-Alert", unit: "AMB-05", status: "Logged" }
+    { time: "14:32", type: "Transfer Alert", desc: "Incoming transfer AMB-01 accepted (ICU).", status: "Resolved" },
+    { time: "13:15", type: "Capacity Update", desc: "ICU beds updated: 45/48 occupied.", status: "Info" },
+    { time: "12:40", type: "Handover", desc: "Patient AMB-14 handover complete at ER.", status: "Resolved" },
+    { time: "11:05", type: "System Alert", desc: "Telemetry connection lost with AMB-08.", status: "Warning" },
+    { time: "10:50", type: "Transfer Alert", desc: "Incoming transfer AMB-08 pending.", status: "Active" },
   ];
 
   return (
-    <div className="p-0">
+    <div className="p-6 h-full overflow-y-auto custom-scrollbar bg-slate-50">
       <div className="mb-8">
-        <h1 className="font-display text-3xl font-bold text-white uppercase tracking-tighter">Operational Logs</h1>
-        <p className="text-slate-400 text-sm">Full audit trail of facility actions.</p>
+        <h1 className="font-display text-3xl font-bold text-slate-900 uppercase tracking-tighter">Activity Log</h1>
+        <p className="text-slate-600 text-sm">Recent system events and patient transfers.</p>
       </div>
 
-      <div className="glass-panel rounded-lg border-white/5 overflow-hidden mb-12">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="bg-surface-container-low/50">
-              <th className="p-4 text-[10px] font-caps font-bold text-slate-500 uppercase tracking-widest">Timestamp</th>
-              <th className="p-4 text-[10px] font-caps font-bold text-slate-500 uppercase tracking-widest">Event</th>
-              <th className="p-4 text-[10px] font-caps font-bold text-slate-500 uppercase tracking-widest">Source</th>
-              <th className="p-4 text-[10px] font-caps font-bold text-slate-500 uppercase tracking-widest">Status</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-white/5">
-            {logs.map((l, i) => (
-              <tr key={i} className="hover:bg-white/5 transition-colors">
-                <td className="p-4 text-xs font-mono text-slate-400">{l.time}</td>
-                <td className="p-4 text-sm font-bold text-white">{l.event}</td>
-                <td className="p-4 text-xs font-mono text-secondary">{l.unit}</td>
-                <td className="p-4">
-                  <span className={`text-[8px] font-caps font-bold px-2 py-0.5 rounded ${l.status === 'Complete' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-primary/10 text-primary'}`}>
-                    {l.status}
-                  </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+        <div className="hidden md:grid grid-cols-12 gap-4 p-4 border-b border-slate-100 bg-slate-50 text-[10px] font-semibold text-slate-500 uppercase tracking-widest">
+          <div className="col-span-2">Time</div>
+          <div className="col-span-3">Event Type</div>
+          <div className="col-span-5">Description</div>
+          <div className="col-span-2">Status</div>
+        </div>
 
-      <MockDataNotice />
+        <div className="divide-y divide-slate-100">
+          {logs.map((log, i) => (
+            <div key={i} className="p-4 md:grid md:grid-cols-12 gap-4 items-center hover:bg-slate-50 transition-colors">
+              <div className="col-span-2 font-mono text-sm text-slate-500 mb-2 md:mb-0">
+                {log.time}
+              </div>
+              <div className="col-span-3 mb-2 md:mb-0">
+                <span className="text-xs font-bold text-slate-900">{log.type}</span>
+              </div>
+              <div className="col-span-5 mb-3 md:mb-0 text-sm text-slate-600">
+                {log.desc}
+              </div>
+              <div className="col-span-2">
+                <span className={`text-[10px] font-semibold px-2 py-1 rounded tracking-widest uppercase ${
+                  log.status === 'Resolved' ? 'bg-emerald-100 text-emerald-700' : 
+                  log.status === 'Active' ? 'bg-primary/10 text-primary' : 
+                  log.status === 'Warning' ? 'bg-amber-100 text-amber-700' : 
+                  'bg-slate-100 text-slate-600'
+                }`}>
+                  {log.status}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

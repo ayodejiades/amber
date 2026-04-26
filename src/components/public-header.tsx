@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { AmberLogo } from "@/components/amber-logo";
 import { useState } from "react";
 
 export function PublicHeader() {
@@ -8,29 +9,31 @@ export function PublicHeader() {
 
   return (
     <>
-      <header className="fixed top-0 z-50 flex justify-between items-center w-full px-6 md:px-8 py-4 max-w-full bg-slate-950/60 backdrop-blur-xl border-b border-primary/10">
-        <Link href="/" className="text-xl md:text-2xl font-black tracking-widest text-white italic font-display">AMBER</Link>
+      <header className="fixed top-0 z-50 flex justify-between items-center w-full px-6 md:px-8 py-4 max-w-full bg-white border-b border-slate-200">
+        <Link href="/" className="flex items-center">
+          <AmberLogo className="h-10 md:h-12 w-auto" />
+        </Link>
         
         {/* Desktop Navigation */}
-        <div className="hidden lg:flex items-center gap-8 font-caps tracking-tight uppercase font-bold text-xs">
-          <Link className="text-slate-400 hover:text-white transition-colors" href="/network">Network</Link>
-          <Link className="text-slate-400 hover:text-white transition-colors" href="/about">Amber Way</Link>
-          <Link className="text-slate-400 hover:text-white transition-colors" href="/partners">Hospital Partners</Link>
-          <Link className="text-slate-400 hover:text-white transition-colors" href="/clients">Private Clients</Link>
+        <div className="hidden lg:flex items-center gap-8 font-medium text-sm text-slate-600">
+          <Link className="hover:text-primary transition-colors" href="/network">Network</Link>
+          <Link className="hover:text-primary transition-colors" href="/about">About</Link>
+          <Link className="hover:text-primary transition-colors" href="/partners">Hospitals</Link>
+          <Link className="hover:text-primary transition-colors" href="/clients">Pricing</Link>
         </div>
         
-        <div className="hidden lg:flex items-center gap-4">
-          <Link href="/login" className="text-slate-400 hover:text-white transition-colors text-[10px] font-bold uppercase tracking-widest px-4 font-caps">
-            Client Login
+        <div className="hidden lg:flex items-center gap-6">
+          <Link href="/login" className="text-slate-600 hover:text-primary transition-colors text-sm font-medium px-4">
+            Sign In
           </Link>
-          <button className="bg-primary text-white font-caps tracking-tight uppercase font-bold text-xs px-6 py-3 rounded-sm hover:brightness-110 active:scale-95 transition-all duration-200 shadow-lg shadow-primary/20">
-            Request Rapid Response
-          </button>
+          <Link href="/request" className="bg-primary text-white font-semibold text-sm px-6 py-2.5 rounded-full hover:bg-primary/90 transition-colors">
+            Request Ambulance
+          </Link>
         </div>
 
         {/* Mobile Menu Toggle */}
         <button 
-          className="lg:hidden text-white p-2"
+          className="lg:hidden text-slate-900 p-2"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           <span className="material-symbols-outlined text-2xl">{isMobileMenuOpen ? 'close' : 'menu'}</span>
@@ -39,20 +42,20 @@ export function PublicHeader() {
 
       {/* Mobile Navigation Drawer */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 top-[72px] z-40 bg-slate-950/95 backdrop-blur-md p-6 flex flex-col gap-6 lg:hidden border-t border-primary/10 animate-in fade-in slide-in-from-top-4">
-          <nav className="flex flex-col gap-6 font-caps tracking-tight uppercase font-bold text-sm">
-            <Link className="text-slate-400" href="/network" onClick={() => setIsMobileMenuOpen(false)}>Network</Link>
-            <Link className="text-slate-400 hover:text-white transition-colors" href="/about" onClick={() => setIsMobileMenuOpen(false)}>Amber Way</Link>
-            <Link className="text-slate-400 hover:text-white transition-colors" href="/partners" onClick={() => setIsMobileMenuOpen(false)}>Hospital Partners</Link>
-            <Link className="text-slate-400 hover:text-white transition-colors" href="/clients" onClick={() => setIsMobileMenuOpen(false)}>Private Clients</Link>
+        <div className="fixed inset-0 top-[72px] z-40 bg-white p-6 flex flex-col gap-6 lg:hidden border-t border-slate-200">
+          <nav className="flex flex-col gap-6 font-medium text-sm">
+            <Link className="text-slate-600 hover:text-primary transition-colors" href="/network" onClick={() => setIsMobileMenuOpen(false)}>Network</Link>
+            <Link className="text-slate-600 hover:text-primary transition-colors" href="/about" onClick={() => setIsMobileMenuOpen(false)}>About</Link>
+            <Link className="text-slate-600 hover:text-primary transition-colors" href="/partners" onClick={() => setIsMobileMenuOpen(false)}>Hospitals</Link>
+            <Link className="text-slate-600 hover:text-primary transition-colors" href="/clients" onClick={() => setIsMobileMenuOpen(false)}>Pricing</Link>
           </nav>
-          <div className="mt-8 pt-8 border-t border-white/10 flex flex-col gap-4">
-            <Link href="/login" className="text-center text-slate-400 hover:text-white transition-colors text-[10px] font-bold uppercase tracking-widest px-4 font-caps py-2" onClick={() => setIsMobileMenuOpen(false)}>
-              Client Login
+          <div className="mt-8 pt-8 border-t border-slate-200 flex flex-col gap-4">
+            <Link href="/login" className="text-center text-slate-600 hover:text-primary transition-colors text-sm font-medium py-2" onClick={() => setIsMobileMenuOpen(false)}>
+              Sign In
             </Link>
-            <button className="w-full bg-primary text-white font-caps tracking-tight uppercase font-bold text-xs px-6 py-4 rounded-sm hover:brightness-110 active:scale-95 transition-all duration-200 shadow-lg shadow-primary/20">
-              Request Rapid Response
-            </button>
+            <Link href="/request" className="w-full text-center bg-primary text-white font-semibold text-sm px-6 py-4 rounded-full hover:bg-primary/90 transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+              Request Ambulance
+            </Link>
           </div>
         </div>
       )}

@@ -1,62 +1,49 @@
 "use client";
 
-import { MockDataNotice } from "@/components/mock-data-notice";
-
 export default function HospitalBedsPage() {
-  const sections = [
-    { name: "ICU North", beds: [
-      { id: "101", status: "Occupied", patient: "#8821-X", vitals: "Critical" },
-      { id: "102", status: "Occupied", patient: "#9042-Y", vitals: "Stable" },
-      { id: "103", status: "Available", patient: "N/A", vitals: "N/A" },
-      { id: "104", status: "Reserved", patient: "UNIT_042", vitals: "Incoming" }
-    ]},
-    { name: "Trauma Bay 1", beds: [
-      { id: "T1", status: "Occupied", patient: "#7712-Z", vitals: "Critical" },
-      { id: "T2", status: "Available", patient: "N/A", vitals: "N/A" }
-    ]}
+  const wards = [
+    { name: "Intensive Care Unit (ICU)", capacity: "45/48", critical: true },
+    { name: "Emergency Room (ER)", capacity: "78/100", elevated: true },
+    { name: "Trauma Ward A", capacity: "12/20", optimal: true },
+    { name: "Cardiac Ward", capacity: "28/30", elevated: true },
+    { name: "General Ward East", capacity: "140/150", optimal: true },
   ];
 
   return (
-    <div className="p-0">
-      <div className="mb-8">
-        <h1 className="font-display text-3xl font-bold text-white uppercase tracking-tighter">Bed Management</h1>
-        <p className="text-slate-400 text-sm">Real-time occupancy and incoming reservations.</p>
+    <div className="p-6 h-full overflow-y-auto custom-scrollbar bg-slate-50">
+      <div className="mb-8 flex justify-between items-end">
+        <div>
+          <h1 className="font-display text-3xl font-bold text-slate-900 uppercase tracking-tighter">Bed Capacity</h1>
+          <p className="text-slate-600 text-sm">Real-time occupancy across all hospital wards.</p>
+        </div>
+        <button className="bg-primary text-white border border-primary px-4 py-2 rounded-lg font-body text-xs font-bold uppercase tracking-widest shadow-md">
+          Update Capacity
+        </button>
       </div>
 
-      <div className="space-y-12 mb-12">
-        {sections.map((s, i) => (
-          <div key={i}>
-            <h2 className="font-caps font-bold text-primary text-xs uppercase tracking-[0.3em] mb-6 flex items-center gap-4">
-              {s.name}
-              <div className="h-px bg-primary/20 flex-1"></div>
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {s.beds.map((b, bi) => (
-                <div key={bi} className={`glass-panel p-6 rounded-lg border-white/5 ${b.status === 'Available' ? 'border-emerald-500/30' : b.status === 'Reserved' ? 'border-secondary/30 glow-red' : ''}`}>
-                  <div className="flex justify-between items-start mb-4">
-                    <span className="font-mono text-xl font-bold text-white">{b.id}</span>
-                    <span className={`text-[8px] font-caps font-bold px-2 py-0.5 rounded ${b.status === 'Available' ? 'bg-emerald-500/10 text-emerald-500' : b.status === 'Occupied' ? 'bg-primary/10 text-primary' : 'bg-secondary/10 text-secondary'}`}>
-                      {b.status}
-                    </span>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-[10px] font-caps font-bold">
-                      <span className="text-slate-500 uppercase">Patient</span>
-                      <span className="text-white">{b.patient}</span>
-                    </div>
-                    <div className="flex justify-between text-[10px] font-caps font-bold">
-                      <span className="text-slate-500 uppercase">Vitals</span>
-                      <span className={b.vitals === 'Critical' ? 'text-primary' : b.vitals === 'Incoming' ? 'text-secondary' : 'text-emerald-500'}>{b.vitals}</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
+      <div className="grid lg:grid-cols-2 gap-6">
+        {wards.map((w, i) => (
+          <div key={i} className={`bg-white p-6 rounded-2xl border ${w.critical ? 'border-primary/30 shadow-md' : 'border-slate-200 shadow-sm'}`}>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="font-display text-xl font-bold text-slate-900 uppercase">{w.name}</h3>
+              {w.critical && <span className="bg-primary/10 text-primary border border-primary/20 px-2 py-1 rounded text-[10px] font-semibold tracking-widest uppercase">Critical</span>}
+              {w.elevated && <span className="bg-amber-100 text-amber-700 border border-amber-200 px-2 py-1 rounded text-[10px] font-semibold tracking-widest uppercase">Elevated</span>}
+              {w.optimal && <span className="bg-emerald-100 text-emerald-700 border border-emerald-200 px-2 py-1 rounded text-[10px] font-semibold tracking-widest uppercase">Optimal</span>}
+            </div>
+            
+            <div className="mb-2 flex justify-between items-end">
+              <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest">Occupancy</span>
+              <span className={`font-mono text-xl font-bold ${w.critical ? 'text-primary' : 'text-slate-900'}`}>{w.capacity}</span>
+            </div>
+            <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+              <div 
+                className={`h-full ${w.critical ? 'bg-primary' : w.elevated ? 'bg-amber-500' : 'bg-emerald-500'}`} 
+                style={{ width: `${(parseInt(w.capacity.split('/')[0]) / parseInt(w.capacity.split('/')[1])) * 100}%` }}
+              ></div>
             </div>
           </div>
         ))}
       </div>
-
-      <MockDataNotice />
     </div>
   );
 }
