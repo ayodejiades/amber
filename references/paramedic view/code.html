@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&amp;family=Inter:wght@400;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .font-mono-tactical { font-family: 'JetBrains Mono', monospace; }
+        .glass-panel { backdrop-filter: blur(20px); }
+        .glow-border-red { border: 1px solid rgba(239, 68, 68, 0.15); box-shadow: 0 0 10px rgba(239, 68, 68, 0.05); }
+        .glow-border-amber { border: 1px solid rgba(233, 195, 73, 0.15); box-shadow: 0 0 10px rgba(233, 195, 73, 0.05); }
+        .waveform-path {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-fixed-variant": "#3f465c",
+                      "surface-container-highest": "#2e3447",
+                      "tertiary-container": "#8990a8",
+                      "surface-dim": "#0c1324",
+                      "secondary-fixed": "#ffe088",
+                      "surface-container": "#191f31",
+                      "tertiary-fixed": "#dae2fd",
+                      "primary-fixed": "#ffdad7",
+                      "on-error-container": "#ffdad6",
+                      "on-error": "#690005",
+                      "inverse-primary": "#b91a24",
+                      "primary-fixed-dim": "#ffb3ad",
+                      "on-primary-container": "#5c0008",
+                      "surface-container-low": "#151b2d",
+                      "background": "#0c1324",
+                      "on-tertiary-fixed": "#131b2e",
+                      "on-secondary-fixed-variant": "#574500",
+                      "secondary-fixed-dim": "#e9c349",
+                      "surface-container-high": "#23293c",
+                      "primary-container": "#ff5451",
+                      "primary": "#ffb3ad",
+                      "outline-variant": "#5b403e",
+                      "on-primary": "#68000a",
+                      "on-surface-variant": "#e4beba",
+                      "tertiary": "#bec6e0",
+                      "on-secondary": "#3c2f00",
+                      "tertiary-fixed-dim": "#bec6e0",
+                      "surface-bright": "#33394c",
+                      "surface": "#0c1324",
+                      "on-surface": "#dce1fb",
+                      "on-tertiary": "#283044",
+                      "on-secondary-fixed": "#241a00",
+                      "on-background": "#dce1fb",
+                      "on-primary-fixed-variant": "#930013",
+                      "secondary": "#e9c349",
+                      "outline": "#ab8986",
+                      "on-primary-fixed": "#410004",
+                      "error": "#ffb4ab",
+                      "surface-variant": "#2e3447",
+                      "on-tertiary-container": "#22293d",
+                      "error-container": "#93000a",
+                      "on-secondary-container": "#342800",
+                      "secondary-container": "#af8d11",
+                      "inverse-surface": "#dce1fb",
+                      "inverse-on-surface": "#2a3043",
+                      "surface-container-lowest": "#070d1f",
+                      "surface-tint": "#ffb3ad"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "margin": "40px",
+                      "unit": "4px",
+                      "gutter": "24px",
+                      "container-max": "1440px"
+              },
+              "fontFamily": {
+                      "body-lg": ["Inter"],
+                      "body-md": ["Inter"],
+                      "h2": ["Outfit"],
+                      "label-caps": ["Inter"],
+                      "h3": ["Outfit"],
+                      "h1": ["Outfit"]
+              },
+              "fontSize": {
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "h2": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "label-caps": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                      "h3": ["24px", {"lineHeight": "1.3", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                      "h1": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary/30 min-h-screen">
+<!-- Top Navigation -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-slate-950/60 backdrop-blur-xl border-b border-red-600/10">
+<div class="flex items-center gap-8">
+<span class="text-xl font-black tracking-widest text-red-600 font-mono-tactical">PROJECT AMBER</span>
+<div class="flex gap-6">
+<a class="text-red-500 font-bold border-b-2 border-red-600 h-16 flex items-center px-2 text-label-caps" href="#">FIELD ASSESSMENT</a>
+<a class="text-slate-500 hover:text-red-400 transition-colors h-16 flex items-center px-2 text-label-caps" href="#">TRAJECTORY</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center bg-error-container/20 px-3 py-1 rounded border border-error/20">
+<span class="material-symbols-outlined text-red-600 text-sm mr-2" data-icon="timer">timer</span>
+<span class="text-red-600 font-mono-tactical font-bold text-body-md">00:14:22</span>
+</div>
+<button class="bg-error-container text-white px-4 py-1.5 font-mono-tactical font-bold tracking-tighter hover:bg-error transition-all scale-95 active:bg-red-900/20">
+                EVAC REQUEST
+            </button>
+<div class="flex gap-2">
+<span class="material-symbols-outlined text-slate-400 cursor-pointer hover:text-red-500 transition-all" data-icon="notifications_active">notifications_active</span>
+<span class="material-symbols-outlined text-slate-400 cursor-pointer hover:text-red-500 transition-all" data-icon="settings">settings</span>
+</div>
+</div>
+</nav>
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-full flex flex-col pt-20 pb-6 z-40 bg-slate-900/60 backdrop-blur-2xl w-20 md:w-64 border-r border-red-600/10">
+<div class="px-4 mb-8">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-slate-800 rounded border border-amber-400/30 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Professional paramedic operator headshot in tactical gear with neutral grey background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGLsMMPpNAbC8HaGfhUPb7L0aCsu85XPxHH12UU2wuR9YQdhCrGR4kTJJwh2HwqwnS99KPIQVpZftsqjzRr_y09C5Ulh-7iREr-UjDSxZsjT7Z2frVyMsEeu0Kak1O3rABUKjYGlpJcCPQVKstjo4KC3jrJTIHNM9BckcTGFsaFfbSGCsrzyesQSD9uUbJMWhXlXOijxxvP9CHU5_h_ig4UZQZvJY6I72qIinRFr3qL5Rr9k43HLcs_KGTIuSX2tRUvd0aVYNfytIP"/>
+</div>
+<div class="hidden md:block">
+<p class="text-amber-400 font-black text-label-caps">OP-AMBER-01</p>
+<p class="text-slate-500 text-[10px] tracking-widest font-mono-tactical">SECTOR 7-G</p>
+</div>
+</div>
+</div>
+<div class="flex-1 space-y-2">
+<a class="text-slate-400 p-4 flex items-center gap-4 hover:bg-slate-800/40 transition-all group" href="#">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span class="hidden md:block text-label-caps">Map</span>
+</a>
+<a class="bg-red-600 text-white rounded-none border-l-4 border-amber-400 p-4 flex items-center gap-4 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="monitor_heart">monitor_heart</span>
+<span class="hidden md:block text-label-caps">Patient HUD</span>
+</a>
+<a class="text-slate-400 p-4 flex items-center gap-4 hover:bg-slate-800/40 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="hub">hub</span>
+<span class="hidden md:block text-label-caps">Comms</span>
+</a>
+<a class="text-slate-400 p-4 flex items-center gap-4 hover:bg-slate-800/40 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="medical_services">medical_services</span>
+<span class="hidden md:block text-label-caps">Inventory</span>
+</a>
+</div>
+<div class="px-4 mt-auto space-y-4">
+<button class="w-full bg-secondary-container text-on-secondary-container py-3 text-label-caps font-bold tracking-widest hover:brightness-110 transition-all">
+                SIGNAL EXTRACTION
+            </button>
+<div class="pt-4 border-t border-slate-800 space-y-2">
+<a class="text-slate-500 flex items-center gap-3 text-label-caps hover:text-slate-300" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="settings">settings</span>
+<span class="hidden md:block">Settings</span>
+</a>
+<a class="text-slate-500 flex items-center gap-3 text-label-caps hover:text-slate-300" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="logout">logout</span>
+<span class="hidden md:block">Log Out</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="pl-20 md:pl-64 pt-20 p-8 grid grid-cols-12 gap-gutter max-w-container-max mx-auto">
+<!-- Patient Profile & Vitals HUD -->
+<section class="col-span-12 lg:col-span-8 space-y-gutter">
+<div class="glass-panel bg-surface-container-low rounded-lg p-6 glow-border-red relative overflow-hidden">
+<div class="absolute top-0 left-0 w-2 h-2 bg-amber-400"></div>
+<div class="flex justify-between items-start mb-8">
+<div>
+<h2 class="text-h3 font-h3 text-white">PATIENT ALPHA-702</h2>
+<p class="text-label-caps text-slate-500 font-mono-tactical">UNIDENTIFIED MALE | APPROX 35Y | TRAUMA LEVEL 1</p>
+</div>
+<div class="text-right">
+<span class="bg-red-600/20 text-red-500 px-3 py-1 rounded-full text-label-caps font-bold border border-red-600/30">CRITICAL STATUS</span>
+</div>
+</div>
+<!-- Vital Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Heart Rate -->
+<div class="bg-slate-900/40 p-4 rounded border-l-2 border-red-600">
+<div class="flex justify-between items-center mb-2">
+<span class="text-label-caps text-slate-400">HEART RATE</span>
+<span class="material-symbols-outlined text-red-600 text-sm" data-icon="favorite" data-weight="fill" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-h1 font-mono-tactical text-red-500">142</span>
+<span class="text-slate-500 text-label-caps">BPM</span>
+</div>
+<div class="mt-4 h-12 flex items-center">
+<!-- SVG Waveform Mock -->
+<svg class="w-full h-8" viewbox="0 0 200 40">
+<path class="waveform-path" d="M0 20 L20 20 L25 5 L35 35 L40 20 L60 20 L65 0 L75 40 L80 20 L100 20 L105 10 L115 30 L120 20 L140 20 L145 5 L155 35 L160 20 L180 20 L185 0 L195 40 L200 20" fill="none" stroke="#ef4444" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+<!-- SpO2 -->
+<div class="bg-slate-900/40 p-4 rounded border-l-2 border-amber-500">
+<div class="flex justify-between items-center mb-2">
+<span class="text-label-caps text-slate-400">SPO2</span>
+<span class="material-symbols-outlined text-amber-500 text-sm" data-icon="air">air</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-h1 font-mono-tactical text-amber-500">88</span>
+<span class="text-slate-500 text-label-caps">%</span>
+</div>
+<div class="mt-4">
+<div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+<div class="bg-amber-500 h-full w-[88%]"></div>
+</div>
+<p class="text-[10px] text-amber-500/70 mt-2 font-mono-tactical uppercase tracking-widest">UNSTABLE RANGE</p>
+</div>
+</div>
+<!-- BP -->
+<div class="bg-slate-900/40 p-4 rounded border-l-2 border-red-600">
+<div class="flex justify-between items-center mb-2">
+<span class="text-label-caps text-slate-400">BLOOD PRESSURE</span>
+<span class="material-symbols-outlined text-red-600 text-sm" data-icon="compress">compress</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-h1 font-mono-tactical text-red-500">85/50</span>
+<span class="text-slate-500 text-label-caps">MMHG</span>
+</div>
+<div class="mt-4">
+<p class="text-[10px] text-red-600 mt-2 font-mono-tactical uppercase tracking-widest">HYPOTENSIVE CRISIS</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Digital Triage Checklist -->
+<div class="glass-panel bg-surface-container-low rounded-lg p-6 border border-slate-800">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-h3 font-h3 text-white flex items-center gap-3">
+<span class="material-symbols-outlined text-amber-400" data-icon="fact_check">fact_check</span>
+                        ABCD ASSESSMENT
+                    </h3>
+<button class="text-label-caps text-slate-400 hover:text-white transition-colors border border-slate-700 px-4 py-1">RESET</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Airway -->
+<div class="flex items-center justify-between p-4 bg-slate-900/60 border border-red-600/20 rounded">
+<div class="flex items-center gap-4">
+<div class="w-3 h-3 rounded-full bg-red-600 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]"></div>
+<span class="text-label-caps text-white">A - AIRWAY</span>
+</div>
+<span class="text-red-500 font-mono-tactical text-xs font-bold">OBSTRUCTED</span>
+</div>
+<!-- Breathing -->
+<div class="flex items-center justify-between p-4 bg-slate-900/60 border border-amber-600/20 rounded">
+<div class="flex items-center gap-4">
+<div class="w-3 h-3 rounded-full bg-amber-500"></div>
+<span class="text-label-caps text-white">B - BREATHING</span>
+</div>
+<span class="text-amber-500 font-mono-tactical text-xs font-bold">LABORED</span>
+</div>
+<!-- Circulation -->
+<div class="flex items-center justify-between p-4 bg-slate-900/60 border border-red-600/20 rounded">
+<div class="flex items-center gap-4">
+<div class="w-3 h-3 rounded-full bg-red-600"></div>
+<span class="text-label-caps text-white">C - CIRCULATION</span>
+</div>
+<span class="text-red-500 font-mono-tactical text-xs font-bold">HEMORRHAGE</span>
+</div>
+<!-- Disability -->
+<div class="flex items-center justify-between p-4 bg-slate-900/60 border border-slate-700 rounded">
+<div class="flex items-center gap-4">
+<div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+<span class="text-label-caps text-white">D - DISABILITY</span>
+</div>
+<span class="text-emerald-500 font-mono-tactical text-xs font-bold">STABLE</span>
+</div>
+</div>
+</div>
+<!-- Intervention & Medication Log -->
+<div class="glass-panel bg-surface-container-low rounded-lg p-6 border border-slate-800">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-h3 font-h3 text-white">INTERVENTION LOG</h3>
+<button class="bg-amber-400 text-on-secondary-fixed font-bold text-label-caps px-4 py-2 flex items-center gap-2 hover:bg-amber-300 transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                        NEW ENTRY
+                    </button>
+</div>
+<div class="space-y-4 max-h-64 overflow-y-auto pr-2 custom-scrollbar">
+<div class="flex items-start gap-6 p-4 bg-slate-900/40 border-l border-slate-700">
+<span class="text-slate-500 font-mono-tactical text-xs pt-1">04:18</span>
+<div>
+<p class="text-white font-bold text-body-md">Administered Epinephrine</p>
+<p class="text-slate-400 text-xs">Dosage: 1mg IV Push. Patient response: Minimal improvement in HR.</p>
+</div>
+</div>
+<div class="flex items-start gap-6 p-4 bg-slate-900/40 border-l border-slate-700">
+<span class="text-slate-500 font-mono-tactical text-xs pt-1">04:15</span>
+<div>
+<p class="text-white font-bold text-body-md">IV Access Established</p>
+<p class="text-slate-400 text-xs">Location: Left Antecubital. 18G Cannula.</p>
+</div>
+</div>
+<div class="flex items-start gap-6 p-4 bg-slate-900/40 border-l border-slate-700">
+<span class="text-slate-500 font-mono-tactical text-xs pt-1">04:10</span>
+<div>
+<p class="text-white font-bold text-body-md">Oxygen Therapy Initiated</p>
+<p class="text-slate-400 text-xs">High-flow mask 15L/min.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Sidebar Components -->
+<section class="col-span-12 lg:col-span-4 space-y-gutter">
+<!-- Hospital Pre-Alert Status -->
+<div class="glass-panel bg-slate-900/80 rounded-lg p-6 glow-border-amber border-t-4 border-t-amber-400">
+<div class="flex items-center gap-4 mb-6">
+<span class="material-symbols-outlined text-amber-400 text-3xl" data-icon="local_hospital">local_hospital</span>
+<div>
+<h4 class="text-white font-bold tracking-tight">ST. AMBER MEDICAL</h4>
+<p class="text-[10px] text-slate-500 font-mono-tactical">RECEIVING TRAUMA CENTER</p>
+</div>
+</div>
+<div class="bg-emerald-950/30 border border-emerald-500/20 p-4 rounded-lg mb-4 text-center">
+<p class="text-emerald-500 text-label-caps font-bold mb-1">HOSPITAL STATUS</p>
+<p class="text-h3 text-white font-mono-tactical font-black">READY</p>
+<p class="text-emerald-400/70 text-xs mt-2 uppercase tracking-widest">TRAUMA BAY 3 CLEARED</p>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between text-xs">
+<span class="text-slate-500">ETA</span>
+<span class="text-white font-mono-tactical">07:24 MIN</span>
+</div>
+<div class="flex justify-between text-xs">
+<span class="text-slate-500">SURGEON</span>
+<span class="text-white font-mono-tactical">DR. VANCE (ON-SITE)</span>
+</div>
+</div>
+</div>
+<!-- Comms Panel -->
+<div class="glass-panel bg-surface-container-low rounded-lg p-6 border border-slate-800 h-[500px] flex flex-col">
+<div class="flex items-center justify-between mb-6 border-b border-slate-800 pb-4">
+<h3 class="text-label-caps text-white tracking-widest">COMMS CHANNEL</h3>
+<div class="flex gap-2">
+<div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+<span class="text-[10px] text-slate-500 font-mono-tactical uppercase">SECURE</span>
+</div>
+</div>
+<div class="flex-1 space-y-4 overflow-y-auto mb-4 custom-scrollbar">
+<!-- Message -->
+<div class="space-y-1">
+<div class="flex justify-between text-[10px] font-mono-tactical">
+<span class="text-amber-400">AMBER COMMAND</span>
+<span class="text-slate-600">04:19</span>
+</div>
+<div class="bg-slate-900/60 p-3 rounded text-sm text-slate-300 border-l-2 border-amber-400">
+                            Clearance granted for direct route through Sector 7. Traffic control active.
+                        </div>
+</div>
+<!-- Message -->
+<div class="space-y-1 text-right">
+<div class="flex justify-between text-[10px] font-mono-tactical">
+<span class="text-slate-600">04:20</span>
+<span class="text-red-400">YOU (OP-01)</span>
+</div>
+<div class="bg-red-950/20 p-3 rounded text-sm text-slate-300 border-r-2 border-red-600">
+                            Copy that. 7 minutes to ETA. Patient BP still dropping.
+                        </div>
+</div>
+<!-- Message -->
+<div class="space-y-1">
+<div class="flex justify-between text-[10px] font-mono-tactical">
+<span class="text-on-secondary-fixed">ER SURGEON</span>
+<span class="text-slate-600">04:21</span>
+</div>
+<div class="bg-secondary-container/20 p-3 rounded text-sm text-slate-300 border-l-2 border-on-secondary-fixed">
+                            Confirming GCS score. Prep O-Negative for arrival.
+                        </div>
+</div>
+</div>
+<div class="mt-auto">
+<div class="relative">
+<input class="w-full bg-slate-950 border-0 border-b-2 border-slate-700 focus:border-red-600 focus:ring-0 text-white font-mono-tactical text-xs py-3 pr-10" placeholder="TYPE MESSAGE..." type="text"/>
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-slate-600 cursor-pointer hover:text-red-600 transition-all" data-icon="send">send</span>
+</div>
+<div class="flex justify-between mt-4">
+<button class="text-[10px] text-slate-500 flex items-center gap-1 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="mic">mic</span> VOICE CLIPS
+                        </button>
+<button class="text-[10px] text-slate-500 flex items-center gap-1 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="attachment">attachment</span> ATTACH DATA
+                        </button>
+</div>
+</div>
+</div>
+<!-- Tactical Map Inset -->
+<div class="glass-panel bg-surface-container-low rounded-lg h-40 relative overflow-hidden border border-slate-800">
+<img class="w-full h-full object-cover opacity-50 grayscale contrast-125" data-alt="Digital blue topographical map of an urban area with red tactical overlays and GPS coordinate grids" data-location="Metropolis Central" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4Y7P0ju-bURKzZ0NQhNmDIHk7mQeIgIpxYJdEWx4spRPhGeUWs4j61zDurWPs4EwjTr9mfle9xgDFHaLVhxn6Fik_j8I0E3DrF-bNlmrXCUbXaXCls-urFkurxH9BQaLcfHovBFtifaFnQgLdMlekX3f8aeBVx049HvDh74ebRaC0lciF_mvhlMv-_NLoAb1ufKcX2w_JO5Gy4ysbn95pXmOTIztVawE4PJL3SjfKaPH4UrOra4BZBix_5moUZH8AHUdkNgGB8ASm"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-950 to-transparent"></div>
+<div class="absolute top-2 right-2 flex gap-1">
+<div class="w-2 h-2 rounded-full bg-red-600 animate-ping"></div>
+<div class="w-2 h-2 rounded-full bg-red-600 absolute"></div>
+</div>
+<div class="absolute bottom-2 left-4">
+<p class="text-[10px] text-white font-mono-tactical font-bold uppercase tracking-widest">LOCAL POSITION: SECTOR 7-G</p>
+<p class="text-[10px] text-slate-500 font-mono-tactical">LAT: 34.0522° N | LONG: 118.2437° W</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Contextual FAB (Only on Home/Dashboard/Assessment view) -->
+<button class="fixed bottom-10 right-10 w-16 h-16 bg-red-600 text-white rounded-none flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all z-50 glow-border-red">
+<span class="material-symbols-outlined text-3xl" data-icon="add_alert">add_alert</span>
+</button>
+</body></html>

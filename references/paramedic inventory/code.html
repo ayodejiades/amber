@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&amp;family=Inter:wght@400;700&amp;family=JetBrains+Mono:wght@400;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "on-background": "#dce1fb",
+                  "tertiary": "#bec6e0",
+                  "on-surface": "#dce1fb",
+                  "primary": "#ffb3ad",
+                  "on-primary": "#68000a",
+                  "on-error-container": "#ffdad6",
+                  "primary-fixed-dim": "#ffb3ad",
+                  "on-primary-fixed-variant": "#930013",
+                  "on-secondary": "#3c2f00",
+                  "inverse-on-surface": "#2a3043",
+                  "tertiary-fixed": "#dae2fd",
+                  "inverse-surface": "#dce1fb",
+                  "on-secondary-fixed-variant": "#574500",
+                  "on-primary-fixed": "#410004",
+                  "on-tertiary-fixed": "#131b2e",
+                  "outline": "#ab8986",
+                  "on-tertiary-container": "#22293d",
+                  "surface-tint": "#ffb3ad",
+                  "error": "#ffb4ab",
+                  "on-primary-container": "#5c0008",
+                  "surface-container-low": "#151b2d",
+                  "surface": "#0c1324",
+                  "outline-variant": "#5b403e",
+                  "surface-container": "#191f31",
+                  "on-surface-variant": "#e4beba",
+                  "secondary-fixed": "#ffe088",
+                  "tertiary-fixed-dim": "#bec6e0",
+                  "primary-fixed": "#ffdad7",
+                  "secondary-container": "#af8d11",
+                  "surface-dim": "#0c1324",
+                  "surface-container-highest": "#2e3447",
+                  "surface-bright": "#33394c",
+                  "error-container": "#93000a",
+                  "inverse-primary": "#b91a24",
+                  "background": "#0c1324",
+                  "on-secondary-fixed": "#241a00",
+                  "surface-container-high": "#23293c",
+                  "primary-container": "#ff5451",
+                  "surface-container-lowest": "#070d1f",
+                  "on-tertiary-fixed-variant": "#3f465c",
+                  "on-secondary-container": "#342800",
+                  "on-tertiary": "#283044",
+                  "on-error": "#690005",
+                  "tertiary-container": "#8990a8",
+                  "secondary-fixed-dim": "#e9c349",
+                  "surface-variant": "#2e3447",
+                  "secondary": "#e9c349"
+          },
+          "borderRadius": {
+                  "DEFAULT": "0.125rem",
+                  "lg": "0.25rem",
+                  "xl": "0.5rem",
+                  "full": "0.75rem"
+          },
+          "spacing": {
+                  "margin": "40px",
+                  "container-max": "1440px",
+                  "gutter": "24px",
+                  "unit": "4px"
+          },
+          "fontFamily": {
+                  "h1": ["Outfit"],
+                  "h2": ["Outfit"],
+                  "body-lg": ["Inter"],
+                  "body-md": ["Inter"],
+                  "h3": ["Outfit"],
+                  "label-caps": ["Inter"],
+                  "mono": ["JetBrains Mono"]
+          },
+          "fontSize": {
+                  "h1": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                  "h2": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                  "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                  "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                  "h3": ["24px", {"lineHeight": "1.3", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                  "label-caps": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "700"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .tactical-glass {
+      background: rgba(11, 17, 32, 0.6);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255, 179, 173, 0.1);
+      border-left: 1px solid rgba(255, 179, 173, 0.1);
+    }
+    .low-stock-pulse {
+      box-shadow: inset 0 0 15px rgba(255, 84, 81, 0.2);
+    }
+    .corner-accent {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 4px;
+      border-top: 2px solid #e9c349;
+      border-left: 2px solid #e9c349;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body-md overflow-hidden h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 py-3 bg-slate-950/60 backdrop-blur-xl border-b border-red-500/10">
+<div class="text-xl font-black text-red-500 tracking-widest">OP-AMBER-01</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<span class="font-mono tracking-tight uppercase font-bold text-sm text-red-600">SECTOR 4</span>
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-slate-400" data-icon="timer">timer</span>
+<span class="material-symbols-outlined text-slate-400" data-icon="signal_cellular_4_bar">signal_cellular_4_bar</span>
+</div>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-full z-40 flex flex-col pt-16 bg-slate-950/60 backdrop-blur-xl border-r border-red-500/10 w-24 md:w-64">
+<div class="px-6 py-8">
+<div class="text-red-500 font-black font-mono text-xs uppercase tracking-widest">AMBER-01</div>
+<div class="text-slate-500 font-mono text-[10px] tracking-[0.2em]">STATUS: ACTIVE</div>
+</div>
+<div class="flex-1 flex flex-col">
+<a class="flex items-center gap-3 text-slate-500 py-4 px-6 font-mono text-xs font-bold uppercase tracking-widest hover:bg-slate-800/40 hover:text-red-400 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+<span class="hidden md:inline">Map</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 py-4 px-6 font-mono text-xs font-bold uppercase tracking-widest hover:bg-slate-800/40 hover:text-red-400 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="monitor_heart">monitor_heart</span>
+<span class="hidden md:inline">Patient HUD</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 py-4 px-6 font-mono text-xs font-bold uppercase tracking-widest hover:bg-slate-800/40 hover:text-red-400 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="forum">forum</span>
+<span class="hidden md:inline">Comms</span>
+</a>
+<!-- Active Tab -->
+<a class="flex items-center gap-3 bg-red-500/10 text-red-500 border-l-4 border-red-600 py-4 px-6 font-mono text-xs font-bold uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<span class="hidden md:inline">Inventory</span>
+</a>
+</div>
+<div class="mt-auto border-t border-red-500/10">
+<a class="flex items-center gap-3 text-slate-500 py-4 px-6 font-mono text-xs font-bold uppercase tracking-widest hover:bg-slate-800/40 hover:text-red-400 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="hidden md:inline">Settings</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 py-4 px-6 font-mono text-xs font-bold uppercase tracking-widest hover:bg-slate-800/40 hover:text-red-400 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="hidden md:inline">Log Out</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="ml-24 md:ml-64 pt-16 h-full p-8 overflow-y-auto">
+<div class="max-w-[1440px] mx-auto">
+<!-- Header & Quick Scan Area -->
+<section class="flex flex-col lg:flex-row justify-between items-start gap-8 mb-10">
+<div>
+<h1 class="font-h1 text-h1 text-on-background mb-2">Inventory Management</h1>
+<p class="text-tertiary font-body-lg">Unit AMBER-01 Tactical Resupply Dashboard</p>
+</div>
+<!-- Quick Scan Interface -->
+<div class="tactical-glass p-6 rounded-xl w-full lg:w-[400px] relative border border-red-500/20">
+<div class="corner-accent"></div>
+<div class="flex items-center justify-between mb-4">
+<span class="font-label-caps text-secondary uppercase">Mission Scan</span>
+<span class="text-[10px] font-mono text-slate-500">READY_FOR_INPUT</span>
+</div>
+<div class="flex items-center gap-3 bg-surface-container p-1 border-b-2 border-primary-container">
+<span class="material-symbols-outlined text-primary ml-2" data-icon="barcode_scanner">barcode_scanner</span>
+<input class="bg-transparent border-none focus:ring-0 text-on-surface font-mono text-sm w-full placeholder:text-slate-600" placeholder="SCAN BARCODE TO DOCUMENT USE" type="text"/>
+<button class="bg-primary text-on-primary font-label-caps px-4 py-2 hover:opacity-90 transition-opacity">LOG</button>
+</div>
+</div>
+</section>
+<!-- Bento Grid Inventory -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+<!-- High Priority/Low Stock Item -->
+<div class="tactical-glass p-6 rounded-xl relative low-stock-pulse border border-error/30">
+<div class="corner-accent"></div>
+<div class="flex justify-between items-start mb-6">
+<div class="p-2 bg-error-container/40 rounded">
+<span class="material-symbols-outlined text-error" data-icon="emergency">emergency</span>
+</div>
+<div class="bg-error/20 text-error px-2 py-0.5 text-[10px] font-bold uppercase rounded border border-error/50">Low Stock</div>
+</div>
+<h3 class="font-h3 text-h3 text-on-background mb-1">Epinephrine</h3>
+<p class="text-slate-500 font-mono text-xs mb-8">REF: EPI-772-TAC</p>
+<div class="flex items-end justify-between">
+<div>
+<span class="text-4xl font-black font-mono text-error">02</span>
+<span class="text-slate-500 text-xs font-mono ml-1">/10 UNITS</span>
+</div>
+<div class="flex gap-1">
+<div class="w-1.5 h-6 bg-error"></div>
+<div class="w-1.5 h-6 bg-error"></div>
+<div class="w-1.5 h-6 bg-slate-800"></div>
+<div class="w-1.5 h-6 bg-slate-800"></div>
+<div class="w-1.5 h-6 bg-slate-800"></div>
+</div>
+</div>
+</div>
+<!-- Stable Stock Item -->
+<div class="tactical-glass p-6 rounded-xl relative border border-white/5">
+<div class="corner-accent"></div>
+<div class="flex justify-between items-start mb-6">
+<div class="p-2 bg-surface-container-highest rounded text-on-background">
+<span class="material-symbols-outlined" data-icon="medical_services">medical_services</span>
+</div>
+<div class="bg-slate-500/20 text-slate-400 px-2 py-0.5 text-[10px] font-bold uppercase rounded border border-slate-500/50">Standby</div>
+</div>
+<h3 class="font-h3 text-h3 text-on-background mb-1">IV Kits (Tactical)</h3>
+<p class="text-slate-500 font-mono text-xs mb-8">REF: IV-K-09</p>
+<div class="flex items-end justify-between">
+<div>
+<span class="text-4xl font-black font-mono text-secondary">24</span>
+<span class="text-slate-500 text-xs font-mono ml-1">/30 UNITS</span>
+</div>
+<div class="flex gap-1">
+<div class="w-1.5 h-6 bg-secondary"></div>
+<div class="w-1.5 h-6 bg-secondary"></div>
+<div class="w-1.5 h-6 bg-secondary"></div>
+<div class="w-1.5 h-6 bg-secondary"></div>
+<div class="w-1.5 h-6 bg-slate-800"></div>
+</div>
+</div>
+</div>
+<!-- Critical Display - Oxygen -->
+<div class="tactical-glass p-6 rounded-xl relative border border-white/5 col-span-1 lg:col-span-2 overflow-hidden">
+<div class="corner-accent"></div>
+<div class="flex flex-col h-full">
+<div class="flex justify-between items-start mb-6">
+<h3 class="font-h3 text-h3 text-on-background">Oxygen Main Supply</h3>
+<div class="bg-secondary/20 text-secondary px-2 py-0.5 text-[10px] font-bold uppercase rounded border border-secondary/50">Priority</div>
+</div>
+<div class="grid grid-cols-2 gap-8 flex-1">
+<div>
+<p class="text-slate-500 font-mono text-xs mb-2">REMAINING VOLUME</p>
+<div class="text-5xl font-black font-mono text-on-background">88<span class="text-xl text-secondary">%</span></div>
+<div class="mt-4 w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[88%]"></div>
+</div>
+</div>
+<div class="flex flex-col justify-end">
+<div class="flex justify-between border-b border-white/5 py-1 text-xs">
+<span class="text-slate-500 uppercase font-label-caps">Tank Pressure</span>
+<span class="font-mono text-on-background">2,200 PSI</span>
+</div>
+<div class="flex justify-between border-b border-white/5 py-1 text-xs">
+<span class="text-slate-500 uppercase font-label-caps">Flow Rate</span>
+<span class="font-mono text-on-background">15 L/min</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Visual Decoration -->
+<div class="absolute -right-10 -bottom-10 opacity-10">
+<span class="material-symbols-outlined text-[160px]" data-icon="air">air</span>
+</div>
+</div>
+<!-- Morphine - High Alert -->
+<div class="tactical-glass p-6 rounded-xl relative low-stock-pulse border border-error/30">
+<div class="corner-accent"></div>
+<div class="flex justify-between items-start mb-6">
+<div class="p-2 bg-error-container/40 rounded">
+<span class="material-symbols-outlined text-error" data-icon="pill">pill</span>
+</div>
+<div class="bg-error/20 text-error px-2 py-0.5 text-[10px] font-bold uppercase rounded border border-error/50">Low Stock</div>
+</div>
+<h3 class="font-h3 text-h3 text-on-background mb-1">Morphine Sulfate</h3>
+<p class="text-slate-500 font-mono text-xs mb-8">REF: MOR-X1</p>
+<div class="flex items-end justify-between">
+<div>
+<span class="text-4xl font-black font-mono text-error">01</span>
+<span class="text-slate-500 text-xs font-mono ml-1">/05 UNITS</span>
+</div>
+<div class="flex gap-1">
+<div class="w-1.5 h-6 bg-error"></div>
+<div class="w-1.5 h-6 bg-slate-800"></div>
+<div class="w-1.5 h-6 bg-slate-800"></div>
+<div class="w-1.5 h-6 bg-slate-800"></div>
+<div class="w-1.5 h-6 bg-slate-800"></div>
+</div>
+</div>
+</div>
+<!-- Bandages / Dressings -->
+<div class="tactical-glass p-6 rounded-xl relative border border-white/5">
+<div class="corner-accent"></div>
+<div class="flex justify-between items-start mb-6">
+<div class="p-2 bg-surface-container-highest rounded">
+<span class="material-symbols-outlined text-on-background" data-icon="healing">healing</span>
+</div>
+<div class="bg-slate-500/20 text-slate-400 px-2 py-0.5 text-[10px] font-bold uppercase rounded border border-slate-500/50">Stable</div>
+</div>
+<h3 class="font-h3 text-h3 text-on-background mb-1">Hemostatic Gauze</h3>
+<p class="text-slate-500 font-mono text-xs mb-8">REF: HEMO-7</p>
+<div class="flex items-end justify-between">
+<div>
+<span class="text-4xl font-black font-mono text-on-background">42</span>
+<span class="text-slate-500 text-xs font-mono ml-1">/50 UNITS</span>
+</div>
+<div class="flex gap-1">
+<div class="w-1.5 h-6 bg-on-background"></div>
+<div class="w-1.5 h-6 bg-on-background"></div>
+<div class="w-1.5 h-6 bg-on-background"></div>
+<div class="w-1.5 h-6 bg-on-background"></div>
+<div class="w-1.5 h-6 bg-slate-800"></div>
+</div>
+</div>
+</div>
+<!-- Defibrillator Pads -->
+<div class="tactical-glass p-6 rounded-xl relative border border-white/5">
+<div class="corner-accent"></div>
+<div class="flex justify-between items-start mb-6">
+<div class="p-2 bg-surface-container-highest rounded">
+<span class="material-symbols-outlined text-on-background" data-icon="bolt">bolt</span>
+</div>
+<div class="bg-slate-500/20 text-slate-400 px-2 py-0.5 text-[10px] font-bold uppercase rounded border border-slate-500/50">Stable</div>
+</div>
+<h3 class="font-h3 text-h3 text-on-background mb-1">AED Pads (Adult)</h3>
+<p class="text-slate-500 font-mono text-xs mb-8">REF: DEFIB-A</p>
+<div class="flex items-end justify-between">
+<div>
+<span class="text-4xl font-black font-mono text-on-background">06</span>
+<span class="text-slate-500 text-xs font-mono ml-1">/06 UNITS</span>
+</div>
+<div class="flex gap-1">
+<div class="w-1.5 h-6 bg-on-background"></div>
+<div class="w-1.5 h-6 bg-on-background"></div>
+<div class="w-1.5 h-6 bg-on-background"></div>
+<div class="w-1.5 h-6 bg-on-background"></div>
+<div class="w-1.5 h-6 bg-on-background"></div>
+</div>
+</div>
+</div>
+<!-- Mission Log / Recent Activity -->
+<div class="tactical-glass p-6 rounded-xl relative border border-white/5 col-span-1 md:col-span-2 xl:col-span-1">
+<div class="corner-accent"></div>
+<h3 class="font-h3 text-h3 text-on-background mb-4">Mission Log</h3>
+<div class="space-y-4">
+<div class="border-l-2 border-primary pl-3">
+<p class="text-[10px] font-mono text-slate-500">09:42:01</p>
+<p class="text-sm font-bold">1x Epinephrine Used</p>
+<p class="text-[10px] text-slate-400">Barcode: 88203-E</p>
+</div>
+<div class="border-l-2 border-slate-600 pl-3">
+<p class="text-[10px] font-mono text-slate-500">09:21:55</p>
+<p class="text-sm font-bold">2x IV Kit Used</p>
+<p class="text-[10px] text-slate-400">Barcode: 11092-A</p>
+</div>
+<div class="border-l-2 border-slate-600 pl-3">
+<p class="text-[10px] font-mono text-slate-500">08:55:12</p>
+<p class="text-sm font-bold">Initial Supply Sync</p>
+<p class="text-[10px] text-slate-400">Source: Central Hub</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Tactical Visualizations Footer -->
+<section class="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8">
+<div class="tactical-glass p-8 rounded-xl border border-white/5 h-64 overflow-hidden flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h4 class="font-label-caps text-secondary">Supply Depletion Rate</h4>
+<span class="text-[10px] font-mono text-slate-500 tracking-tighter">PROJECTED_RUN_TIME: 14h 22m</span>
+</div>
+<div class="flex-1 relative">
+<!-- Simulated Graph -->
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 400 100">
+<defs>
+<lineargradient id="gold-grad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#e9c349" stop-opacity="0.3"></stop>
+<stop offset="100%" stop-color="#e9c349" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,80 Q50,75 100,60 T200,40 T300,55 T400,20 L400,100 L0,100 Z" fill="url(#gold-grad)"></path>
+<path d="M0,80 Q50,75 100,60 T200,40 T300,55 T400,20" fill="none" stroke="#ffb4ab" stroke-width="2"></path>
+<line stroke="rgba(255,180,171,0.2)" stroke-dasharray="4" x1="0" x2="400" y1="20" y2="20"></line>
+</svg>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<button class="tactical-glass p-6 rounded-xl border border-red-500/20 group hover:bg-error/10 transition-all flex flex-col items-center justify-center gap-3">
+<span class="material-symbols-outlined text-error text-3xl group-hover:scale-110 transition-transform" data-icon="sync_problem">sync_problem</span>
+<span class="font-label-caps text-on-background">REPORT DISCREPANCY</span>
+</button>
+<button class="bg-primary text-on-primary p-6 rounded-xl border border-primary/20 hover:bg-primary-container transition-all flex flex-col items-center justify-center gap-3">
+<span class="material-symbols-outlined text-3xl" data-icon="local_shipping">local_shipping</span>
+<span class="font-label-caps">REQUEST RESUPPLY</span>
+</button>
+</div>
+</section>
+</div>
+</main>
+<!-- Ambient Texture Overlay -->
+<div class="fixed inset-0 pointer-events-none opacity-[0.03]" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC7tpkt__82DB6mzb8S6dSke93-sJ0UMH5068y-gwet2bq4OibHwAAQrh3xzspY-YIkLS2y1KarkhzPdhqeiGUiebn5tKtkgVCYiz4OdIySI442UzR8v9VfMog9BIzbTkXL1RhXtoZ59Re1ppfUzFskWSfXtokGoX_IZNxwyoLci1DdFSekc7QlVr1_XukPQw_RUF3yXUEEKNxldrBTcP-FfCjDEgeXRC_svwm4i9fQqxhkYf_y-JOrhEtiHVSxyRVy5ij_aDfM2zTl');"></div>
+</body></html>

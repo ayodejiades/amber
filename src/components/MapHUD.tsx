@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 
 interface MarkerDef {
   id: string;
@@ -17,22 +17,63 @@ interface MapHUDProps {
   className?: string;
   simulateMovement?: boolean;
   showHeatmap?: boolean;
+  autoFocusAmbulance?: boolean;
+  autoFocusZoom?: number;
+  followAmbulance?: boolean;
 }
 
-export function MapHUD({
+interface OffscreenIndicator {
+  angle: number;
+  distanceKm: number;
+}
+
+export interface MapHUDHandle {
+  zoomIn: () => void;
+  zoomOut: () => void;
+  recenterToAmbulance: () => void;
+}
+
+export const MapHUD = forwardRef<MapHUDHandle, MapHUDProps>(function MapHUD({
   center = [6.5244, 3.3792],
   zoom = 13,
   markers = [],
   className = '',
   simulateMovement = false,
   showHeatmap = false,
-}: MapHUDProps) {
+  autoFocusAmbulance = true,
+  autoFocusZoom = 15,
+  followAmbulance = false,
+}: MapHUDProps, ref) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<any>(null);
   const markerRefs = useRef<Record<string, any>>({});
   const heatCircles = useRef<any[]>([]);
   const posRef = useRef<Record<string, [number, number]>>({});
+  const hasAutoFocused = useRef(false);
   const [ready, setReady] = useState(false);
+  const [offscreenIndicator, setOffscreenIndicator] = useState<OffscreenIndicator | null>(null);
+
+  const getAmbulancePosition = () => {
+    const ambulance = markers.find((m) => m.type === 'ambulance');
+    if (!ambulance) return null;
+    return (posRef.current[ambulance.id] ?? [ambulance.lat, ambulance.lng]) as [number, number];
+  };
+
+  useImperativeHandle(ref, () => ({
+    zoomIn: () => {
+      mapInstance.current?.zoomIn();
+    },
+    zoomOut: () => {
+      mapInstance.current?.zoomOut();
+    },
+    recenterToAmbulance: () => {
+      const map = mapInstance.current;
+      if (!map) return;
+      const position = getAmbulancePosition();
+      if (!position) return;
+      map.flyTo(position, map.getZoom(), { animate: true });
+    },
+  }), [markers]);
 
   // ── Bootstrap Leaflet ─────────────────────────────────────────────
   useEffect(() => {
@@ -144,11 +185,102 @@ export function MapHUD({
       if (!close) {
         posRef.current[ambulance.id] = [nLat, nLng];
         markerRefs.current[ambulance.id]?.setLatLng([nLat, nLng]);
+        if (followAmbulance && mapInstance.current) {
+          mapInstance.current.panTo([nLat, nLng], { animate: true });
+        }
       }
     }, 1500);
 
     return () => clearInterval(id);
-  }, [simulateMovement, ready, markers]);
+  }, [simulateMovement, ready, markers, followAmbulance]);
+
+  // ── Follow ambulance while enabled ────────────────────────────────
+  useEffect(() => {
+    if (!ready || !mapInstance.current || !followAmbulance) return;
+    const map = mapInstance.current;
+    const position = getAmbulancePosition();
+    if (!position) return;
+    map.panTo(position, { animate: true });
+  }, [followAmbulance, ready, markers]);
+
+  // ── Auto-focus ambulance on first ready render ───────────────────
+  useEffect(() => {
+    if (!ready || !mapInstance.current || !autoFocusAmbulance || hasAutoFocused.current) return;
+    const ambulance = markers.find((m) => m.type === 'ambulance');
+    if (!ambulance) return;
+
+    const map = mapInstance.current;
+    const position: [number, number] = posRef.current[ambulance.id] ?? [ambulance.lat, ambulance.lng];
+    map.setView(position, autoFocusZoom, { animate: true });
+    hasAutoFocused.current = true;
+  }, [ready, markers, autoFocusAmbulance, autoFocusZoom]);
+
+  // ── Off-screen incident directional indicator ────────────────────
+  useEffect(() => {
+    if (!ready || !mapInstance.current) return;
+
+    const map = mapInstance.current;
+
+    const toRadians = (value: number) => (value * Math.PI) / 180;
+    const toDegrees = (value: number) => (value * 180) / Math.PI;
+
+    const calculateDistanceKm = (a: [number, number], b: [number, number]) => {
+      const [lat1, lng1] = a;
+      const [lat2, lng2] = b;
+      const earthRadiusKm = 6371;
+      const dLat = toRadians(lat2 - lat1);
+      const dLng = toRadians(lng2 - lng1);
+      const haversine =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
+          Math.sin(dLng / 2) * Math.sin(dLng / 2);
+      const centralAngle = 2 * Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine));
+      return earthRadiusKm * centralAngle;
+    };
+
+    const calculateBearing = (from: [number, number], to: [number, number]) => {
+      const [lat1, lng1] = from;
+      const [lat2, lng2] = to;
+      const dLng = toRadians(lng2 - lng1);
+      const y = Math.sin(dLng) * Math.cos(toRadians(lat2));
+      const x =
+        Math.cos(toRadians(lat1)) * Math.sin(toRadians(lat2)) -
+        Math.sin(toRadians(lat1)) * Math.cos(toRadians(lat2)) * Math.cos(dLng);
+      const bearing = toDegrees(Math.atan2(y, x));
+      return (bearing + 360) % 360;
+    };
+
+    const updateIndicator = () => {
+      const incident = markers.find((m) => m.type === 'incident');
+      const ambulance = markers.find((m) => m.type === 'ambulance');
+      if (!incident || !ambulance) {
+        setOffscreenIndicator(null);
+        return;
+      }
+
+      const incidentPos: [number, number] = [incident.lat, incident.lng];
+      const ambulancePos: [number, number] =
+        posRef.current[ambulance.id] ?? [ambulance.lat, ambulance.lng];
+
+      const inView = map.getBounds().pad(-0.02).contains(incidentPos);
+      if (inView) {
+        setOffscreenIndicator(null);
+        return;
+      }
+
+      setOffscreenIndicator({
+        angle: calculateBearing(ambulancePos, incidentPos),
+        distanceKm: calculateDistanceKm(ambulancePos, incidentPos),
+      });
+    };
+
+    updateIndicator();
+    map.on('move zoom', updateIndicator);
+
+    return () => {
+      map.off('move zoom', updateIndicator);
+    };
+  }, [ready, markers]);
 
   // ── Heatmap ───────────────────────────────────────────────────────
   useEffect(() => {
@@ -201,6 +333,22 @@ export function MapHUD({
           Live Fleet Vector
         </p>
       </div>
+
+      {offscreenIndicator && (
+        <div className="absolute bottom-4 left-1/2 z-[1002] -translate-x-1/2 rounded-full border border-red-200 bg-white/95 px-3 py-1.5 shadow-lg backdrop-blur pointer-events-none">
+          <div className="flex items-center gap-2">
+            <span
+              className="material-symbols-outlined text-red-600"
+              style={{ transform: `rotate(${offscreenIndicator.angle}deg)` }}
+            >
+              north
+            </span>
+            <p className="text-[10px] font-black uppercase tracking-widest text-red-700">
+              Incident off-screen · {offscreenIndicator.distanceKm.toFixed(1)} km
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
-}
+});

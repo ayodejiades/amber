@@ -1,263 +1,211 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { MapHUD } from "@/components/MapHUD";
 import { TelemetryChart } from "@/components/TelemetryChart";
-import { mockStore } from "@/lib/mock-store";
 import { MockDataNotice } from "@/components/mock-data-notice";
+import { ParamedicShell } from "@/components/paramedic/ParamedicShell";
+import { useParamedicIncident } from "@/components/paramedic/useParamedicIncident";
+
+const ABCD_ITEMS = [
+  { label: "Airway", status: "Compromised", tone: "text-red-600 bg-red-50 border-red-200" },
+  { label: "Breathing", status: "Labored", tone: "text-amber-700 bg-amber-50 border-amber-200" },
+  { label: "Circulation", status: "Hemorrhage", tone: "text-red-600 bg-red-50 border-red-200" },
+  { label: "Disability", status: "Responsive", tone: "text-emerald-700 bg-emerald-50 border-emerald-200" },
+];
 
 export default function ParamedicPage() {
-  const [activeIncident, setActiveIncident] = useState<any>(null);
-  const [showNotification, setShowNotification] = useState(false);
-  const [bedConfirmed, setBedConfirmed] = useState(false);
-  const [bedDetails, setBedDetails] = useState("");
-  const [triageStatus, setTriageStatus] = useState("STABLE");
-
-  useEffect(() => {
-    // Check for existing incident
-    if (mockStore) {
-      const existing = mockStore.getActiveIncident();
-      if (existing) setActiveIncident(existing);
-
-      const handleNewIncident = (e: any) => {
-        setActiveIncident(e.detail);
-        setShowNotification(true);
-        // Play alert sound logic could go here
-      };
-
-      const handleClearIncident = () => {
-        setActiveIncident(null);
-      };
-
-      const handleBedConfirmed = (e: any) => {
-        setBedConfirmed(true);
-        setBedDetails(e.detail.bedDetails);
-      };
-
-      mockStore.addEventListener('new-incident', handleNewIncident);
-      mockStore.addEventListener('clear-incident', handleClearIncident);
-      mockStore.addEventListener('bed-confirmed', handleBedConfirmed);
-
-      return () => {
-        if (mockStore) {
-          mockStore.removeEventListener('new-incident', handleNewIncident);
-          mockStore.removeEventListener('clear-incident', handleClearIncident);
-          mockStore.removeEventListener('bed-confirmed', handleBedConfirmed);
-        }
-      };
-    }
-  }, []);
+  const { activeIncident, showNotification, setShowNotification, bedConfirmed, bedDetails } =
+    useParamedicIncident();
 
   return (
-    <div className="bg-slate-50 min-h-screen font-body pb-20 md:pb-0">
-      {/* Mobile-First Layout */}
-      <main className="max-w-md mx-auto h-screen flex flex-col relative bg-white shadow-2xl">
-        
-        {/* Header HUD */}
-        <header className="p-4 border-b border-slate-100 flex justify-between items-center bg-white sticky top-0 z-20">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white font-black italic text-xs">A</div>
-            <div>
-              <h1 className="text-sm font-black text-slate-900 tracking-tight uppercase">AMB-08 UNIT</h1>
-              <div className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">System Ready</span>
-              </div>
-            </div>
-          </div>
-          <button className="p-2 bg-slate-50 border border-slate-100 rounded-lg text-slate-400">
-            <span className="material-symbols-outlined text-xl">account_circle</span>
-          </button>
-        </header>
-
-        {/* Dynamic Content Area */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col">
-          
-          {!activeIncident ? (
-            <div className="flex-1 flex flex-col items-center justify-center p-8 text-center gap-6">
-              <div className="w-24 h-24 bg-slate-50 border-2 border-dashed border-slate-200 rounded-full flex items-center justify-center">
-                <span className="material-symbols-outlined text-4xl text-slate-200">radar</span>
-              </div>
-              <div>
-                <h2 className="font-display font-bold text-slate-900 text-lg uppercase tracking-tight">Awaiting Dispatch</h2>
-                <p className="text-sm text-slate-400 mt-2">Standby at Sector: Apapa. Maintain active connection for incident alerts.</p>
-              </div>
-            </div>
-          ) : (
-            <div className="flex flex-col gap-4 p-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-              {/* Incident Banner */}
-              <div className="bg-primary/5 border border-primary/20 p-4 rounded-xl relative overflow-hidden">
-                <div className="absolute right-0 top-0 bottom-0 w-1 bg-primary"></div>
-                <div className="flex justify-between items-start mb-3">
-                   <span className="bg-primary text-white text-[9px] font-black px-2 py-0.5 rounded uppercase tracking-widest">Active Call</span>
-                   <span className="text-[10px] font-mono font-bold text-primary">ID: {activeIncident.id}</span>
-                </div>
-                <h2 className="text-xl font-display font-black text-slate-900 uppercase leading-tight mb-1">{activeIncident.type}</h2>
-                <p className="text-xs font-bold text-slate-500 flex items-center gap-1 uppercase tracking-tight mb-4">
-                  <span className="material-symbols-outlined text-sm">location_on</span>
-                  {activeIncident.location}
-                </p>
-                <div className="flex gap-2">
-                  <button className="flex-1 bg-primary text-white py-3 rounded-lg font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-primary/20">
-                    <span className="material-symbols-outlined text-sm">navigation</span> Navigate
-                  </button>
-                  <button className="px-4 py-3 bg-white border border-slate-200 rounded-lg text-slate-700 font-bold text-xs">
-                    <span className="material-symbols-outlined">call</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Patient EMR Profile (New Recommendation #8) */}
-              <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 shadow-sm animate-in fade-in zoom-in duration-500">
-                <div className="flex justify-between items-center mb-3">
-                  <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Amber Patient Profile</h3>
-                  <span className="text-[8px] bg-slate-900 text-white px-2 py-0.5 rounded uppercase font-black tracking-widest">Encrypted EMR</span>
-                </div>
-                <div className="grid grid-cols-2 gap-4 mb-3">
-                  <div>
-                    <p className="text-[9px] text-slate-400 font-bold uppercase tracking-tighter">Blood Type</p>
-                    <p className="text-sm font-black text-primary">{activeIncident.patientProfile?.bloodType || 'O+'}</p>
-                  </div>
-                  <div>
-                    <p className="text-[9px] text-slate-400 font-bold uppercase tracking-tighter">Allergies</p>
-                    <p className="text-[10px] font-bold text-slate-700">{activeIncident.patientProfile?.allergies.join(', ') || 'None'}</p>
-                  </div>
-                </div>
-                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-tighter">Medical History</p>
-                <p className="text-[10px] text-slate-600 line-clamp-2 italic">{activeIncident.patientProfile?.history}</p>
-              </div>
-
-              {/* Triage Panel (New Recommendation #2) */}
-              <div className="bg-white border border-slate-100 rounded-xl p-4 shadow-sm">
-                 <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Field Triage (AVPU Scale)</h3>
-                 <div className="grid grid-cols-4 gap-2">
-                    {['A', 'V', 'P', 'U'].map((lvl) => (
-                      <button 
-                        key={lvl}
-                        onClick={() => {
-                          const status = lvl === 'A' ? 'ALERT' : lvl === 'V' ? 'VERBAL' : lvl === 'P' ? 'PAIN' : 'UNRESPONSIVE';
-                          setTriageStatus(status);
-                          if (mockStore) mockStore.updateTriage(activeIncident.id, status);
-                        }}
-                        className={`py-3 rounded-lg font-black text-sm transition-all ${
-                          triageStatus.startsWith(lvl) 
-                          ? 'bg-primary text-white shadow-lg shadow-primary/20 scale-105' 
-                          : 'bg-slate-50 text-slate-400 border border-slate-100'
-                        }`}
-                      >
-                        {lvl}
-                      </button>
-                    ))}
-                 </div>
-                 <p className="text-center text-[9px] font-black text-slate-300 mt-3 tracking-widest uppercase">
-                   Current: {triageStatus}
-                 </p>
-              </div>
-
-              {/* Patient Telemetry (RECHARTS) */}
-              <div className="bg-white border border-slate-100 rounded-xl p-4 shadow-sm">
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Bio-Telemetry Feed</h3>
-                  <span className="text-[9px] font-bold text-primary animate-pulse bg-primary/5 px-2 py-0.5 rounded uppercase tracking-widest">Live</span>
-                </div>
-                
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-end">
-                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-tighter">Heart Rate</span>
-                      <span className="text-sm font-black text-slate-900">88 BPM</span>
-                    </div>
-                    <TelemetryChart type="heart" color="#EF4444" seed={activeIncident.telemetrySeed} />
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-end">
-                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-tighter">Oxygen Sat</span>
-                      <span className="text-sm font-black text-slate-900">98%</span>
-                    </div>
-                    <TelemetryChart type="spo2" color="#3B82F6" seed={activeIncident.telemetrySeed} />
-                  </div>
-                </div>
-              </div>
-
-              {/* Destination HUD */}
-              <div className="bg-slate-950 text-white rounded-xl p-4 relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-10">
-                   <span className="material-symbols-outlined text-4xl">local_hospital</span>
-                </div>
-                <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-2">Hospital Connection</p>
-                <p className="font-bold text-sm uppercase truncate mb-1">{activeIncident.hospital}</p>
-                <div className="flex justify-between items-center">
-                  <span className={`text-[10px] font-bold uppercase transition-colors ${bedConfirmed ? 'text-emerald-500' : 'text-slate-400'}`}>
-                    {bedConfirmed ? (
-                      <span className="flex items-center gap-1">
-                        <span className="material-symbols-outlined text-xs">check_circle</span>
-                        {bedDetails} Reserved
-                      </span>
-                    ) : 'Awaiting confirmation...'}
-                  </span>
-                  <span className="text-[10px] font-mono text-slate-400">ETA 12:44</span>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Map Navigation (Mapbox Fallback) */}
-          <div className="px-4 pb-4 mt-auto">
-            <div className="h-48 relative rounded-xl overflow-hidden shadow-inner border border-slate-100">
-               <MapHUD 
-                 className="h-full" 
-                 zoom={14} 
-                 center={activeIncident ? [3.37, 6.48] : [3.38, 6.52]}
-                 markers={activeIncident ? [
-                   { id: 'scene', lng: 3.37, lat: 6.48, type: 'incident', label: 'Scene' },
-                   { id: 'unit', lng: 3.38, lat: 6.49, type: 'ambulance', label: 'AMB-08' }
-                 ] : []}
-               />
-            </div>
-          </div>
+    <ParamedicShell title="Paramedic Patient HUD" subtitle="Sector 7G Live">
+      {!activeIncident ? (
+        <div className="flex min-h-[70vh] flex-col items-center justify-center rounded-3xl border border-clinical-border bg-white p-10 text-center shadow-clinical">
+          <span className="material-symbols-outlined mb-3 text-6xl text-slate-300">ambulance_alert</span>
+          <h2 className="font-display text-2xl font-black">Awaiting Dispatch</h2>
+          <p className="mt-2 max-w-md text-sm text-slate-500">
+            Unit is online and ready for response. New incidents from dispatch will appear here in real time.
+          </p>
         </div>
-
-        {/* Footer Controls */}
-        <nav className="p-4 border-t border-slate-100 flex justify-around items-center bg-white shrink-0">
-          <button className="flex flex-col items-center gap-1 text-primary">
-            <span className="material-symbols-outlined">dashboard</span>
-            <span className="text-[8px] font-black uppercase tracking-widest">Main</span>
-          </button>
-          <button className="flex flex-col items-center gap-1 text-slate-300">
-            <span className="material-symbols-outlined">medical_information</span>
-            <span className="text-[8px] font-black uppercase tracking-widest">Vitals</span>
-          </button>
-          <button className="flex flex-col items-center gap-1 text-slate-300">
-            <span className="material-symbols-outlined">history</span>
-            <span className="text-[8px] font-black uppercase tracking-widest">Logs</span>
-          </button>
-          <button className="flex flex-col items-center gap-1 text-slate-300">
-             <span className="material-symbols-outlined">settings_suggest</span>
-             <span className="text-[8px] font-black uppercase tracking-widest">Setup</span>
-          </button>
-        </nav>
-
-        {/* Notification Overlay */}
-        {showNotification && (
-          <div className="absolute inset-x-4 top-20 z-50 bg-primary text-white p-4 rounded-xl shadow-2xl flex items-center justify-between animate-in slide-in-from-top-full duration-300">
-            <div className="flex items-center gap-3">
-              <span className="material-symbols-outlined heartbeat">emergency_share</span>
-              <div>
-                <p className="text-[10px] font-black uppercase tracking-widest leading-none mb-1">New Assignment</p>
-                <p className="text-sm font-bold truncate max-w-[180px]">INCIDENT DETECTED</p>
+      ) : (
+        <section className="grid gap-6 xl:grid-cols-[1.45fr_1fr]">
+          <div className="space-y-6">
+            <article className="rounded-2xl border border-red-200 bg-white p-6 shadow-clinical">
+              <div className="mb-4 flex flex-wrap items-start justify-between gap-2">
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-red-600">
+                    Critical Status
+                  </p>
+                  <h2 className="font-display text-2xl font-black">{activeIncident.type}</h2>
+                  <p className="text-xs font-bold uppercase tracking-wide text-slate-500">
+                    {activeIncident.location}
+                  </p>
+                </div>
+                <p className="rounded-full border border-clinical-border px-3 py-1 text-[11px] font-mono font-bold">
+                  {activeIncident.id}
+                </p>
               </div>
-            </div>
-            <button 
-              onClick={() => setShowNotification(false)}
-              className="bg-white/20 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase"
-            >
-              Acknowledge
-            </button>
-          </div>
-        )}
+              <div className="grid gap-3 sm:grid-cols-3">
+                <button className="rounded-xl bg-clinical-primary px-4 py-3 text-[11px] font-black uppercase tracking-[0.18em] text-white">
+                  Request Evac
+                </button>
+                <button className="rounded-xl border border-clinical-border px-4 py-3 text-[11px] font-black uppercase tracking-[0.18em] text-slate-700">
+                  Route Assist
+                </button>
+                <button className="rounded-xl border border-clinical-border px-4 py-3 text-[11px] font-black uppercase tracking-[0.18em] text-slate-700">
+                  Voice Channel
+                </button>
+              </div>
+            </article>
 
-        <MockDataNotice />
-      </main>
-    </div>
+            <div className="grid gap-4 md:grid-cols-3">
+              <article className="rounded-2xl border border-clinical-border bg-white p-4 shadow-clinical">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Heart Rate</p>
+                <p className="mt-2 font-mono text-4xl font-black text-red-600">142</p>
+                <p className="text-[10px] font-bold uppercase text-slate-500">BPM</p>
+                <TelemetryChart type="heart" seed={activeIncident.telemetrySeed} color="#dc2626" />
+              </article>
+              <article className="rounded-2xl border border-clinical-border bg-white p-4 shadow-clinical">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">SpO2</p>
+                <p className="mt-2 font-mono text-4xl font-black text-sky-700">88</p>
+                <p className="text-[10px] font-bold uppercase text-slate-500">%</p>
+                <TelemetryChart type="spo2" seed={activeIncident.telemetrySeed} color="#0c4a6e" />
+              </article>
+              <article className="rounded-2xl border border-clinical-border bg-white p-4 shadow-clinical">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                  Blood Pressure
+                </p>
+                <p className="mt-2 font-mono text-4xl font-black text-amber-700">92/58</p>
+                <p className="text-[10px] font-bold uppercase text-slate-500">MMHG</p>
+                <TelemetryChart type="bp" seed={activeIncident.telemetrySeed} color="#b45309" />
+              </article>
+            </div>
+
+            <article className="rounded-2xl border border-clinical-border bg-white p-5 shadow-clinical">
+              <div className="mb-3 flex items-center justify-between">
+                <h3 className="text-[11px] font-black uppercase tracking-[0.2em]">ABCD Assessment</h3>
+                <button className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">
+                  Reset
+                </button>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {ABCD_ITEMS.map((item) => (
+                  <div key={item.label} className={`rounded-xl border p-3 ${item.tone}`}>
+                    <p className="text-[10px] font-black uppercase tracking-[0.16em]">{item.label}</p>
+                    <p className="text-sm font-mono font-bold">{item.status}</p>
+                  </div>
+                ))}
+              </div>
+            </article>
+
+            <article className="rounded-2xl border border-clinical-border bg-white p-5 shadow-clinical">
+              <div className="mb-3 flex items-center justify-between">
+                <h3 className="text-[11px] font-black uppercase tracking-[0.2em]">Intervention Log</h3>
+                <button className="rounded-lg bg-slate-900 px-3 py-2 text-[10px] font-black uppercase tracking-[0.18em] text-white">
+                  New Entry
+                </button>
+              </div>
+              <div className="space-y-2">
+                <div className="rounded-xl border border-clinical-border bg-slate-50 p-3">
+                  <p className="text-[10px] font-mono font-bold text-slate-500">04:18</p>
+                  <p className="text-xs font-black uppercase">Administered Epinephrine</p>
+                </div>
+                <div className="rounded-xl border border-clinical-border bg-slate-50 p-3">
+                  <p className="text-[10px] font-mono font-bold text-slate-500">04:15</p>
+                  <p className="text-xs font-black uppercase">IV Access Established</p>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <aside className="space-y-6">
+            <article className="rounded-2xl border border-clinical-border bg-white p-5 shadow-clinical">
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                Receiving Hospital
+              </p>
+              <h3 className="mt-1 text-lg font-black">{activeIncident.hospital}</h3>
+              <div className="mt-3 grid grid-cols-2 gap-2">
+                <div className="rounded-lg bg-slate-100 p-2 text-center">
+                  <p className="text-[10px] font-bold uppercase text-slate-500">ETA</p>
+                  <p className="font-mono text-sm font-black">{activeIncident.eta}</p>
+                </div>
+                <div className="rounded-lg bg-slate-100 p-2 text-center">
+                  <p className="text-[10px] font-bold uppercase text-slate-500">Status</p>
+                  <p className="font-mono text-sm font-black text-emerald-700">
+                    {bedConfirmed ? "Ready" : "Pre-alert"}
+                  </p>
+                </div>
+              </div>
+              {bedDetails ? (
+                <p className="mt-3 rounded-lg bg-emerald-50 p-2 text-xs font-bold text-emerald-700">
+                  {bedDetails}
+                </p>
+              ) : null}
+            </article>
+
+            <article className="h-72 overflow-hidden rounded-2xl border border-clinical-border bg-white shadow-clinical">
+              <MapHUD
+                className="h-full"
+                zoom={14}
+                center={[6.48, 3.37]}
+                markers={[
+                  { id: "scene", lat: 6.48, lng: 3.37, type: "incident", label: "Patient" },
+                  { id: "unit", lat: 6.49, lng: 3.38, type: "ambulance", label: "AMB-08" },
+                ]}
+              />
+            </article>
+
+            <article id="comms" className="rounded-2xl border border-clinical-border bg-white p-5 shadow-clinical">
+              <div className="mb-3 flex items-center justify-between">
+                <p className="text-[11px] font-black uppercase tracking-[0.2em]">Comms Channel</p>
+                <span className="h-2 w-2 rounded-full bg-emerald-500" />
+              </div>
+              <div className="mb-3 space-y-2">
+                <div className="rounded-xl bg-clinical-primary-soft p-3">
+                  <p className="text-[10px] font-black uppercase tracking-[0.14em] text-clinical-primary">
+                    Amber Command
+                  </p>
+                  <p className="text-xs text-slate-700">Clear path active. Trauma bay is prepped.</p>
+                </div>
+                <div className="rounded-xl border border-clinical-border p-3">
+                  <p className="text-[10px] font-black uppercase tracking-[0.14em] text-slate-500">
+                    Receiving Team
+                  </p>
+                  <p className="text-xs text-slate-700">Continue oxygen support and update GCS en route.</p>
+                </div>
+              </div>
+              <div className="relative">
+                <input
+                  placeholder="Send update..."
+                  className="w-full rounded-xl border border-clinical-border bg-slate-50 px-4 py-2.5 text-xs font-mono"
+                />
+                <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
+                  send
+                </span>
+              </div>
+            </article>
+          </aside>
+        </section>
+      )}
+
+      {showNotification ? (
+        <div className="fixed right-6 top-22 z-50 rounded-xl bg-clinical-primary p-4 text-white shadow-2xl">
+          <p className="text-[10px] font-black uppercase tracking-[0.2em]">New Assignment</p>
+          <p className="text-sm font-bold">{activeIncident?.type ?? "Incident detected"}</p>
+          <button
+            onClick={() => setShowNotification(false)}
+            className="mt-2 rounded-md bg-white/20 px-3 py-1 text-[10px] font-bold uppercase"
+          >
+            Acknowledge
+          </button>
+        </div>
+      ) : null}
+
+      <button className="fixed bottom-7 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-2xl bg-red-600 text-white shadow-xl shadow-red-200">
+        <span className="material-symbols-outlined">add_alert</span>
+      </button>
+
+      <MockDataNotice />
+    </ParamedicShell>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { MapHUD } from "@/components/MapHUD";
 import { mockStore } from "@/lib/mock-store";
@@ -14,10 +14,11 @@ const EMERGENCY_TYPES = [
   { label: "Other", icon: "more_horiz" },
 ];
 
-const AVAILABLE_UNITS = [
-  { id: "AMB-05", location: "Hub 4, Surulere", eta: "6 min", lng: 3.36, lat: 6.50 },
-  { id: "AMB-08", location: "Costain, Apapa", eta: "3 min", lng: 3.37, lat: 6.48 },
-  { id: "AMB-14", location: "Orile Depot", eta: "9 min", lng: 3.34, lat: 6.49 },
+const ASSET_CARDS = [
+  { id: "Amber 01", status: "EN ROUTE", detail: "DEST: VICTORIA ISLAND", width: "w-[65%]", tone: "border-red-500 text-red-700 bg-red-50" },
+  { id: "Amber 05", status: "STANDBY", detail: "LOC: CENTRAL HUB 4", width: "w-[40%]", tone: "border-cyan-500 text-cyan-700 bg-cyan-50" },
+  { id: "Amber 09", status: "MAINTENANCE", detail: "EST. RETURN: 0400 HRS", width: "w-[15%]", tone: "border-slate-400 text-slate-600 bg-slate-50" },
+  { id: "Amber 12", status: "EN ROUTE", detail: "DEST: LEKKI PHASE 1", width: "w-[30%]", tone: "border-amber-500 text-amber-700 bg-amber-50" },
 ];
 
 export default function DispatchOverviewPage() {
@@ -30,25 +31,17 @@ export default function DispatchOverviewPage() {
 
 function DispatchContent() {
   const searchParams = useSearchParams();
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(searchParams.get("newEmergency") === "true");
   const [modalStep, setModalStep] = useState<"form" | "matching" | "dispatched">("form");
   const [selectedType, setSelectedType] = useState<number | null>(null);
   const [incidentLocation, setIncidentLocation] = useState("");
-  const [selectedUnit, setSelectedUnit] = useState<number | null>(null);
   const [showHeatmap, setShowHeatmap] = useState(false);
-
-  useEffect(() => {
-    if (searchParams.get("newEmergency") === "true") {
-      openModal();
-    }
-  }, [searchParams]);
 
   const openModal = () => {
     setShowModal(true);
     setModalStep("form");
     setSelectedType(null);
     setIncidentLocation("");
-    setSelectedUnit(null);
   };
 
   const handleDispatchAction = () => {
@@ -57,7 +50,6 @@ function DispatchContent() {
 
     // Simulate AI matching
     setTimeout(() => {
-      setSelectedUnit(1); // Auto-select AMB-08 (closest)
       setModalStep("dispatched");
       
       // Send to mock store for cross-portal handshake
@@ -75,164 +67,141 @@ function DispatchContent() {
   };
 
   return (
-    <div className="p-4 h-full flex flex-col lg:grid lg:grid-cols-12 gap-4 overflow-y-auto lg:overflow-hidden pb-8 lg:pb-4">
-      {/* Left: Ambulance Monitor */}
-      <section className="lg:col-span-3 flex flex-col gap-4">
-        <div className="bg-white border border-slate-200 rounded-xl flex flex-col h-[400px] lg:h-full shadow-sm overflow-hidden">
-          <div className="p-4 border-b border-slate-100 bg-slate-50 flex justify-between items-center shrink-0">
-            <h2 className="font-display font-bold text-slate-900 uppercase tracking-widest text-sm flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary text-base">airport_shuttle</span> Ambulance Monitor
-            </h2>
-            <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded font-bold">142 Active</span>
+    <div className="grid h-full grid-cols-1 gap-4 lg:grid-cols-12">
+      <section className="flex flex-col gap-4 lg:col-span-3">
+        <div className="flex h-full min-h-[560px] flex-col rounded-xl border border-slate-200 bg-white p-5">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-sm font-black uppercase tracking-[0.2em] text-cyan-700">Asset Monitor</h2>
+            <span className="material-symbols-outlined text-cyan-700">sensors</span>
           </div>
-          
-          <div className="flex-1 overflow-y-auto p-3 space-y-3 custom-scrollbar">
-            {/* Active Unit Card */}
-            <div className="bg-slate-50 border border-primary/20 rounded-lg p-3 shadow-sm relative overflow-hidden group">
-              <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
-              <div className="flex justify-between items-start mb-2">
-                <div>
-                  <span className="font-mono text-xs font-bold text-slate-900">AMB-01</span>
-                  <p className="text-[9px] text-primary font-semibold uppercase tracking-wider">En route to scene</p>
+          <div className="space-y-3 overflow-y-auto pr-1 custom-scrollbar">
+            {ASSET_CARDS.map((asset) => (
+              <article key={asset.id} className={`rounded-r-lg border-l-2 p-3 ${asset.tone}`}>
+                <div className="mb-2 flex items-center justify-between">
+                  <p className="font-mono text-sm font-bold">{asset.id}</p>
+                  <span className="rounded px-2 py-1 text-[10px] font-black">{asset.status}</span>
                 </div>
-                <span className="text-[10px] text-slate-500 font-bold font-mono">ETA 04m</span>
-              </div>
-              <div className="text-xs text-slate-600 mb-2 font-mono truncate">
-                TO: APAPA WHARF
-              </div>
-              <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
-                <div className="bg-primary h-full w-[80%]"></div>
-              </div>
+                <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.14em]">{asset.detail}</p>
+                <div className="h-1.5 rounded-full bg-white/70">
+                  <div className={`h-1.5 rounded-full bg-current ${asset.width}`} />
+                </div>
+              </article>
+            ))}
+          </div>
+          <div className="mt-4 grid grid-cols-2 gap-3">
+            <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+              <p className="text-[10px] uppercase tracking-[0.14em] text-slate-500">Active</p>
+              <p className="font-mono text-xl font-black">14</p>
             </div>
-
-            {/* Standby Unit Card */}
-            <div className="bg-white border border-slate-200 rounded-lg p-3 relative overflow-hidden opacity-80 hover:opacity-100 transition-opacity">
-              <div className="flex justify-between items-start mb-2">
-                <div>
-                  <span className="font-mono text-xs font-bold text-slate-700">AMB-05</span>
-                  <p className="text-[9px] text-emerald-600 font-semibold uppercase tracking-wider">Standby</p>
-                </div>
-              </div>
-              <div className="text-xs text-slate-500 font-mono">
-                AT: HUB 4
-              </div>
-            </div>
-
-            <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 relative overflow-hidden group">
-              <div className="absolute left-0 top-0 bottom-0 w-1 bg-amber-500"></div>
-              <div className="flex justify-between items-start mb-2">
-                <div>
-                  <span className="font-mono text-xs font-bold text-slate-900">AMB-12</span>
-                  <p className="text-[9px] text-amber-600 font-semibold uppercase tracking-wider">At hospital</p>
-                </div>
-              </div>
-              <div className="text-xs text-slate-600 font-mono">
-                LOC: LUTH ER
-              </div>
+            <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+              <p className="text-[10px] uppercase tracking-[0.14em] text-slate-500">Available</p>
+              <p className="font-mono text-xl font-black text-cyan-700">08</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Center: Live Network Monitor (Mapbox) */}
-      <section className="lg:col-span-6 flex flex-col gap-4">
-        <MapHUD 
-          className="flex-1 min-h-[400px]"
-          simulateMovement={true}
-          showHeatmap={showHeatmap}
-          markers={[
-            { id: 'amb-01', lng: 3.37, lat: 6.51, type: 'ambulance', label: 'AMB-01' },
-            { id: 'luth', lng: 3.36, lat: 6.52, type: 'hospital', label: 'LUTH' },
-            { id: 'incident-1', lng: 3.38, lat: 6.50, type: 'incident', label: 'Cardiac VI' }
-          ]}
-        />
-        
-        <div className="bg-white border border-slate-200 p-4 rounded-xl flex flex-col sm:flex-row justify-between items-center gap-4 shadow-lg shrink-0">
-          <div>
-            <p className="text-[10px] font-semibold text-slate-500 mb-1">Selected Unit</p>
-            <div className="flex items-center gap-3">
-              <span className="font-display font-bold text-xl text-slate-900">AMB-01</span>
-              <span className="bg-primary/10 text-primary px-2 py-0.5 rounded text-[10px] font-semibold border border-primary/20">Critical</span>
+      <section className="lg:col-span-6">
+        <article className="relative h-full min-h-[560px] overflow-hidden rounded-xl border border-red-200 bg-white shadow-[0_0_30px_rgba(239,68,68,0.09)]">
+          <MapHUD
+            className="h-full"
+            simulateMovement
+            showHeatmap={showHeatmap}
+            markers={[
+              { id: "amb-01", lng: 3.37, lat: 6.51, type: "ambulance", label: "Amber 01" },
+              { id: "luth", lng: 3.36, lat: 6.52, type: "hospital", label: "LUTH" },
+              { id: "incident-1", lng: 3.38, lat: 6.50, type: "incident", label: "Cardiac Incident" },
+            ]}
+          />
+          <div className="pointer-events-none absolute inset-0 p-4">
+            <div className="flex justify-between">
+              <div className="rounded border border-slate-200 bg-white/90 p-3">
+                <p className="text-[10px] uppercase tracking-[0.16em] text-amber-700">Coordinates</p>
+                <p className="font-mono text-xs font-bold">6 deg 27N 3 deg 23E</p>
+              </div>
+              <div className="rounded border border-slate-200 bg-white/90 p-3 text-right">
+                <p className="text-[10px] uppercase tracking-[0.16em] text-cyan-700">Signal Strength</p>
+                <p className="font-mono text-xs font-bold">99.8% Crypto-Link</p>
+              </div>
+            </div>
+            <div className="absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full border border-slate-300 bg-white/95 px-6 py-3">
+              <div className="flex items-center gap-6 text-[10px] font-bold uppercase tracking-[0.14em]">
+                <span className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-red-500" /> Fleet</span>
+                <span className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-cyan-500" /> Medical Hubs</span>
+                <span className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-amber-500" /> Active Incidents</span>
+              </div>
             </div>
           </div>
-          <div className="flex gap-4 md:gap-6 text-right w-full sm:w-auto justify-between sm:justify-end border-t border-slate-100 sm:border-0 pt-3 sm:pt-0">
-            <div>
-              <span className="block text-[10px] font-medium text-slate-500">ETA</span>
-              <span className="font-mono font-bold text-lg text-primary">04:12</span>
-            </div>
-            <div>
-              <span className="block text-[10px] font-medium text-slate-500">Speed</span>
-              <span className="font-mono font-bold text-lg text-slate-900">84 km/h</span>
-            </div>
-          </div>
-        </div>
+        </article>
       </section>
 
-      {/* Right: Live Stats */}
-      <section className="lg:col-span-3 flex flex-col gap-4">
-        <div className="bg-white border border-slate-200 rounded-xl flex-1 flex flex-col shadow-sm overflow-hidden min-h-[400px]">
-          <div className="p-4 border-b border-slate-100 bg-slate-50 shrink-0">
-            <h2 className="font-display font-bold text-slate-900 text-sm flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary text-base">route</span> Live Stats
-            </h2>
+      <section className="lg:col-span-3">
+        <article className="flex h-full min-h-[560px] flex-col rounded-xl border border-slate-200 bg-white p-5">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-sm font-black uppercase tracking-[0.2em] text-red-600">Live Alerts</h2>
+            <span className="material-symbols-outlined text-red-600">wifi_tethering</span>
           </div>
-          
-          <div className="flex-1 p-4 space-y-6 overflow-y-auto custom-scrollbar">
-            <div>
-              <div className="flex justify-between items-end mb-2">
-                <span className="text-[10px] font-medium text-slate-500">Network Load</span>
-                <span className="font-mono text-sm font-bold text-primary">94%</span>
-              </div>
-              <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                <div className="bg-primary h-full w-[94%]"></div>
-              </div>
-            </div>
-
-            <div>
-              <span className="text-[10px] font-medium text-slate-500 block mb-3">System Health</span>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center bg-slate-50 p-2 rounded border border-slate-100">
-                  <span className="text-xs text-slate-700 font-semibold">API Gateway</span>
-                  <span className="text-[10px] text-emerald-600 font-bold">12ms</span>
+          <div className="flex-1 space-y-3 overflow-y-auto pr-1 custom-scrollbar">
+            <article className="rounded border border-red-200 bg-red-50 p-4">
+              <p className="mb-2 text-[10px] font-black uppercase tracking-[0.14em] text-red-700">ID: #8821-X</p>
+              <p className="mb-2 text-xs font-black uppercase">Cardiac Incident - VI</p>
+              <div className="mb-3 rounded border border-cyan-200 bg-cyan-50 p-3">
+                <div className="mb-1 flex items-center justify-between">
+                  <span className="text-[10px] font-black uppercase tracking-[0.14em] text-cyan-700">AI Hospital Match</span>
+                  <span className="text-[10px] font-mono font-bold text-cyan-700">98% Score</span>
                 </div>
-                <div className="flex justify-between items-center bg-slate-50 p-2 rounded border border-slate-100">
-                  <span className="text-xs text-slate-700 font-semibold">Database</span>
-                  <span className="text-[10px] text-emerald-600 font-bold">45ms</span>
-                </div>
-                <div className="flex justify-between items-center bg-slate-50 p-2 rounded border border-slate-100">
-                  <span className="text-xs text-slate-700 font-semibold">Connection</span>
-                  <span className="text-[10px] text-emerald-600 font-bold">Strong</span>
-                </div>
+                <p className="text-xs font-bold">Reddington Victoria Island</p>
+                <p className="text-[10px] text-slate-600">ICU Bed 04 available | Cardiology team on-site</p>
               </div>
-            </div>
-            
-            <div className="pt-4 border-t border-slate-100 space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Predictive Heatmap</span>
-                <button 
-                  onClick={() => setShowHeatmap(!showHeatmap)}
-                  className={`w-10 h-5 rounded-full relative transition-colors ${showHeatmap ? 'bg-primary' : 'bg-slate-200'}`}
-                >
-                  <div className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-all ${showHeatmap ? 'left-6' : 'left-1'}`}></div>
+              <div className="flex gap-2">
+                <button className="flex-1 rounded bg-red-600 py-2 text-[10px] font-black uppercase tracking-[0.14em] text-white">
+                  Dispatch Amber 01
+                </button>
+                <button className="rounded border border-slate-300 px-2 text-slate-600">
+                  <span className="material-symbols-outlined text-sm">more_vert</span>
                 </button>
               </div>
-              
-              <button 
-                onClick={openModal}
-                className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-4 rounded-lg text-xs shadow-lg shadow-primary/20 transition-colors flex items-center justify-center gap-2 uppercase tracking-widest font-caps"
+            </article>
+            <article className="rounded border border-slate-200 bg-slate-50 p-3">
+              <div className="mb-1 flex items-center justify-between">
+                <p className="text-[10px] font-black uppercase">Trauma - Lekki 1</p>
+                <span className="text-[9px] font-mono text-slate-500">2m ago</span>
+              </div>
+              <p className="text-[10px] text-slate-600">Patient: VIP Member #0042</p>
+            </article>
+            <article className="rounded border border-slate-200 bg-slate-50 p-3">
+              <div className="mb-1 flex items-center justify-between">
+                <p className="text-[10px] font-black uppercase">Resolved - Hub 2</p>
+                <span className="text-[9px] font-mono text-slate-500">14m ago</span>
+              </div>
+              <p className="text-[10px] text-slate-600">Transfer complete to St. Nicholas</p>
+            </article>
+          </div>
+          <div className="mt-4 space-y-3 border-t border-slate-200 pt-4">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-black uppercase tracking-[0.14em] text-slate-500">Predictive Heatmap</span>
+              <button
+                onClick={() => setShowHeatmap(!showHeatmap)}
+                className={`relative h-5 w-10 rounded-full ${showHeatmap ? "bg-red-600" : "bg-slate-300"}`}
               >
-                <span className="material-symbols-outlined text-sm">add</span> New Emergency
+                <span className={`absolute top-1 h-3 w-3 rounded-full bg-white transition-all ${showHeatmap ? "left-6" : "left-1"}`} />
               </button>
             </div>
+            <button
+              onClick={openModal}
+              className="w-full rounded bg-red-600 py-3 text-xs font-black uppercase tracking-[0.14em] text-white"
+            >
+              New Emergency
+            </button>
           </div>
-        </div>
+        </article>
       </section>
 
       {/* New Emergency Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={() => setShowModal(false)}></div>
-          <div className="relative bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in duration-200">
+          <div className="relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-2xl">
             
             {/* Modal Header */}
             <div className="sticky top-0 bg-white border-b border-slate-100 p-5 flex justify-between items-center rounded-t-2xl z-10">
@@ -304,6 +273,7 @@ function DispatchContent() {
                   {/* Dispatch Button */}
                   <button
                     onClick={handleDispatchAction}
+                    type="button"
                     disabled={selectedType === null || !incidentLocation}
                     className="w-full py-4 bg-primary text-white rounded-xl font-bold text-sm shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 uppercase tracking-widest font-caps"
                   >

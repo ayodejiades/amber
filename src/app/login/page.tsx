@@ -6,7 +6,7 @@ import { useState } from "react";
 import { AmberLogo } from "@/components/amber-logo";
 
 const DEMO_ACCOUNTS = [
-  { role: "Customer", email: "user@amber.ng", password: "amber2026", redirect: "/request" },
+  { role: "Customer", email: "user@amber.ng", password: "amber2026", redirect: "/members" },
   { role: "Dispatcher", email: "dispatch@amber.ng", password: "amber2026", redirect: "/dispatch" },
   { role: "Hospital", email: "admin@bluecross.ng", password: "amber2026", redirect: "/hospital" },
   { role: "Paramedic", email: "crew@amber.ng", password: "amber2026", redirect: "/paramedic" },
@@ -53,6 +53,12 @@ export default function LoginPage() {
           <div className="text-center mb-6 relative">
             <h1 className="text-3xl font-display font-bold text-slate-900">Sign In</h1>
             <p className="text-slate-500 mt-2 text-sm">Log in to the Amber Emergency Network</p>
+            <p className="mt-2 text-xs text-slate-500">
+              New here?{" "}
+              <Link href="/onboarding" className="font-semibold text-primary hover:underline">
+                Create member account
+              </Link>
+            </p>
           </div>
 
           {/* Role Selector */}

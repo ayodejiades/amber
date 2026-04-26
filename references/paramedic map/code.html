@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OP-AMBER-01 | Tactical Map HUD</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&amp;family=Inter:wght@400;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #0c1324;
+            color: #dce1fb;
+            overflow: hidden;
+        }
+        .glass-panel {
+            background: rgba(11, 17, 32, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 84, 81, 0.1);
+        }
+        .scanline {
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 84, 81, 0.1);
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 10;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#dce1fb",
+                        "tertiary": "#bec6e0",
+                        "on-surface": "#dce1fb",
+                        "primary": "#ffb3ad",
+                        "on-primary": "#68000a",
+                        "on-error-container": "#ffdad6",
+                        "primary-fixed-dim": "#ffb3ad",
+                        "on-primary-fixed-variant": "#930013",
+                        "on-secondary": "#3c2f00",
+                        "inverse-on-surface": "#2a3043",
+                        "tertiary-fixed": "#dae2fd",
+                        "inverse-surface": "#dce1fb",
+                        "on-secondary-fixed-variant": "#574500",
+                        "on-primary-fixed": "#410004",
+                        "on-tertiary-fixed": "#131b2e",
+                        "outline": "#ab8986",
+                        "on-tertiary-container": "#22293d",
+                        "surface-tint": "#ffb3ad",
+                        "error": "#ffb4ab",
+                        "on-primary-container": "#5c0008",
+                        "surface-container-low": "#151b2d",
+                        "surface": "#0c1324",
+                        "outline-variant": "#5b403e",
+                        "surface-container": "#191f31",
+                        "on-surface-variant": "#e4beba",
+                        "secondary-fixed": "#ffe088",
+                        "tertiary-fixed-dim": "#bec6e0",
+                        "primary-fixed": "#ffdad7",
+                        "secondary-container": "#af8d11",
+                        "surface-dim": "#0c1324",
+                        "surface-container-highest": "#2e3447",
+                        "surface-bright": "#33394c",
+                        "error-container": "#93000a",
+                        "inverse-primary": "#b91a24",
+                        "background": "#0c1324",
+                        "on-secondary-fixed": "#241a00",
+                        "surface-container-high": "#23293c",
+                        "primary-container": "#ff5451",
+                        "surface-container-lowest": "#070d1f",
+                        "on-tertiary-fixed-variant": "#3f465c",
+                        "on-secondary-container": "#342800",
+                        "on-tertiary": "#283044",
+                        "on-error": "#690005",
+                        "tertiary-container": "#8990a8",
+                        "secondary-fixed-dim": "#e9c349",
+                        "surface-variant": "#2e3447",
+                        "secondary": "#e9c349"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "h1": ["Outfit"],
+                        "h2": ["Outfit"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "h3": ["Outfit"],
+                        "label-caps": ["Inter"],
+                        "mono": ["JetBrains Mono"]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface font-body-md overflow-hidden h-screen w-screen flex">
+<!-- TopAppBar Shell -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 py-3 bg-slate-950/60 backdrop-blur-xl border-b border-red-500/10">
+<div class="flex items-center gap-4">
+<span class="text-xl font-black text-red-500 tracking-widest font-h2">OP-AMBER-01</span>
+<div class="h-4 w-px bg-red-500/20 mx-2"></div>
+<div class="flex flex-col">
+<span class="font-mono text-[10px] tracking-tighter text-secondary">SYSTEM TIME</span>
+<span class="font-mono text-sm font-bold text-on-surface">14:42:09</span>
+</div>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-red-500 border-b-2 border-red-500 pb-1 font-mono tracking-tight uppercase font-bold text-sm" href="#">Map</a>
+<a class="text-slate-400 font-mono tracking-tight uppercase font-bold text-sm hover:text-red-400 transition-colors" href="#">Patient HUD</a>
+<a class="text-slate-400 font-mono tracking-tight uppercase font-bold text-sm hover:text-red-400 transition-colors" href="#">Comms</a>
+<a class="text-slate-400 font-mono tracking-tight uppercase font-bold text-sm hover:text-red-400 transition-colors" href="#">Inventory</a>
+</nav>
+<div class="flex items-center gap-6">
+<div class="flex flex-col items-end">
+<span class="font-mono text-[10px] tracking-tighter text-red-500">SECTOR 4</span>
+<span class="font-mono text-xs font-bold text-slate-300">ACTIVE RESPONSE</span>
+</div>
+<div class="flex gap-3 text-red-500">
+<span class="material-symbols-outlined text-sm" data-icon="timer">timer</span>
+<span class="material-symbols-outlined text-sm" data-icon="signal_cellular_4_bar">signal_cellular_4_bar</span>
+</div>
+</div>
+</header>
+<!-- SideNavBar Shell -->
+<aside class="fixed left-0 top-0 h-full z-40 flex flex-col pt-16 bg-slate-950/60 backdrop-blur-xl border-r border-red-500/20 w-24 md:w-64 transition-all">
+<div class="px-6 py-8 flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-red-500/10 border border-red-500/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-red-500" data-icon="medical_services">medical_services</span>
+</div>
+<div class="hidden md:block">
+<p class="font-mono text-red-500 font-black text-sm">AMBER-01</p>
+<p class="font-mono text-[10px] text-slate-400 tracking-widest">STATUS: ACTIVE</p>
+</div>
+</div>
+<nav class="flex-1">
+<div class="flex items-center gap-3 bg-red-500/10 text-red-500 border-l-4 border-red-600 py-4 px-6 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+<span class="hidden md:inline font-mono text-xs font-bold uppercase tracking-widest">Map</span>
+</div>
+<div class="flex items-center gap-3 text-slate-500 py-4 px-6 cursor-pointer hover:bg-slate-800/40 hover:text-red-400 transition-colors">
+<span class="material-symbols-outlined" data-icon="monitor_heart">monitor_heart</span>
+<span class="hidden md:inline font-mono text-xs font-bold uppercase tracking-widest">Patient HUD</span>
+</div>
+<div class="flex items-center gap-3 text-slate-500 py-4 px-6 cursor-pointer hover:bg-slate-800/40 hover:text-red-400 transition-colors">
+<span class="material-symbols-outlined" data-icon="forum">forum</span>
+<span class="hidden md:inline font-mono text-xs font-bold uppercase tracking-widest">Comms</span>
+</div>
+<div class="flex items-center gap-3 text-slate-500 py-4 px-6 cursor-pointer hover:bg-slate-800/40 hover:text-red-400 transition-colors">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="hidden md:inline font-mono text-xs font-bold uppercase tracking-widest">Inventory</span>
+</div>
+</nav>
+<div class="pb-8 border-t border-red-500/10">
+<div class="flex items-center gap-3 text-slate-500 py-4 px-6 cursor-pointer hover:bg-slate-800/40 hover:text-red-400 transition-colors">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="hidden md:inline font-mono text-xs font-bold uppercase tracking-widest">Settings</span>
+</div>
+<div class="flex items-center gap-3 text-slate-500 py-4 px-6 cursor-pointer hover:bg-slate-800/40 hover:text-red-400 transition-colors">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="hidden md:inline font-mono text-xs font-bold uppercase tracking-widest">Log Out</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Area (Tactical Map) -->
+<main class="flex-1 relative pl-24 md:pl-64 pt-16">
+<!-- Full Screen Map Background -->
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover grayscale brightness-[0.2] contrast-[1.2]" data-alt="Dark high-contrast satellite map of an urban city center with deep navy and slate tones and subtle street grid highlights" data-location="San Francisco" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwq2F0yiUAY-C67DnOi2ODLdYdXZ5Y6W697xpaGaGi8kyOBgsUUsyD7mxkpXEuAuxlj2Hy8AxHotBgJXOVDZF1IhiWEjyDmCy7mVQSp2LNiL2CIP66mHNaDMk9KRFIMx5GQ2uYSvUI-4d3NZsQKv1GC3DpAgO5agRO_kmGeP23BuloFga2nPX_GBYKJM_1BLomkhEnQysPiEAq85Ta4G2abqBr_tnJ3mQ6lSmNNsY9hdyBrWZAcTSk-FSE2VwXFyJ3YKq1idceUpAo"/>
+<!-- Overlay Grids & HUD Elements -->
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-surface-container-lowest/50 opacity-80 pointer-events-none"></div>
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(12,19,36,0.6)_100%)] pointer-events-none"></div>
+<!-- Simulated Tactical Path -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none" viewbox="0 0 1000 1000">
+<path class="drop-shadow-[0_0_8px_rgba(255,84,81,0.8)]" d="M 200 800 L 400 650 L 550 680 L 700 500 L 850 450" fill="none" stroke="#ff5451" stroke-dasharray="10 5" stroke-width="4"></path>
+<!-- Current Location Pulse -->
+<circle class="animate-pulse" cx="200" cy="800" fill="#ff5451" r="8">
+<title>UNIT-ALPHA-01</title>
+</circle>
+<!-- Destination Marker -->
+<path class="drop-shadow-[0_0_12px_rgba(233,195,73,0.8)]" d="M 850 450 l -10 -25 h 20 z" fill="#e9c349"></path>
+</svg>
+</div>
+<!-- Floating Tactical Overlays -->
+<div class="relative z-10 p-6 h-full flex flex-col gap-6">
+<!-- Top HUD Bar: Clear Path Status -->
+<div class="flex justify-between items-start">
+<div class="glass-panel px-6 py-4 rounded-lg flex items-center gap-6 border-l-4 border-l-secondary">
+<div class="flex flex-col">
+<span class="text-label-caps font-mono text-slate-400">OPTIMIZATION STATUS</span>
+<span class="text-h3 font-h3 text-secondary">CLEAR PATH ACTIVE</span>
+</div>
+<div class="h-10 w-px bg-slate-700"></div>
+<div class="flex flex-col">
+<span class="text-label-caps font-mono text-slate-400">SIGNAL PRIORITY</span>
+<div class="flex items-center gap-2">
+<span class="h-2 w-2 rounded-full bg-secondary"></span>
+<span class="text-label-caps text-on-surface">EMERGENCY PRE-EMPTION</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-4 items-end">
+<!-- Urgent Alerts Stack -->
+<div class="glass-panel p-4 rounded border-r-4 border-r-primary bg-primary/5 flex items-center gap-4 animate-pulse">
+<span class="material-symbols-outlined text-primary" data-icon="warning">warning</span>
+<div class="flex flex-col">
+<span class="text-label-caps text-primary">TRAFFIC ALERT: SECTOR 4 BLOCKADE</span>
+<span class="text-xs text-slate-300">CONSTRUCTION ON 5TH AVE - RE-ROUTING...</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bento Layout Content Panels -->
+<div class="mt-auto grid grid-cols-12 gap-6 pb-6">
+<!-- Navigation Details -->
+<div class="col-span-12 lg:col-span-4 glass-panel p-6 rounded-xl relative overflow-hidden">
+<div class="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-secondary"></div>
+<div class="flex justify-between items-end mb-6">
+<div>
+<h2 class="text-label-caps text-slate-400 font-mono">DESTINATION</h2>
+<p class="text-h3 font-h2 text-on-surface">ST. JUDE GENERAL</p>
+</div>
+<span class="material-symbols-outlined text-secondary text-4xl" data-icon="local_hospital">local_hospital</span>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-high/50 p-4 rounded border border-white/5">
+<span class="text-label-caps text-slate-500 block mb-1">ETA</span>
+<span class="text-h2 font-h2 text-primary">04:12</span>
+<span class="text-xs text-slate-500 font-mono">MINUTES</span>
+</div>
+<div class="bg-surface-container-high/50 p-4 rounded border border-white/5">
+<span class="text-label-caps text-slate-500 block mb-1">DISTANCE</span>
+<span class="text-h2 font-h2 text-on-surface">2.4</span>
+<span class="text-xs text-slate-500 font-mono">MILES</span>
+</div>
+</div>
+<div class="mt-6 flex items-center justify-between p-3 bg-red-500/10 rounded border border-red-500/20">
+<span class="text-label-caps text-primary">NEXT MANEUVER</span>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="turn_right">turn_right</span>
+<span class="font-mono text-sm text-on-surface">RIGHT ON MARKET</span>
+</div>
+</div>
+</div>
+<!-- Hospital Load Status -->
+<div class="col-span-12 lg:col-span-5 glass-panel p-6 rounded-xl border-t border-t-secondary/20">
+<h2 class="text-label-caps text-slate-400 font-mono mb-4">REGIONAL HOSPITAL LOAD</h2>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="w-1 h-8 bg-secondary rounded-full"></span>
+<div>
+<p class="text-sm font-bold text-on-surface">ST. JUDE MEDICAL</p>
+<p class="text-[10px] text-slate-500 font-mono">ER CAP: 82% | TRAUMA L1</p>
+</div>
+</div>
+<span class="text-label-caps px-2 py-1 bg-secondary/10 text-secondary border border-secondary/20 rounded">DIVERSION LIKELY</span>
+</div>
+<div class="flex items-center justify-between opacity-60">
+<div class="flex items-center gap-3">
+<span class="w-1 h-8 bg-slate-600 rounded-full"></span>
+<div>
+<p class="text-sm font-bold text-slate-400">METRO CENTRAL</p>
+<p class="text-[10px] text-slate-500 font-mono">ER CAP: 45% | TRAUMA L2</p>
+</div>
+</div>
+<span class="text-label-caps px-2 py-1 bg-slate-800 text-slate-400 border border-slate-700 rounded">AVAILABLE</span>
+</div>
+<div class="flex items-center justify-between opacity-60">
+<div class="flex items-center gap-3">
+<span class="w-1 h-8 bg-slate-600 rounded-full"></span>
+<div>
+<p class="text-sm font-bold text-slate-400">ST. MARYS INFIRMARY</p>
+<p class="text-[10px] text-slate-500 font-mono">ER CAP: 12% | CLINIC</p>
+</div>
+</div>
+<span class="text-label-caps px-2 py-1 bg-slate-800 text-slate-400 border border-slate-700 rounded">AVAILABLE</span>
+</div>
+</div>
+</div>
+<!-- Environmental/Tactical Telemetry -->
+<div class="col-span-12 lg:col-span-3 glass-panel p-6 rounded-xl">
+<h2 class="text-label-caps text-slate-400 font-mono mb-4">TACTICAL HUD</h2>
+<div class="space-y-6">
+<div class="flex flex-col gap-1">
+<div class="flex justify-between text-[10px] font-mono text-slate-500 uppercase">
+<span>Signal Strength</span>
+<span>98%</span>
+</div>
+<div class="h-1 bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full w-[98%] bg-secondary"></div>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between text-[10px] font-mono text-slate-500 uppercase">
+<span>Vehicle Integrity</span>
+<span>94%</span>
+</div>
+<div class="h-1 bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full w-[94%] bg-on-surface"></div>
+</div>
+</div>
+<div class="pt-4 border-t border-white/5 flex gap-4">
+<div class="flex-1 flex flex-col items-center p-2 bg-surface-container/50 rounded">
+<span class="material-symbols-outlined text-slate-400" data-icon="cloud">cloud</span>
+<span class="text-[10px] font-mono text-slate-300 mt-1">68°F</span>
+</div>
+<div class="flex-1 flex flex-col items-center p-2 bg-surface-container/50 rounded">
+<span class="material-symbols-outlined text-slate-400" data-icon="air">air</span>
+<span class="text-[10px] font-mono text-slate-300 mt-1">12MPH</span>
+</div>
+<div class="flex-1 flex flex-col items-center p-2 bg-surface-container/50 rounded">
+<span class="material-symbols-outlined text-slate-400" data-icon="visibility">visibility</span>
+<span class="text-[10px] font-mono text-slate-300 mt-1">FULL</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Floating Action Button Contextual (Map Zoom/Controls) -->
+<div class="fixed right-8 bottom-32 flex flex-col gap-4">
+<button class="w-12 h-12 bg-surface-container-highest border border-white/10 flex items-center justify-center rounded-lg hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined text-on-surface" data-icon="add">add</span>
+</button>
+<button class="w-12 h-12 bg-surface-container-highest border border-white/10 flex items-center justify-center rounded-lg hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined text-on-surface" data-icon="remove">remove</span>
+</button>
+<button class="w-12 h-12 bg-primary border border-primary/20 flex items-center justify-center rounded-lg shadow-[0_0_20px_rgba(255,84,81,0.4)] active:scale-95 transition-all">
+<span class="material-symbols-outlined text-on-primary" data-icon="my_location" data-weight="fill">my_location</span>
+</button>
+</div>
+<!-- Scanline Effect Overlay -->
+<div class="scanline h-1 opacity-20"></div>
+</main>
+</body></html>

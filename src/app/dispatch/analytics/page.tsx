@@ -2,38 +2,49 @@
 
 export default function DispatchAnalyticsPage() {
   return (
-    <div className="p-6 h-full overflow-y-auto custom-scrollbar bg-slate-50">
-      <div className="mb-8">
-        <h1 className="font-display text-3xl font-bold text-slate-900 uppercase tracking-tighter">Performance Overview</h1>
-        <p className="text-slate-600 text-sm">Response metrics and efficiency data.</p>
+    <div className="h-full overflow-y-auto custom-scrollbar">
+      <div className="mb-6">
+        <h1 className="font-display text-3xl font-black uppercase tracking-tight text-slate-900">Network Analytics</h1>
+        <p className="text-sm text-slate-600">Tactical command efficiency and live throughput performance.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-        <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-          <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-2 block">Total Dispatches</span>
-          <p className="text-4xl font-display font-black text-slate-900">1,422</p>
-          <span className="text-[9px] text-emerald-600 font-bold mt-2 block">+12% vs last month</span>
+      <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="rounded-xl border border-slate-200 bg-white p-5">
+          <span className="mb-2 block text-[10px] font-black uppercase tracking-[0.14em] text-slate-500">Total Dispatches</span>
+          <p className="font-display text-4xl font-black">1,422</p>
+          <span className="mt-2 block text-[10px] font-bold text-emerald-600">+12% vs last month</span>
         </div>
-        <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-          <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-2 block">Avg Response Time</span>
-          <p className="text-4xl font-display font-black text-primary">08:14</p>
-          <span className="text-[9px] text-slate-500 font-bold mt-2 block">Target: 10:00</span>
+        <div className="rounded-xl border border-slate-200 bg-white p-5">
+          <span className="mb-2 block text-[10px] font-black uppercase tracking-[0.14em] text-slate-500">Avg Response Time</span>
+          <p className="font-display text-4xl font-black text-red-600">08:14</p>
+          <span className="mt-2 block text-[10px] font-bold text-slate-500">Target: 10:00</span>
         </div>
-        <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-          <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-2 block">Matching Accuracy</span>
-          <p className="text-4xl font-display font-black text-emerald-600">99.4%</p>
-          <span className="text-[9px] text-emerald-600 font-bold mt-2 block">AI optimized</span>
+        <div className="rounded-xl border border-slate-200 bg-white p-5">
+          <span className="mb-2 block text-[10px] font-black uppercase tracking-[0.14em] text-slate-500">Matching Accuracy</span>
+          <p className="font-display text-4xl font-black text-cyan-700">99.4%</p>
+          <span className="mt-2 block text-[10px] font-bold text-cyan-700">AI optimized</span>
         </div>
-        <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-          <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-2 block">Hospital Uptime</span>
-          <p className="text-4xl font-display font-black text-slate-900">100%</p>
-          <span className="text-[9px] text-slate-500 font-bold mt-2 block">All partner hospitals</span>
+        <div className="rounded-xl border border-slate-200 bg-white p-5">
+          <span className="mb-2 block text-[10px] font-black uppercase tracking-[0.14em] text-slate-500">Hospital Uptime</span>
+          <p className="font-display text-4xl font-black">100%</p>
+          <span className="mt-2 block text-[10px] font-bold text-slate-500">All partner hospitals</span>
         </div>
       </div>
 
-      <div className="bg-white p-8 rounded-2xl border border-slate-200 h-64 flex flex-col justify-center items-center text-center shadow-sm">
-        <span className="material-symbols-outlined text-slate-300 text-6xl mb-4">analytics</span>
-        <p className="text-slate-400 font-semibold tracking-widest uppercase">Charts coming soon</p>
+      <div className="grid gap-4 lg:grid-cols-2">
+        <article className="rounded-xl border border-slate-200 bg-white p-5">
+          <h2 className="mb-3 text-xs font-black uppercase tracking-[0.16em] text-cyan-700">Response Heatline</h2>
+          <div className="h-40 rounded-lg border border-slate-200 bg-gradient-to-r from-red-100 via-amber-100 to-cyan-100" />
+          <p className="mt-2 text-xs text-slate-600">Intensity trend mirrors tactical command charting from admin reference.</p>
+        </article>
+        <article className="rounded-xl border border-slate-200 bg-white p-5">
+          <h2 className="mb-3 text-xs font-black uppercase tracking-[0.16em] text-red-600">Alert Throughput</h2>
+          <div className="space-y-2">
+            <div className="rounded border border-slate-200 bg-slate-50 p-3 text-xs">Critical incidents processed: 42</div>
+            <div className="rounded border border-slate-200 bg-slate-50 p-3 text-xs">Escort cases processed: 17</div>
+            <div className="rounded border border-slate-200 bg-slate-50 p-3 text-xs">Resolved transfers: 33</div>
+          </div>
+        </article>
       </div>
     </div>
   );

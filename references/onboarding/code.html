@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Project Amber - Onboarding Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-fixed": "#0b1c30",
+                      "error-container": "#ffdad6",
+                      "outline-variant": "#e4beba",
+                      "on-surface": "#191c1e",
+                      "inverse-on-surface": "#eff1f3",
+                      "on-primary-fixed-variant": "#930013",
+                      "inverse-surface": "#2d3133",
+                      "secondary-fixed-dim": "#b7c8e1",
+                      "on-error-container": "#93000a",
+                      "background": "#f7f9fb",
+                      "on-surface-variant": "#5b403e",
+                      "surface": "#f7f9fb",
+                      "secondary-container": "#d0e1fb",
+                      "inverse-primary": "#ffb3ad",
+                      "on-tertiary": "#ffffff",
+                      "surface-bright": "#f7f9fb",
+                      "surface-container-highest": "#e0e3e5",
+                      "tertiary-fixed-dim": "#69d8d4",
+                      "on-primary-fixed": "#410004",
+                      "primary-container": "#da3437",
+                      "on-tertiary-container": "#f3fffd",
+                      "surface-container-low": "#f2f4f6",
+                      "on-primary": "#ffffff",
+                      "tertiary-container": "#008280",
+                      "surface-container-high": "#e6e8ea",
+                      "on-secondary-fixed-variant": "#38485d",
+                      "surface-tint": "#b91a24",
+                      "tertiary-fixed": "#87f4f0",
+                      "surface-container-lowest": "#ffffff",
+                      "primary-fixed": "#ffdad7",
+                      "surface-container": "#eceef0",
+                      "primary-fixed-dim": "#ffb3ad",
+                      "on-tertiary-fixed": "#00201f",
+                      "primary": "#b61722",
+                      "on-tertiary-fixed-variant": "#00504e",
+                      "tertiary": "#006765",
+                      "surface-dim": "#d8dadc",
+                      "outline": "#8f6f6d",
+                      "on-error": "#ffffff",
+                      "secondary-fixed": "#d3e4fe",
+                      "on-secondary": "#ffffff",
+                      "on-primary-container": "#fffbff",
+                      "secondary": "#505f76",
+                      "on-secondary-container": "#54647a",
+                      "on-background": "#191c1e",
+                      "error": "#ba1a1a",
+                      "surface-variant": "#e0e3e5"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "margin-desktop": "40px",
+                      "base": "8px",
+                      "margin-mobile": "16px",
+                      "container-max": "1280px"
+              },
+              "fontFamily": {
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "label-bold": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "status-sm": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-bold": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "status-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex">
+<!-- SideNavBar (Desktop) -->
+<nav class="hidden md:flex bg-slate-50 dark:bg-slate-900 text-red-600 dark:text-red-500 font-sans text-sm font-semibold tracking-wide h-screen w-64 border-r border-r border-slate-200 dark:border-slate-800 flat no shadows flex-col h-full p-4 space-y-2 select-none">
+<div class="mb-8 px-4">
+<h1 class="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tighter">Project Amber</h1>
+<p class="text-sm text-secondary">Amber Command</p>
+</div>
+<div class="flex-1 space-y-2">
+<a class="flex items-center space-x-3 px-4 py-3 bg-white dark:bg-slate-800 text-red-600 dark:text-red-400 shadow-sm rounded-md transition-transform duration-200 hover:translate-x-1 cursor-pointer" href="#">
+<span class="material-symbols-outlined" data-icon="group" data-weight="fill" style="font-variation-settings: 'FILL' 1;">group</span>
+<span>Members</span>
+</a>
+<a class="flex items-center space-x-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md transition-transform duration-200 hover:translate-x-1 cursor-pointer" href="#">
+<span class="material-symbols-outlined" data-icon="local_hospital">local_hospital</span>
+<span>Hospitals</span>
+</a>
+<a class="flex items-center space-x-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md transition-transform duration-200 hover:translate-x-1 cursor-pointer" href="#">
+<span class="material-symbols-outlined" data-icon="hub">hub</span>
+<span>Admin</span>
+</a>
+<a class="flex items-center space-x-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md transition-transform duration-200 hover:translate-x-1 cursor-pointer" href="#">
+<span class="material-symbols-outlined" data-icon="medical_services">medical_services</span>
+<span>Paramedics</span>
+</a>
+</div>
+<div class="mt-auto px-4">
+<button class="w-full bg-primary text-on-primary py-3 rounded-lg font-label-bold flex items-center justify-center space-x-2 shadow-[0_4px_12px_rgba(15,23,42,0.08)] hover:bg-on-primary-fixed-variant transition-colors duration-200">
+<span class="material-symbols-outlined text-sm">add</span>
+<span>New Dispatch</span>
+</button>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col h-screen overflow-hidden">
+<!-- TopAppBar (Mobile & Desktop) -->
+<header class="bg-white dark:bg-slate-950 text-red-600 dark:text-red-500 font-sans antialiased text-sm font-medium tracking-tight docked full-width top-0 border-b border-slate-100 dark:border-slate-800 shadow-sm flex justify-between items-center w-full px-6 py-3 z-40">
+<div class="flex items-center space-x-4">
+<span class="md:hidden text-xl font-black tracking-tighter text-red-600 dark:text-red-500 uppercase">Project Amber</span>
+<span class="hidden md:inline-block font-headline-md text-headline-md text-on-surface">Member Onboarding</span>
+</div>
+<div class="flex items-center space-x-4 text-slate-500 dark:text-slate-400">
+<button class="hover:text-slate-900 hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors duration-200 active:opacity-80 p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="hover:text-slate-900 hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors duration-200 active:opacity-80 p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<button class="hover:text-slate-900 hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors duration-200 active:opacity-80 p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Canvas Area -->
+<div class="flex-1 overflow-y-auto p-margin-mobile md:p-margin-desktop bg-surface pb-24 md:pb-margin-desktop">
+<div class="max-w-container-max mx-auto h-full flex flex-col lg:flex-row gap-gutter">
+<!-- Left Panel: Content -->
+<div class="flex-1 flex flex-col justify-center max-w-2xl">
+<div class="inline-flex items-center space-x-2 bg-error-container text-on-error-container px-3 py-1 rounded-full mb-6 w-fit shadow-[0_4px_12px_rgba(15,23,42,0.04)]">
+<span class="material-symbols-outlined text-sm" data-icon="verified_user">verified_user</span>
+<span class="font-status-sm text-status-sm uppercase tracking-widest">VIP Registration</span>
+</div>
+<h2 class="font-display-lg text-display-lg text-on-surface mb-4">Elite Protection for You and Your Family</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-10 leading-relaxed max-w-xl">
+                        Gain immediate access to our rapid response fleet and priority medical logistics. Project Amber ensures uncompromising clinical care and secure evacuation when seconds matter.
+                    </p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+<div class="bg-surface-container-lowest border border-surface-variant rounded-xl p-4 shadow-[0_4px_12px_rgba(15,23,42,0.04)] flex items-start space-x-4">
+<div class="bg-primary/10 text-primary p-2 rounded-lg">
+<span class="material-symbols-outlined" data-icon="rocket_launch">rocket_launch</span>
+</div>
+<div>
+<h3 class="font-label-bold text-label-bold text-on-surface mb-1">Rapid Dispatch</h3>
+<p class="font-body-md text-sm text-secondary">Under 15-minute response times in active zones.</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-surface-variant rounded-xl p-4 shadow-[0_4px_12px_rgba(15,23,42,0.04)] flex items-start space-x-4">
+<div class="bg-primary/10 text-primary p-2 rounded-lg">
+<span class="material-symbols-outlined" data-icon="monitor_heart">monitor_heart</span>
+</div>
+<div>
+<h3 class="font-label-bold text-label-bold text-on-surface mb-1">Clinical Precision</h3>
+<p class="font-body-md text-sm text-secondary">ICU-level care en route to designated facilities.</p>
+</div>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="bg-primary text-on-primary font-label-bold text-label-bold px-8 py-4 rounded-xl shadow-[0_8px_30px_rgba(15,23,42,0.08)] hover:bg-on-primary-fixed-variant transition-all duration-200 flex items-center justify-center space-x-2">
+<span>Begin Member Enrollment</span>
+<span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<button class="bg-surface-container-lowest text-secondary border border-outline font-label-bold text-label-bold px-8 py-4 rounded-xl shadow-[0_4px_12px_rgba(15,23,42,0.04)] hover:bg-surface-container transition-all duration-200">
+                            View Plan Details
+                        </button>
+</div>
+</div>
+<!-- Right Panel: Visual -->
+<div class="hidden lg:flex flex-1 items-center justify-center relative">
+<!-- Glassmorphism Card Overlay -->
+<div class="absolute bottom-10 left-10 bg-white/90 backdrop-blur-md border border-white/20 p-6 rounded-2xl shadow-[0_30px_60px_rgba(15,23,42,0.12)] z-10 w-72">
+<div class="flex items-center justify-between mb-4">
+<span class="font-label-bold text-label-bold text-on-surface">Fleet Status</span>
+<span class="flex h-3 w-3 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary-fixed opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-tertiary"></span>
+</span>
+</div>
+<div class="space-y-3">
+<div class="flex items-center justify-between text-sm">
+<span class="text-secondary">Air Units</span>
+<span class="font-semibold text-on-surface">Available</span>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+<div class="bg-tertiary h-full w-3/4 rounded-full"></div>
+</div>
+<div class="flex items-center justify-between text-sm mt-2">
+<span class="text-secondary">Ground Units</span>
+<span class="font-semibold text-on-surface">Deployed</span>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-1/2 rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Main Image Placeholder (simulating illustration) -->
+<div class="w-full h-[600px] rounded-[2rem] overflow-hidden shadow-[0_30px_60px_rgba(15,23,42,0.08)] border border-surface-variant bg-surface-container-lowest relative">
+<img alt="Premium medical evacuation helicopter landing on a sleek helipad at twilight with cinematic lighting" class="w-full h-full object-cover" data-alt="Sleek, modern medical helicopter landing on an urban helipad at dusk, dramatic lighting, premium cinematic feel, clinical white and red accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB06UikNXQWP1NBgUmCU-g-oWlogo-rc4n3c49pB0brod_NfE9dx2VJka1rnMLQFQsq8_5uz8rT2IWtSJ8DGvSrrhOyK_fmvzC2FBVKwGkNC4eEJkpBdSpbGVuhB0ML2hKGWzWRHwYydGbWAeM0uiHWaAhGH-rNO7YwpmjWdvYOvGMXsE-v2mtc9NDlsu3Ev94itDYayvo5Kplf6qyVGZTynCL1ZLsVmN0GegNpwODC6tnuiJStq5Xjs1LLk8aLciUY5b0uVHeSeSWM"/>
+<!-- Tonal Overlay -->
+<div class="absolute inset-0 bg-gradient-to-t from-on-secondary-fixed/40 to-transparent"></div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden bg-white dark:bg-slate-950 text-red-600 dark:text-red-500 text-[10px] font-bold uppercase tracking-widest fixed bottom-0 w-full z-50 border-t border-t-2 border-slate-100 dark:border-slate-800 shadow-[0_-4px_12px_rgba(15,23,42,0.04)] fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 bg-white/95 backdrop-blur-md tap-highlight-transparent pb-safe">
+<a class="flex flex-col items-center justify-center text-red-600 dark:text-red-500 bg-red-50/50 dark:bg-red-950/20 rounded-lg py-1 px-3 active:bg-slate-50 dark:active:bg-slate-900" href="#">
+<span class="material-symbols-outlined mb-1 text-xl" data-icon="split_screen" data-weight="fill" style="font-variation-settings: 'FILL' 1;">splitscreen</span>
+<span>Flows</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 active:bg-slate-50 dark:active:bg-slate-900 py-1 px-3" href="#">
+<span class="material-symbols-outlined mb-1 text-xl" data-icon="folder_shared">folder_shared</span>
+<span>Directory</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 active:bg-slate-50 dark:active:bg-slate-900 py-1 px-3" href="#">
+<span class="material-symbols-outlined mb-1 text-xl" data-icon="clinical_notes">clinical_notes</span>
+<span>Status</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 active:bg-slate-50 dark:active:bg-slate-900 py-1 px-3" href="#">
+<span class="material-symbols-outlined mb-1 text-xl" data-icon="person">person</span>
+<span>Profile</span>
+</a>
+</nav>
+</body></html>

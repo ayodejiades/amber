@@ -36,6 +36,14 @@
   --radius-xl: 0.75rem;
   
   --spacing-gutter: 16px;
+
+  --color-clinical-bg: #f2f6fb;
+  --color-clinical-panel: #ffffff;
+  --color-clinical-border: #dbe6f2;
+  --color-clinical-primary: #0f6cbd;
+  --color-clinical-primary-soft: #e8f2fc;
+  --color-clinical-alert: #dc2626;
+  --color-clinical-gold: #b98900;
 }
 
 :root {
@@ -86,4 +94,40 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: #EF4444;
   border-radius: 4px;
+}
+
+.bg-clinical-bg {
+  background: var(--color-clinical-bg);
+}
+
+.bg-clinical-panel {
+  background: var(--color-clinical-panel);
+}
+
+.border-clinical-border {
+  border-color: var(--color-clinical-border);
+}
+
+.text-clinical-primary {
+  color: var(--color-clinical-primary);
+}
+
+.bg-clinical-primary {
+  background: var(--color-clinical-primary);
+}
+
+.bg-clinical-primary-soft {
+  background: var(--color-clinical-primary-soft);
+}
+
+.text-clinical-alert {
+  color: var(--color-clinical-alert);
+}
+
+.text-clinical-gold {
+  color: var(--color-clinical-gold);
+}
+
+.shadow-clinical {
+  box-shadow: 0 10px 30px rgba(15, 108, 189, 0.08);
 }
