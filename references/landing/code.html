@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AMBER | Tactical Healthcare Mobility</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#0c1324",
+                        "surface-dim": "#0c1324",
+                        "surface-bright": "#33394c",
+                        "surface-container-lowest": "#070d1f",
+                        "surface-container-low": "#151b2d",
+                        "surface-container": "#1e2436",
+                        "surface-container-high": "#282e41",
+                        "surface-container-highest": "#33394c",
+                        "primary": "#EF4444",
+                        "on-primary": "#ffffff",
+                        "primary-container": "#EF4444",
+                        "on-primary-container": "#ffffff",
+                        "secondary": "#D4AF37",
+                        "on-secondary": "#1a1a1a",
+                        "error": "#ffb4ab",
+                        "on-surface": "#f1f5f9",
+                        "on-surface-variant": "#94a3b8",
+                        "outline": "#475569",
+                        "outline-variant": "#1e293b",
+                        "background": "#070d1f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1280px",
+                        "stack-md": "24px",
+                        "stack-sm": "12px",
+                        "unit": "8px",
+                        "stack-lg": "48px",
+                        "section-padding": "120px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Space Grotesk"],
+                        "display-xl": ["Space Grotesk"],
+                        "body-md": ["Inter"],
+                        "data-mono": ["Space Grotesk"],
+                        "label-caps": ["Space Grotesk"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Space Grotesk"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["48px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "display-xl": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "data-mono": ["14px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(239, 68, 68, 0.1);
+        }
+        .glow-red {
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+        }
+        .gradient-text-white {
+            background: linear-gradient(135deg, #FFFFFF 0%, #94A3B8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .reticle {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+        .reticle-tl { top: 0; left: 0; border-right: 0; border-bottom: 0; }
+        .reticle-tr { top: 0; right: 0; border-left: 0; border-bottom: 0; }
+        .reticle-bl { bottom: 0; left: 0; border-right: 0; border-top: 0; }
+        .reticle-br { bottom: 0; right: 0; border-left: 0; border-top: 0; }
+    </style>
+</head>
+<body class="bg-surface-container-lowest text-on-surface font-body-md selection:bg-red-500/30 selection:text-white">
+<!-- TopNavBar -->
+<header class="fixed top-0 z-50 flex justify-between items-center w-full px-8 py-4 max-w-full bg-slate-950/60 backdrop-blur-xl border-b border-red-500/10">
+<div class="text-2xl font-black tracking-widest text-white italic">AMBER</div>
+<div class="hidden md:flex items-center gap-8 font-sans tracking-tight uppercase font-bold text-xs">
+<a class="text-red-500 border-b-2 border-red-500 pb-1" href="#">Network</a>
+<a class="text-slate-400 hover:text-white transition-colors" href="#">Amber Way</a>
+<a class="text-slate-400 hover:text-white transition-colors" href="#">Hospital Partners</a>
+<a class="text-slate-400 hover:text-white transition-colors" href="#">Private Clients</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="hidden lg:block text-slate-400 hover:text-white transition-colors text-[10px] font-bold uppercase tracking-widest px-4">Client Login</button>
+<button class="bg-red-500 text-white font-sans tracking-tight uppercase font-bold text-xs px-6 py-3 rounded-sm hover:brightness-110 active:scale-95 transition-all duration-200 shadow-lg shadow-red-500/20">
+            Request Rapid Response
+        </button>
+</div>
+</header>
+<main>
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center pt-24 px-8 overflow-hidden">
+<div class="absolute inset-0 z-0 opacity-30">
+<img alt="Mission Control Center" class="w-full h-full object-cover grayscale brightness-50" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoKqtj68vQP58eUMvZVqKyaKw8isXwl4wHkon6iZex6B2_K5RXqTPwvJElnVGwRQKoi_DCkgdMlVE5WXO2Fu4E_ivKiIy6P0EzhRrgZww6iGtqOg0erx8vMIUjXd81MgzZnIMpIv_AFQVm_1mTN1MZbGT1SQlwy4xa2cc9R7lfk5i7TZV63UBtlDmCmDCfKwGGQqxlS1Y2KYfF3_SpsgPaiPELNpm-i60ha1K1p7haGJVqTr1eepWTd6mWysL6TCeH6vXvtxzY5u9s"/>
+<div class="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/20 to-slate-950"></div>
+</div>
+<div class="relative z-10 max-w-screen-xl mx-auto w-full">
+<h1 class="font-display-xl text-display-xl leading-none mb-6 max-w-4xl gradient-text-white">
+                Security for the Most Vulnerable.<br/>
+                Precision for the Best Hospitals.
+            </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mb-12 opacity-80 border-l-2 border-red-500/50 pl-6">
+                The world's first AI-coordinated A-Grade ambulance network. We eliminate rejection rates and specialist mismatches through real-time telemetry and tactical verification.
+            </p>
+<div class="flex flex-wrap gap-6">
+<button class="bg-red-600 text-white font-label-caps px-10 py-5 text-sm uppercase tracking-widest shadow-xl shadow-red-500/20 hover:bg-red-500 transition-colors active:scale-95 duration-200">Initiate Protocol</button>
+<button class="border border-slate-700 text-slate-300 font-label-caps px-10 py-5 text-sm uppercase tracking-widest hover:bg-white/5 transition-all">View Network Map</button>
+</div>
+</div>
+<div class="absolute bottom-12 right-12 hidden xl:block glass-card p-6 w-80 border-red-500/20">
+<div class="flex justify-between items-center mb-4">
+<span class="font-label-caps text-[10px] text-slate-400 uppercase tracking-widest">Active Fleet Telemetry</span>
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="sensors">sensors</span>
+</div>
+<div class="space-y-4">
+<div class="flex items-center gap-4">
+<div class="w-10 h-1 bg-red-500/20 rounded-full overflow-hidden">
+<div class="h-full bg-red-500 w-3/4"></div>
+</div>
+<span class="font-data-mono text-[10px] text-red-500">UNIT_042: EN ROUTE</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-10 h-1 bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-red-500 w-1/4"></div>
+</div>
+<span class="font-data-mono text-[10px] text-slate-500">UNIT_089: STANDBY</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Problem/Solution Grid (Amber Difference) -->
+<section class="py-section-padding px-8 bg-surface-container-low">
+<div class="max-w-screen-xl mx-auto">
+<div class="mb-20 text-center">
+<h2 class="font-headline-lg text-headline-lg text-white mb-4 uppercase tracking-tight">The Amber Difference</h2>
+<div class="h-1 w-24 bg-red-600 mx-auto"></div>
+</div>
+<div class="grid md:grid-cols-2 gap-12">
+<!-- The Broken System -->
+<div class="glass-card p-10 relative overflow-hidden group border-slate-800">
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined text-red-500 text-6xl" data-icon="dangerous">dangerous</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-slate-400 mb-8 uppercase">The Broken System</h3>
+<ul class="space-y-8">
+<li class="flex items-start gap-4">
+<span class="material-symbols-outlined text-red-500 mt-1" data-icon="error_outline">error_outline</span>
+<div>
+<h4 class="font-label-caps text-white mb-1">Blind Referrals</h4>
+<p class="text-sm text-slate-400">Dispatchers send patients to the nearest hospital without checking bed availability or specialist status.</p>
+</div>
+</li>
+<li class="flex items-start gap-4">
+<span class="material-symbols-outlined text-red-500 mt-1" data-icon="close">close</span>
+<div>
+<h4 class="font-label-caps text-white mb-1">44% Rejection Rate</h4>
+<p class="text-sm text-slate-400">Nearly half of emergency transfers are rejected upon arrival, forcing hazardous secondary transits.</p>
+</div>
+</li>
+<li class="flex items-start gap-4">
+<span class="material-symbols-outlined text-red-500 mt-1" data-icon="timer_off">timer_off</span>
+<div>
+<h4 class="font-label-caps text-white mb-1">Triage Chaos</h4>
+<p class="text-sm text-slate-400">Hospitals receive zero telemetry before the ambulance doors open, losing critical minutes.</p>
+</div>
+</li>
+</ul>
+</div>
+<!-- The Amber Way -->
+<div class="glass-card p-10 relative overflow-hidden border-red-500/30 bg-red-500/5">
+<div class="absolute top-0 right-0 p-4">
+<span class="material-symbols-outlined text-secondary text-6xl opacity-30" data-icon="verified_user">verified_user</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-red-500 mb-8 uppercase">The Amber Way</h3>
+<ul class="space-y-8">
+<li class="flex items-start gap-4">
+<span class="material-symbols-outlined text-secondary mt-1" data-icon="psychology">psychology</span>
+<div>
+<h4 class="font-label-caps text-white mb-1">AI Matching</h4>
+<p class="text-sm text-slate-300">Proprietary logic identifies the single best medical facility based on current specialist shifts and real-time load.</p>
+</div>
+</li>
+<li class="flex items-start gap-4">
+<span class="material-symbols-outlined text-secondary mt-1" data-icon="check_circle">check_circle</span>
+<div>
+<h4 class="font-label-caps text-white mb-1">Human-Verified Beds</h4>
+<p class="text-sm text-slate-300">Amber Command confirms bed availability with a live tactical coordinator before wheels turn.</p>
+</div>
+</li>
+<li class="flex items-start gap-4">
+<span class="material-symbols-outlined text-secondary mt-1" data-icon="notification_important">notification_important</span>
+<div>
+<h4 class="font-label-caps text-white mb-1">Digital Pre-Alerts</h4>
+<p class="text-sm text-slate-300">Full patient vitals are streamed directly to the ER surgeon's tablet 15 minutes prior to arrival.</p>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<!-- Amber Tactical Explorer -->
+<section class="py-section-padding px-8 relative overflow-hidden">
+<div class="max-w-screen-xl mx-auto">
+<div class="grid lg:grid-cols-12 gap-12 items-center">
+<div class="lg:col-span-5">
+<span class="font-label-caps text-red-500 text-xs uppercase tracking-widest mb-4 block">Amber Lab | Live Telemetry</span>
+<h2 class="font-headline-lg text-headline-lg mb-6 leading-tight uppercase text-white">Tactical Intelligence Explorer</h2>
+<p class="text-on-surface-variant mb-8 text-body-lg">
+                        Monitor your fleet and hospital network through our tactical HUD. Every patient transit is tracked with sub-second precision and biometric transparency.
+                    </p>
+<div class="space-y-6">
+<div class="flex items-center gap-6 p-4 border-b border-white/5">
+<span class="font-data-mono text-red-500 text-xl">01.</span>
+<div>
+<span class="font-label-caps text-white block">Real-time Hub Status</span>
+<span class="text-xs text-slate-500">Live monitoring of ICU and trauma capacity across the network.</span>
+</div>
+</div>
+<div class="flex items-center gap-6 p-4 border-b border-white/5">
+<span class="font-data-mono text-red-500 text-xl">02.</span>
+<div>
+<span class="font-label-caps text-white block">Specialism Verification</span>
+<span class="text-xs text-slate-500">Instant matching of patient pathology to available hospital equipment.</span>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:col-span-7">
+<div class="glass-card relative p-1 bg-slate-950/80 rounded-lg overflow-hidden group border-red-500/20">
+<div class="reticle reticle-tl"></div><div class="reticle reticle-tr"></div>
+<div class="reticle reticle-bl"></div><div class="reticle reticle-br"></div>
+<div class="aspect-video relative rounded-sm overflow-hidden">
+<img alt="High-tech map interface" class="w-full h-full object-cover opacity-40 grayscale scale-110 group-hover:scale-100 transition-transform duration-[20s]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDrkqO6_U2Xe6jGOdBmp3_QzbBkVrKFDifVaKJdMGBPM17KjyVt1PuJWU_5x86cQcS1TNgQurh7BF8mIJi26oT48t3yE1dNn7xUys-7gY6x6G_MWDIYxu6mGuXoMEXyR0EFtDwlvRPax2BltQQjzzH0As_67kfrrkJjCRXpQC5q1KKYf7w-TwYTSE20lOTuzJwa7cUlj8d9L8DU59Q1c-fJ6qAw8hwxMotcsqbe7jqzdHtDqNiFOptUS24vDGXv8V9-zgiLImrTN9z"/>
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<div class="relative">
+<div class="w-16 h-16 border-2 border-red-500/50 rounded-full animate-ping absolute -inset-0"></div>
+<div class="w-16 h-16 border border-red-500 bg-red-500/10 rounded-full flex items-center justify-center backdrop-blur-sm">
+<span class="material-symbols-outlined text-red-500 text-3xl" data-icon="emergency">emergency</span>
+</div>
+</div>
+</div>
+<div class="absolute top-4 left-4 glass-card px-4 py-2 border-slate-800">
+<div class="flex items-center gap-3">
+<span class="font-data-mono text-[10px] text-red-500">COORD: 51.5074° N, 0.1278° W</span>
+</div>
+</div>
+<div class="absolute bottom-4 left-4 right-4 glass-card p-4 flex justify-between items-center border-slate-800">
+<div class="flex gap-8">
+<div>
+<span class="block font-label-caps text-[8px] text-slate-500 uppercase">Active Units</span>
+<span class="font-data-mono text-white text-lg">142</span>
+</div>
+<div>
+<span class="block font-label-caps text-[8px] text-slate-500 uppercase">Response Time</span>
+<span class="font-data-mono text-red-500 text-lg">04:12</span>
+</div>
+</div>
+<button class="bg-red-500/20 text-red-500 border border-red-500/40 px-4 py-2 font-label-caps text-[10px] uppercase tracking-widest hover:bg-red-500/30 transition-colors">Enter Terminal</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- User Voices -->
+<section class="py-section-padding px-8 bg-surface-container-lowest">
+<div class="max-w-screen-xl mx-auto">
+<div class="grid md:grid-cols-2 gap-16">
+<div class="space-y-8">
+<span class="material-symbols-outlined text-secondary text-5xl" data-icon="format_quote">format_quote</span>
+<blockquote class="font-headline-md text-headline-md italic text-white leading-tight">
+                        "I need to know my family reaches the <span class="text-red-500">right</span> doctor, not just the <span class="text-slate-500">nearest</span> hospital. Amber provided that certainty when every second mattered."
+                    </blockquote>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden grayscale border border-slate-800">
+<img alt="Client Portrait" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHQNDU3L7oGehmkgL6cot2dJEimK2NYgj8qhE7GUeXlrY3mJ7pESzWoXkJ0aRlxBM6EYir3un4V-O6M-L_3DjhWPCqeeuQOY63IYl1vGP7uwDwP4LKhhfMu6_olJu9VE5SzUTd2A_oNENBbkn48ADtz-bhC-dls-mveiyjyOi07fkldlPpxNwVQ83Rn6SgGenSdoA0qfCiagapZYHIV8tFEfTCQoCS09Fv0OFRjxuG15uX2kzpJzUv-RHYtLT7u8LXMCmR1Z6juWcL"/>
+</div>
+<div>
+<h5 class="font-label-caps text-white text-sm">Marcus Vane</h5>
+<p class="text-xs text-slate-500 uppercase tracking-widest">Private Client | London</p>
+</div>
+</div>
+</div>
+<div class="space-y-8 pt-12 md:pt-24">
+<span class="material-symbols-outlined text-secondary text-5xl" data-icon="format_quote">format_quote</span>
+<blockquote class="font-headline-md text-headline-md italic text-white leading-tight">
+                        "Stop the triage chaos. We want patients we are <span class="text-red-500">ready to save</span>. Amber's pre-alerts are the evolution the healthcare system has been waiting for."
+                    </blockquote>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden grayscale border border-slate-800">
+<img alt="Doctor Portrait" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnD_VPG69tBZsz1cvaNXryTzFhbOZe6TgYkB4tE7u7W9rAtyASbtiLO6iHFk7fWCBjoV99VRhycJVwmjoBx54ENpRISbNuTm3LGVjBzn_CoMlaGa_goNZuMYsjED7fYp6db5fpiKukRBaRxpnNpBijQsblJwL3P6yoZqwpYz9d7G7C0It7qL2zJpWdneseVgNL5nhWswLtiWPaXNaAlcXEh4B0oJRS8VimyoHDLmRwAo8_Kbq0KCBOqQH_ikwNFymBvjGX9Yz-rMnr"/>
+</div>
+<div>
+<h5 class="font-label-caps text-white text-sm">Dr. Elena Rostova</h5>
+<p class="text-xs text-slate-500 uppercase tracking-widest">Chief of Trauma | St. Jude's</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="py-section-padding px-8 relative">
+<div class="max-w-screen-xl mx-auto glass-card p-16 text-center relative overflow-hidden border-red-500/20 glow-red">
+<div class="absolute inset-0 z-0 opacity-10">
+<img alt="Tactical Ambulance" class="w-full h-full object-cover grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcPe0x-0qP-c5I1tEXD9a0wL0WseKxxKSEsd3enV_lpUYnpNIjXU6-gc7fGV9k89E8XfX3yVCKJdjsFGYdlA1egw9AKFrMIasFTsfT0PtmkqF-5uXbcsLJL_VSIGQxETen0NdUGD5No9FPMHnhH7ZZwhjqfea_E6iQ_2ckE_l8BqhzguwomfPTmtXv21XhLczsl_eI-JnbgTnqsmAEXd73PIjk38Nr0zWal67EzIHnldKW9zvFmLcr3xRkJpGSTYejKBfXML_utt2M"/>
+</div>
+<div class="relative z-10">
+<h2 class="font-headline-lg text-headline-lg mb-8 uppercase tracking-tighter text-white">Command the Outcome.</h2>
+<p class="text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-12">
+                    Amber is only available to certified hospital networks and registered private clients. Secure your protocol today.
+                </p>
+<div class="flex flex-col sm:flex-row gap-4 justify-center">
+<button class="bg-red-600 text-white font-label-caps px-12 py-6 text-sm uppercase tracking-widest hover:bg-red-500 transition-all active:scale-95 duration-200">Request Onboarding</button>
+<button class="glass-card text-white font-label-caps px-12 py-6 text-sm uppercase tracking-widest border-slate-700 hover:bg-white/5 transition-all">Speak to an Operative</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 border-t border-white/5 bg-slate-950 px-8">
+<div class="max-w-screen-2xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="text-lg font-black text-slate-200">AMBER TACTICAL</div>
+<div class="flex flex-wrap justify-center gap-8 font-sans text-[10px] tracking-widest uppercase">
+<a class="text-slate-500 hover:text-slate-300 transition-colors" href="#">Privacy Protocol</a>
+<a class="text-slate-500 hover:text-slate-300 transition-colors" href="#">Operational Terms</a>
+<a class="text-slate-500 hover:text-slate-300 transition-colors" href="#">Contact Command</a>
+</div>
+<div class="font-sans text-[10px] tracking-widest uppercase text-slate-500 text-center md:text-right">
+            © 2024 AMBER TACTICAL. ELITE RESPONSE COORDINATION. <br/>
+<span class="text-red-600 font-bold">SYSTEM STATUS: OPERATIONAL.</span>
+</div>
+</div>
+</footer>
+</body></html>

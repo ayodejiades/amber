@@ -2,144 +2,212 @@
 
 import { useState } from "react";
 
-export default function HospitalPortal() {
-  const [bedsOpen, setBedsOpen] = useState(4);
-  const [isAccepting, setIsAccepting] = useState(true);
-  
-  const [incomingAlert, setIncomingAlert] = useState<any>({
-    patientId: "AMB-09-STROKE",
-    eta: "8 mins",
-    condition: "Acute Stroke Suspect",
-    severity: "Critical",
-    assignedSpecialist: "Neurologist (Dr. Adeyemi)"
-  });
-
+export default function HospitalOverviewPage() {
   return (
-    <div className="min-h-screen bg-slate-950 p-6 lg:p-12">
-      <div className="max-w-7xl mx-auto space-y-12">
-        
-        {/* Header Area */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div>
-            <h1 className="text-3xl font-display font-bold text-white">LUTH Staff Portal</h1>
-            <p className="text-slate-400 mt-1">Lagos University Teaching Hospital • Sector A</p>
-          </div>
-          
-          <div className="flex items-center gap-4">
-            <div className={`px-4 py-2 rounded-full border ${isAccepting ? 'bg-success/10 border-success/30 text-success' : 'bg-accent/10 border-accent/30 text-accent'} text-sm font-bold flex items-center gap-2`}>
-              <span className={`w-2 h-2 rounded-full ${isAccepting ? 'bg-success animate-pulse' : 'bg-accent'}`} />
-              {isAccepting ? 'ACCEPTING EMERGENCIES' : 'AT FULL CAPACITY'}
-            </div>
-            <button 
-              onClick={() => setIsAccepting(!isAccepting)}
-              className="px-6 py-2 bg-white text-slate-950 rounded-xl font-bold text-sm hover:bg-slate-200 transition-colors"
-            >
-              Toggle Status
-            </button>
-          </div>
+    <>
+      {/* Page Header */}
+      <div className="mb-8 flex justify-between items-end">
+        <div>
+          <h1 className="font-display text-5xl font-bold text-on-surface mb-2">Facility Overview</h1>
+          <p className="font-body text-lg text-on-surface-variant">Real-time capacity and incoming trauma logistics.</p>
         </div>
-
-        {/* Incoming Alert (Mission Critical) */}
-        {incomingAlert && (
-          <div className="bg-accent/10 border-2 border-accent/50 rounded-3xl p-8 flex flex-col md:flex-row items-center justify-between gap-8 animate-pulse shadow-[0_0_50px_rgba(239,68,68,0.15)]">
-            <div className="space-y-2 text-center md:text-left">
-              <div className="flex items-center justify-center md:justify-start gap-3">
-                <span className="px-3 py-1 bg-accent text-white text-[10px] font-black rounded-lg uppercase tracking-widest">Pre-Alert</span>
-                <span className="text-accent font-mono font-bold">ETA: {incomingAlert.eta}</span>
-              </div>
-              <h2 className="text-4xl font-display font-black text-white">{incomingAlert.condition}</h2>
-              <p className="text-slate-400 font-medium">Patient coming from VI via {incomingAlert.patientId.split('-')[0] + '-' + incomingAlert.patientId.split('-')[1]}</p>
-            </div>
-            
-            <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
-              <div className="px-6 py-4 bg-slate-900/80 rounded-2xl border border-white/10 text-center">
-                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1">Assigned Specialist</p>
-                <p className="font-bold text-white">{incomingAlert.assignedSpecialist}</p>
-              </div>
-              <button className="px-8 py-4 bg-accent text-white rounded-2xl font-display font-black text-lg hover:scale-105 transition-transform shadow-xl shadow-accent/40">
-                ACKNOWLEDGE
-              </button>
-            </div>
+        <div className="flex gap-4">
+          <div className="glass-panel px-4 py-2 flex items-center gap-3 rounded tactical-corner">
+            <div className="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+            <span className="font-caps text-xs font-bold tracking-[0.1em] text-on-surface uppercase">DEFCON 3 STATUS</span>
           </div>
-        )}
-
-        <div className="grid lg:grid-cols-3 gap-8">
-          
-          {/* Capacity Management */}
-          <div className="lg:col-span-2 space-y-8">
-            <div className="glass rounded-3xl p-8">
-              <h3 className="text-lg font-display font-bold mb-6">Real-time Bed Capacity</h3>
-              <div className="grid sm:grid-cols-2 gap-6">
-                <div className="p-8 bg-white/5 rounded-3xl border border-white/5 flex flex-col items-center justify-center text-center">
-                  <p className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-2">ER Beds Open</p>
-                  <div className="flex items-center gap-6">
-                    <button 
-                      onClick={() => setBedsOpen(Math.max(0, bedsOpen - 1))}
-                      className="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center text-2xl font-bold hover:bg-slate-700 transition-colors"
-                    >-</button>
-                    <span className="text-7xl font-display font-black text-white">{bedsOpen}</span>
-                    <button 
-                      onClick={() => setBedsOpen(bedsOpen + 1)}
-                      className="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center text-2xl font-bold hover:bg-slate-700 transition-colors"
-                    >+</button>
-                  </div>
-                </div>
-                
-                <div className="p-8 bg-white/5 rounded-3xl border border-white/5 flex flex-col items-center justify-center text-center">
-                  <p className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-2">Wait Time</p>
-                  <p className="text-7xl font-display font-black text-success">08</p>
-                  <p className="text-xs font-bold text-slate-500 mt-2 uppercase tracking-widest">Minutes (Median)</p>
-                </div>
-              </div>
-              
-              <div className="mt-8 pt-8 border-t border-white/5 grid grid-cols-2 sm:grid-cols-4 gap-4">
-                {['Trauma', 'ICU', 'NICU', 'Burn Unit'].map((unit) => (
-                  <div key={unit} className="p-4 rounded-2xl bg-slate-900/50 border border-white/5">
-                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1">{unit}</p>
-                    <p className="text-lg font-bold">4 Available</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Specialist Roster */}
-          <div className="space-y-8">
-            <div className="glass rounded-3xl p-8">
-              <h3 className="text-lg font-display font-bold mb-6">On-Call Specialists</h3>
-              <div className="space-y-4">
-                {[
-                  { name: "Dr. Adeyemi", role: "Neurologist", status: "In-Surgery" },
-                  { name: "Dr. Okonjo", role: "Trauma Surgeon", status: "On-Call" },
-                  { name: "Dr. Balogun", role: "Obstetrician", status: "On-Call" },
-                ].map((doc) => (
-                  <div key={doc.name} className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5">
-                    <div>
-                      <p className="text-sm font-bold">{doc.name}</p>
-                      <p className="text-[10px] text-slate-500 uppercase tracking-widest">{doc.role}</p>
-                    </div>
-                    <span className={`text-[10px] font-bold px-2 py-1 rounded-full ${doc.status === 'On-Call' ? 'bg-success/20 text-success' : 'bg-amber-500/20 text-amber-500'}`}>
-                      {doc.status}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              <button className="w-full mt-6 py-3 bg-slate-900 border border-white/10 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-slate-800 transition-colors">
-                Manage Roster
-              </button>
-            </div>
-
-            <div className="glass rounded-3xl p-8 bg-gradient-to-br from-blue-600/20 to-transparent border-blue-500/20">
-              <h3 className="text-sm font-bold text-blue-400 uppercase tracking-widest mb-2">Facility Stats</h3>
-              <div className="space-y-2">
-                <p className="text-2xl font-display font-black text-white">24</p>
-                <p className="text-xs text-slate-400">Emergencies Triaged Today</p>
-              </div>
-            </div>
-          </div>
-
         </div>
       </div>
-    </div>
+
+      {/* Grid Layout */}
+      <div className="grid grid-cols-12 gap-6">
+        {/* Section 1: Bed Capacity (Spans 8 cols) */}
+        <section className="col-span-12 lg:col-span-8 flex flex-col gap-6">
+          <h2 className="font-display text-2xl font-bold text-on-surface flex items-center gap-2">
+            <span className="material-symbols-outlined text-secondary">hotel</span> Live Bed Capacity
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* ICU Card */}
+            <div className="glass-panel rounded-lg p-6 tactical-corner flex flex-col relative overflow-hidden group">
+              <div className="flex justify-between items-start mb-4 relative z-10">
+                <div>
+                  <h3 className="font-display text-3xl font-bold text-on-surface mb-1">ICU</h3>
+                  <span className="font-caps text-xs font-bold tracking-[0.1em] text-primary uppercase">CRITICAL LOAD</span>
+                </div>
+                <span className="material-symbols-outlined text-primary text-3xl">monitor_heart</span>
+              </div>
+              <div className="flex items-baseline gap-2 mb-4 relative z-10">
+                <span className="font-display text-[56px] leading-none font-bold text-primary">94%</span>
+                <span className="font-body text-on-surface-variant">45/48 Beds</span>
+              </div>
+              <div className="w-full bg-surface-container h-2 rounded-full overflow-hidden relative z-10">
+                <div className="bg-primary h-full w-[94%] relative">
+                  <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
+                </div>
+              </div>
+              <div className="absolute bottom-0 right-0 w-32 h-32 bg-primary/10 blur-3xl rounded-full group-hover:bg-primary/20 transition-colors"></div>
+            </div>
+
+            {/* ER Card */}
+            <div className="glass-panel rounded-lg p-6 flex flex-col relative overflow-hidden group">
+              <div className="flex justify-between items-start mb-4 relative z-10">
+                <div>
+                  <h3 className="font-display text-3xl font-bold text-on-surface mb-1">ER</h3>
+                  <span className="font-caps text-xs font-bold tracking-[0.1em] text-secondary uppercase">ELEVATED</span>
+                </div>
+                <span className="material-symbols-outlined text-secondary text-3xl">emergency</span>
+              </div>
+              <div className="flex items-baseline gap-2 mb-4 relative z-10">
+                <span className="font-display text-[56px] leading-none font-bold text-secondary">78%</span>
+                <span className="font-body text-on-surface-variant">78/100 Beds</span>
+              </div>
+              <div className="w-full bg-surface-container h-2 rounded-full overflow-hidden relative z-10">
+                <div className="bg-secondary h-full w-[78%]"></div>
+              </div>
+            </div>
+
+            {/* General Ward Card */}
+            <div className="glass-panel rounded-lg p-6 flex flex-col relative overflow-hidden group">
+              <div className="flex justify-between items-start mb-4 relative z-10">
+                <div>
+                  <h3 className="font-display text-3xl font-bold text-on-surface mb-1">GEN</h3>
+                  <span className="font-caps text-xs font-bold tracking-[0.1em] text-tertiary uppercase">STABLE</span>
+                </div>
+                <span className="material-symbols-outlined text-tertiary text-3xl">bed</span>
+              </div>
+              <div className="flex items-baseline gap-2 mb-4 relative z-10">
+                <span className="font-display text-[56px] leading-none font-bold text-on-surface">62%</span>
+                <span className="font-body text-on-surface-variant">186/300 Beds</span>
+              </div>
+              <div className="w-full bg-surface-container h-2 rounded-full overflow-hidden relative z-10">
+                <div className="bg-tertiary h-full w-[62%]"></div>
+              </div>
+            </div>
+          </div>
+
+          {/* High Priority Incoming Alerts */}
+          <div className="mt-4">
+            <h2 className="font-display text-2xl font-bold text-on-surface flex items-center gap-2 mb-6">
+              <span className="material-symbols-outlined text-primary">airport_shuttle</span> Incoming Amber Alerts
+            </h2>
+            <div className="flex flex-col gap-4">
+              {/* Alert Item 1 */}
+              <div className="glass-panel p-4 rounded-lg flex items-center justify-between border-l-4 border-l-primary bg-surface-container-low/40">
+                <div className="flex items-center gap-6">
+                  <div className="flex flex-col items-center justify-center bg-surface-container w-16 h-16 rounded">
+                    <span className="font-caps text-xs font-bold text-slate-400 uppercase">ETA</span>
+                    <span className="font-display text-2xl font-bold text-primary">04<span className="text-sm font-normal">m</span></span>
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-3 mb-1">
+                      <span className="bg-primary/20 text-primary px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Level 1 Trauma</span>
+                      <span className="font-display text-lg font-bold text-on-surface">Unit A-77</span>
+                    </div>
+                    <p className="font-body text-sm text-slate-400">MVA, blunt force trauma. BP 80/50, HR 130.</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <button className="bg-slate-900 border border-secondary text-on-surface px-4 py-2 rounded font-caps text-xs font-bold hover:bg-surface-container transition-colors tracking-widest uppercase">
+                    Details
+                  </button>
+                  <button className="bg-primary text-white px-6 py-2 rounded font-caps text-xs font-bold hover:bg-primary/80 transition-colors flex items-center gap-2 tracking-widest uppercase shadow-lg shadow-primary/20">
+                    <span className="material-symbols-outlined text-sm">add_box</span>
+                    Confirm Bed
+                  </button>
+                </div>
+              </div>
+
+              {/* Alert Item 2 */}
+              <div className="glass-panel p-4 rounded-lg flex items-center justify-between border-l-4 border-l-secondary bg-surface-container-low/40">
+                <div className="flex items-center gap-6">
+                  <div className="flex flex-col items-center justify-center bg-surface-container w-16 h-16 rounded">
+                    <span className="font-caps text-xs font-bold text-slate-400 uppercase">ETA</span>
+                    <span className="font-display text-2xl font-bold text-secondary">12<span className="text-sm font-normal">m</span></span>
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-3 mb-1">
+                      <span className="bg-secondary/20 text-secondary px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Cardiac</span>
+                      <span className="font-display text-lg font-bold text-on-surface">Unit B-12</span>
+                    </div>
+                    <p className="font-body text-sm text-slate-400">Suspected STEMI. Vitals stable, awaiting cath lab.</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <button className="bg-slate-900 border border-secondary text-on-surface px-4 py-2 rounded font-caps text-xs font-bold hover:bg-surface-container transition-colors tracking-widest uppercase">
+                    Details
+                  </button>
+                  <button className="bg-primary text-white px-6 py-2 rounded font-caps text-xs font-bold hover:bg-primary/80 transition-colors flex items-center gap-2 tracking-widest uppercase shadow-lg shadow-primary/20">
+                    <span className="material-symbols-outlined text-sm">add_box</span>
+                    Confirm Bed
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Section 2: Live Specialist Feed (Spans 4 cols) */}
+        <section className="col-span-12 lg:col-span-4 flex flex-col h-full">
+          <div className="glass-panel rounded-lg tactical-corner flex flex-col h-full overflow-hidden">
+            <div className="p-6 border-b border-white/5 bg-surface-container-low/50">
+              <h2 className="font-display text-2xl font-bold text-on-surface flex items-center gap-2">
+                <span className="material-symbols-outlined text-secondary">groups</span> On-Site Specialists
+              </h2>
+              <p className="font-body text-sm text-slate-400 mt-1">Currently clocked in and available.</p>
+            </div>
+            <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3 custom-scrollbar">
+              {/* Specialist 1 */}
+              <div className="bg-surface-container/40 p-3 rounded border border-white/5 hover:border-secondary/30 transition-colors flex items-center gap-4">
+                <div className="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden border border-white/10">
+                  <img alt="Dr. Sarah Chen" className="w-full h-full object-cover" src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=100" />
+                </div>
+                <div className="flex-1">
+                  <div className="flex justify-between items-start">
+                    <h4 className="font-body font-bold text-on-surface">Dr. Sarah Chen</h4>
+                    <div className="w-2 h-2 rounded-full bg-emerald-500 mt-1"></div>
+                  </div>
+                  <p className="font-caps text-[10px] font-bold tracking-widest text-secondary mt-1 uppercase">TRAUMA SURGEON</p>
+                </div>
+              </div>
+
+              {/* Specialist 2 */}
+              <div className="bg-surface-container/40 p-3 rounded border border-white/5 hover:border-secondary/30 transition-colors flex items-center gap-4">
+                <div className="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden border border-white/10">
+                  <img alt="Dr. Marcus Webb" className="w-full h-full object-cover" src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=100" />
+                </div>
+                <div className="flex-1">
+                  <div className="flex justify-between items-start">
+                    <h4 className="font-body font-bold text-on-surface">Dr. Marcus Webb</h4>
+                    <div className="w-2 h-2 rounded-full bg-emerald-500 mt-1"></div>
+                  </div>
+                  <p className="font-caps text-[10px] font-bold tracking-widest text-secondary mt-1 uppercase">CARDIOLOGIST</p>
+                </div>
+              </div>
+
+              {/* Specialist 3 */}
+              <div className="bg-surface-container/40 p-3 rounded border border-white/5 hover:border-secondary/30 transition-colors flex items-center gap-4 opacity-60">
+                <div className="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden border border-white/10 flex items-center justify-center">
+                  <span className="material-symbols-outlined text-slate-400">person</span>
+                </div>
+                <div className="flex-1">
+                  <div className="flex justify-between items-start">
+                    <h4 className="font-body font-bold text-on-surface">Dr. Elena Rostova</h4>
+                    <div className="w-2 h-2 rounded-full bg-secondary mt-1"></div>
+                  </div>
+                  <p className="font-caps text-[10px] font-bold tracking-widest text-slate-400 mt-1 uppercase">NEUROLOGIST • IN SURGERY</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="p-4 border-t border-white/5">
+              <button className="w-full bg-transparent border border-outline text-on-surface py-3 rounded font-caps text-xs font-bold hover:bg-surface-container transition-colors tracking-widest uppercase">
+                VIEW FULL ROSTER
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </>
   );
 }

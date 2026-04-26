@@ -2,231 +2,214 @@
 
 import { useState } from "react";
 import { findOptimalHospital, MOCK_HOSPITALS, PatientRequest, MatchResult } from "@/lib/matching";
-import LagosPitchMap from "@/components/LagosPitchMap";
 
-const SEVERITIES = [
-  { id: "critical", label: "Critical", color: "bg-red-500" },
-  { id: "severe", label: "Severe", color: "bg-orange-500" },
-  { id: "moderate", label: "Moderate", color: "bg-blue-500" },
-];
-
-const SPECIALISTS = [
-  "Trauma Surgeon",
-  "Cardiologist",
-  "Neurologist (Stroke)",
-  "Pediatrician",
-  "Obstetrician",
-  "General Surgeon",
-];
-
-export default function DispatchPage() {
-  const [matching, setMatching] = useState(false);
-  const [results, setResults] = useState<MatchResult[]>([]);
-  const [selectedSeverity, setSelectedSeverity] = useState("severe");
-  const [selectedSpecialist, setSelectedSpecialist] = useState<string | null>(null);
-
-  const handleMatch = (e: React.FormEvent) => {
-    e.preventDefault();
-    setMatching(true);
-    
-    // Simulate Processing Delay
-    setTimeout(() => {
-      const patient: PatientRequest = {
-        location: { lat: 6.45, lng: 3.39 }, // Mock VI location
-        severity: selectedSeverity as any,
-        requiredSpecialist: selectedSpecialist || undefined,
-      };
-
-      const matches = findOptimalHospital(patient, MOCK_HOSPITALS);
-      setResults(matches);
-      setMatching(false);
-    }, 1500);
-  };
-
+export default function DispatchCommandPage() {
   return (
-    <div className="min-h-screen bg-slate-950 p-6 lg:p-12">
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-3 gap-8">
-        
-        {/* Left Column: Intake Form */}
-        <div className="lg:col-span-2 space-y-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-display font-bold text-white">Command Center</h1>
-              <p className="text-slate-400 mt-1">AI-Assisted Emergency Routing</p>
+    <div className="p-4 h-full grid grid-cols-12 gap-4 overflow-hidden">
+      {/* Left: Asset Monitor */}
+      <section className="col-span-3 flex flex-col gap-4 h-full">
+        <div className="glass-panel p-6 rounded-lg flex flex-col h-full overflow-hidden">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="font-caps text-tertiary uppercase text-sm tracking-widest font-bold">Asset Monitor</h2>
+            <span className="material-symbols-outlined text-tertiary">sensors</span>
+          </div>
+          <div className="space-y-4 overflow-y-auto pr-2 custom-scrollbar flex-grow">
+            {/* Fleet Cards */}
+            <div className="p-4 border-l-2 border-primary bg-white/5 rounded-r">
+              <div className="flex justify-between items-start mb-2">
+                <span className="font-mono font-medium text-white text-sm">Amber 01</span>
+                <span className="px-2 py-1 bg-primary/20 text-primary text-[10px] font-bold rounded">EN ROUTE</span>
+              </div>
+              <p className="text-[10px] text-slate-400 font-caps mb-3 font-bold">DEST: VICTORIA ISLAND</p>
+              <div className="w-full bg-white/10 h-1 rounded-full overflow-hidden">
+                <div className="bg-primary h-full w-[65%]"></div>
+              </div>
             </div>
-            <div className="px-4 py-2 bg-slate-900 rounded-full border border-white/5 text-xs font-mono text-slate-500">
-              MATCH_ENGINE_V1.2
+            
+            <div className="p-4 border-l-2 border-tertiary bg-white/5 rounded-r">
+              <div className="flex justify-between items-start mb-2">
+                <span className="font-mono font-medium text-white text-sm">Amber 05</span>
+                <span className="px-2 py-1 bg-tertiary/20 text-tertiary text-[10px] font-bold rounded">STANDBY</span>
+              </div>
+              <p className="text-[10px] text-slate-400 font-caps mb-3 font-bold">LOC: CENTRAL HUB 4</p>
+              <div className="flex gap-2 items-center">
+                <span className="w-2 h-2 rounded-full bg-tertiary heartbeat"></span>
+                <span className="text-[10px] text-tertiary font-bold tracking-widest uppercase font-caps">Heartbeat Nominal</span>
+              </div>
+            </div>
+
+            <div className="p-4 border-l-2 border-slate-600 bg-white/5 rounded-r opacity-60">
+              <div className="flex justify-between items-start mb-2">
+                <span className="font-mono font-medium text-white text-sm">Amber 09</span>
+                <span className="px-2 py-1 bg-slate-600/20 text-slate-400 text-[10px] font-bold rounded">MAINTENANCE</span>
+              </div>
+              <p className="text-[10px] text-slate-400 font-caps font-bold uppercase tracking-widest">EST. RETURN: 0400 HRS</p>
+            </div>
+
+            <div className="p-4 border-l-2 border-secondary bg-white/5 rounded-r">
+              <div className="flex justify-between items-start mb-2">
+                <span className="font-mono font-medium text-white text-sm">Amber 12</span>
+                <span className="px-2 py-1 bg-secondary/20 text-secondary text-[10px] font-bold rounded">EN ROUTE</span>
+              </div>
+              <p className="text-[10px] text-slate-400 font-caps mb-3 font-bold">DEST: LEKKI PHASE 1</p>
+              <div className="w-full bg-white/10 h-1 rounded-full overflow-hidden">
+                <div className="bg-secondary h-full w-[30%]"></div>
+              </div>
             </div>
           </div>
-
-          <form onSubmit={handleMatch} className="glass rounded-3xl p-8 space-y-8">
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-400">Patient ID / Reference</label>
-                <input 
-                  type="text" 
-                  defaultValue="CAS-7702-X"
-                  className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all"
-                />
+          
+          <div className="mt-auto pt-4 shrink-0">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-surface-container-low p-3 rounded border border-white/5">
+                <p className="text-[10px] text-slate-500 uppercase font-bold tracking-widest font-caps">Active</p>
+                <p className="text-xl font-mono text-white font-medium">14</p>
               </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-400">Current Location (GPS)</label>
-                <div className="flex gap-2">
-                  <input 
-                    type="text" 
-                    readOnly
-                    value="6.4500° N, 3.3900° E"
-                    className="flex-grow bg-slate-900/20 border border-white/5 rounded-xl px-4 py-3 text-slate-500 cursor-not-allowed"
-                  />
-                  <button type="button" className="p-3 bg-slate-800 rounded-xl border border-white/10">📍</button>
-                </div>
+              <div className="bg-surface-container-low p-3 rounded border border-white/5">
+                <p className="text-[10px] text-slate-500 uppercase font-bold tracking-widest font-caps">Available</p>
+                <p className="text-xl font-mono text-tertiary font-medium">08</p>
               </div>
             </div>
-
-            <div className="space-y-4">
-              <label className="text-sm font-medium text-slate-400">Triage Severity</label>
-              <div className="grid grid-cols-3 gap-4">
-                {SEVERITIES.map((s) => (
-                  <button
-                    key={s.id}
-                    type="button"
-                    onClick={() => setSelectedSeverity(s.id)}
-                    className={`p-4 rounded-2xl border transition-all text-left ${selectedSeverity === s.id ? 'bg-slate-800 border-white/30 ring-1 ring-white/20' : 'bg-slate-900 border-white/5 opacity-50'}`}
-                  >
-                    <div className={`w-3 h-3 rounded-full ${s.color} mb-2`} />
-                    <p className="text-xs font-semibold text-slate-300 uppercase tracking-wider">{s.label}</p>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <label className="text-sm font-medium text-slate-400">Required Specialist</label>
-              <div className="flex flex-wrap gap-2">
-                {SPECIALISTS.map((spec) => (
-                  <button
-                    key={spec}
-                    type="button"
-                    onClick={() => setSelectedSpecialist(selectedSpecialist === spec ? null : spec)}
-                    className={`px-4 py-2 rounded-full border text-sm transition-all ${selectedSpecialist === spec ? 'bg-accent border-accent text-white' : 'bg-slate-900 border-white/5 text-slate-400'}`}
-                  >
-                    {spec}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <button 
-              type="submit"
-              disabled={matching}
-              className="w-full py-4 bg-accent hover:bg-accent/90 disabled:bg-slate-800 disabled:cursor-not-allowed rounded-2xl font-display font-bold text-lg shadow-xl shadow-accent/20 transition-all flex items-center justify-center gap-3"
-            >
-              {matching ? (
-                <>
-                  <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                  Running AI Matching...
-                </>
-              ) : (
-                "Search Optimal Facility"
-              )}
-            </button>
-          </form>
+          </div>
         </div>
+      </section>
 
-        {/* Right Column: Dynamic Results */}
-        <div className="space-y-6">
-          <div className="glass rounded-3xl p-6 min-h-[400px] flex flex-col relative overflow-hidden">
-            {results.length === 0 && !matching && (
-              <div className="flex-grow flex flex-col items-center justify-center text-center">
-                <div className="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center mb-4 border border-white/10">
-                  <span className="text-xl text-slate-700">?</span>
-                </div>
-                <h3 className="font-display font-bold text-slate-500 uppercase tracking-widest text-xs">Ready for Input</h3>
-              </div>
-            )}
-
-            {matching && (
-              <div className="flex-grow flex flex-col items-center justify-center space-y-6">
-                <div className="relative w-full h-1 bg-slate-900 rounded-full overflow-hidden">
-                  <div className="absolute inset-0 bg-accent w-1/3 animate-[slide_1.5s_infinite_linear]" />
-                </div>
-                <p className="text-[10px] font-mono text-accent animate-pulse uppercase tracking-[0.2em]">Calculating Weights...</p>
-              </div>
-            )}
-
-            {results.length > 0 && !matching && (
-              <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <div className="flex items-center justify-between">
-                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Recommended Matches</p>
-                  <span className="text-[10px] text-success font-bold uppercase">Success Rank</span>
-                </div>
-
-                <div className="space-y-4">
-                  {results.slice(0, 3).map((match, idx) => (
-                    <div 
-                      key={match.hospital.id} 
-                      className={`p-5 rounded-2xl border transition-all ${idx === 0 ? 'bg-white/5 border-white/20' : 'bg-slate-900/50 border-white/5 opacity-60'}`}
-                    >
-                      <div className="flex justify-between items-start mb-3">
-                        <div className="max-w-[70%]">
-                          <h4 className="font-display font-bold text-white truncate">{match.hospital.name}</h4>
-                          <div className="flex items-center gap-3 mt-1">
-                            <span className="text-[10px] font-mono font-bold text-slate-400">{match.distance}km</span>
-                            <span className="text-[10px] font-mono font-bold text-accent">{match.eta}m ETA</span>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <p className={`text-xl font-display font-black ${match.score > 80 ? 'text-success' : 'text-amber-500'}`}>
-                            {match.score}%
-                          </p>
-                        </div>
-                      </div>
-                      
-                      <div className="flex flex-wrap gap-2 pt-3 border-t border-white/5">
-                        {match.reasons.slice(0, 2).map((reason, i) => (
-                          <span key={i} className="text-[9px] font-bold text-slate-500 uppercase bg-slate-800 px-2 py-1 rounded">
-                            {reason}
-                          </span>
-                        ))}
-                      </div>
-
-                      {idx === 0 && (
-                        <button className="w-full mt-4 py-3 bg-white text-slate-950 rounded-xl font-bold text-xs uppercase tracking-widest hover:scale-[0.98] transition-transform">
-                          Confirm Dispatch
-                        </button>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+      {/* Center: Real-Time Tactical Map */}
+      <section className="col-span-6 relative h-full">
+        <div className="absolute inset-0 rounded-xl overflow-hidden glass-panel border-primary/30 shadow-[0_0_40px_rgba(239,68,68,0.1)] flex flex-col">
+          <div className="absolute inset-0 z-0 bg-[#0a0a0a]">
+            <img 
+              alt="Tactical Map Base" 
+              className="w-full h-full object-cover opacity-40 mix-blend-luminosity" 
+              src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80" 
+            />
           </div>
-
-          <div className="glass rounded-3xl p-6 bg-gradient-to-br from-accent/5 to-transparent border-accent/10">
-            <h3 className="text-[10px] font-bold text-accent uppercase tracking-widest mb-4">Emergency Protocol</h3>
-            <div className="space-y-3">
-              <div className="flex items-start gap-3">
-                <span className="w-4 h-4 bg-accent/20 rounded text-[10px] flex items-center justify-center text-accent">1</span>
-                <p className="text-[11px] text-slate-400">Match patients to hospitals with confirmed specialist on-call.</p>
+          
+          {/* Map UI Overlays */}
+          <div className="absolute inset-0 pointer-events-none p-6 flex flex-col">
+            <div className="flex justify-between shrink-0">
+              <div className="bg-black/60 backdrop-blur-md p-4 border-b border-r border-white/10">
+                <p className="text-[10px] text-secondary tracking-[0.2em] font-caps uppercase font-bold">Coordinates</p>
+                <p className="font-mono font-medium text-white text-xs mt-1">6°27&apos;11&quot;N 3°23&apos;45&quot;E</p>
               </div>
-              <div className="flex items-start gap-3">
-                <span className="w-4 h-4 bg-accent/20 rounded text-[10px] flex items-center justify-center text-accent">2</span>
-                <p className="text-[11px] text-slate-400">Prioritize facilities with &gt;2 available ER beds for Critical cases.</p>
+              <div className="bg-black/60 backdrop-blur-md p-4 border-b border-l border-white/10 text-right">
+                <p className="text-[10px] text-tertiary tracking-[0.2em] font-caps uppercase font-bold">Signal Strength</p>
+                <p className="font-mono font-medium text-white text-xs mt-1">99.8% CRYPTO-LINK</p>
+              </div>
+            </div>
+            
+            {/* Glowing Nodes Mockup */}
+            <div className="relative flex-grow">
+              {/* Amber 01 Pin */}
+              <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto">
+                <div className="relative">
+                  <div className="absolute inset-0 w-8 h-8 bg-primary/20 rounded-full blur-xl heartbeat"></div>
+                  <div className="relative w-4 h-4 bg-primary rounded-full border-2 border-black flex items-center justify-center">
+                    <div className="w-1 h-1 bg-white rounded-full"></div>
+                  </div>
+                  <div className="absolute left-6 top-0 bg-black/80 backdrop-blur-md border border-primary/50 p-2 whitespace-nowrap">
+                    <p className="text-[9px] text-primary font-bold uppercase tracking-widest font-caps">Amber 01</p>
+                    <p className="text-[8px] text-white font-mono mt-0.5">SPD: 84 KM/H</p>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Incident Pin */}
+              <div className="absolute bottom-1/4 right-1/3 pointer-events-auto">
+                <div className="relative">
+                  <div className="absolute inset-0 w-12 h-12 bg-primary/30 rounded-full blur-2xl heartbeat" style={{animationDuration: '0.6s'}}></div>
+                  <div className="w-5 h-5 bg-primary rounded-full border-2 border-black flex items-center justify-center">
+                    <span className="material-symbols-outlined text-[12px] text-white">warning</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="mt-auto flex justify-center pb-2 shrink-0 pointer-events-auto">
+              <div className="bg-black/80 backdrop-blur-xl border border-white/10 px-6 py-3 rounded-full flex gap-8">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-primary"></span>
+                  <span className="text-[10px] text-white font-caps uppercase font-bold tracking-widest">Fleet</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-tertiary"></span>
+                  <span className="text-[10px] text-white font-caps uppercase font-bold tracking-widest">Medical Hubs</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-secondary"></span>
+                  <span className="text-[10px] text-white font-caps uppercase font-bold tracking-widest">Active Incidents</span>
+                </div>
               </div>
             </div>
           </div>
-
-          <LagosPitchMap />
         </div>
+      </section>
 
-      </div>
+      {/* Right: Live Alerts Feed */}
+      <section className="col-span-3 flex flex-col gap-4 h-full">
+        <div className="glass-panel p-6 rounded-lg flex flex-col h-full overflow-hidden">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="font-caps text-primary uppercase text-sm tracking-widest font-bold">Live Alerts</h2>
+            <span className="material-symbols-outlined text-primary heartbeat">wifi_tethering</span>
+          </div>
+          
+          <div className="space-y-4 overflow-y-auto flex-grow custom-scrollbar">
+            {/* Expanded Alert */}
+            <div className="border border-primary/50 bg-primary/5 rounded p-4 relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-2">
+                <span className="text-[8px] font-mono font-medium text-primary tracking-widest">ID: #8821-X</span>
+              </div>
+              <div className="flex items-center gap-2 mb-3">
+                <span className="material-symbols-outlined text-primary text-sm">emergency</span>
+                <span className="text-[11px] font-bold text-white uppercase tracking-wider font-caps">Cardiac Incident - VI</span>
+              </div>
+              <div className="bg-black/40 border border-white/5 p-3 rounded mb-3">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-[10px] text-tertiary font-caps uppercase font-bold">AI Hospital Match</span>
+                  <span className="text-[10px] font-mono font-medium text-tertiary">98% SCORE</span>
+                </div>
+                <p className="text-xs text-white font-bold mb-1">Reddington Victoria Island</p>
+                <p className="text-[9px] text-slate-400">ICU Bed 04 Available | Cardiology Team On-Site</p>
+              </div>
+              <div className="flex gap-2">
+                <button className="flex-grow bg-primary text-white text-[10px] font-bold py-2.5 rounded uppercase tracking-widest hover:glow-red transition-all font-caps">Dispatch Amber 01</button>
+                <button className="p-2 border border-white/10 rounded text-slate-400 hover:text-white transition-colors">
+                  <span className="material-symbols-outlined text-sm">more_vert</span>
+                </button>
+              </div>
+            </div>
 
-      <style jsx>{`
-        @keyframes slide {
-          from { transform: translateX(-100%); }
-          to { transform: translateX(300%); }
-        }
-      `}</style>
+            {/* Minor Alerts */}
+            <div className="border border-white/10 bg-white/5 rounded p-4 opacity-80 hover:opacity-100 transition-opacity">
+              <div className="flex justify-between items-start mb-2">
+                <div className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                  <span className="text-[10px] font-bold text-white uppercase font-caps">Trauma - Lekki 1</span>
+                </div>
+                <span className="text-[9px] font-mono font-medium text-slate-500">2m ago</span>
+              </div>
+              <p className="text-[10px] text-slate-400 mb-2">Patient: VIP Member #0042</p>
+              <div className="flex justify-between items-center">
+                <span className="text-[9px] text-tertiary font-caps uppercase font-bold tracking-widest">Matching Hub...</span>
+                <span className="material-symbols-outlined text-xs text-slate-500">chevron_right</span>
+              </div>
+            </div>
+
+            <div className="border border-white/10 bg-white/5 rounded p-4 opacity-60">
+              <div className="flex justify-between items-start mb-2">
+                <div className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+                  <span className="text-[10px] font-bold text-white uppercase font-caps">Resolved - Hub 2</span>
+                </div>
+                <span className="text-[9px] font-mono font-medium text-slate-500">14m ago</span>
+              </div>
+              <p className="text-[10px] text-slate-500">Transfer complete to St. Nicholas</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      {/* Visual Footer Accent */}
+      <footer className="fixed bottom-0 left-64 right-0 h-1 bg-gradient-to-r from-transparent via-primary/20 to-transparent"></footer>
     </div>
   );
 }

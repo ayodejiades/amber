@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>St. Amber Medical - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700&amp;family=Inter:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#e9c349",
+                        "inverse-primary": "#b91a24",
+                        "inverse-on-surface": "#2a3043",
+                        "surface-container": "#191f31",
+                        "on-background": "#dce1fb",
+                        "on-primary": "#68000a",
+                        "on-tertiary-fixed-variant": "#3f465c",
+                        "on-error": "#690005",
+                        "on-secondary-fixed": "#241a00",
+                        "inverse-surface": "#dce1fb",
+                        "surface-container-low": "#151b2d",
+                        "surface-container-high": "#23293c",
+                        "on-tertiary": "#283044",
+                        "on-tertiary-fixed": "#131b2e",
+                        "on-surface-variant": "#e4beba",
+                        "on-primary-container": "#5c0008",
+                        "on-error-container": "#ffdad6",
+                        "error-container": "#93000a",
+                        "surface": "#0c1324",
+                        "tertiary-fixed": "#dae2fd",
+                        "on-secondary-container": "#342800",
+                        "background": "#0c1324",
+                        "surface-dim": "#0c1324",
+                        "surface-container-lowest": "#070d1f",
+                        "on-secondary": "#3c2f00",
+                        "error": "#ffb4ab",
+                        "tertiary-container": "#8990a8",
+                        "surface-variant": "#2e3447",
+                        "on-tertiary-container": "#22293d",
+                        "on-secondary-fixed-variant": "#574500",
+                        "primary-fixed-dim": "#ffb3ad",
+                        "on-primary-fixed": "#410004",
+                        "primary": "#ffb3ad",
+                        "surface-container-highest": "#2e3447",
+                        "primary-container": "#ff5451",
+                        "secondary-container": "#af8d11",
+                        "primary-fixed": "#ffdad7",
+                        "surface-bright": "#33394c",
+                        "tertiary-fixed-dim": "#bec6e0",
+                        "secondary-fixed-dim": "#e9c349",
+                        "on-surface": "#dce1fb",
+                        "surface-tint": "#ffb3ad",
+                        "on-primary-fixed-variant": "#930013",
+                        "outline-variant": "#5b403e",
+                        "outline": "#ab8986",
+                        "tertiary": "#bec6e0",
+                        "secondary-fixed": "#ffe088"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "unit": "4px",
+                        "margin": "40px",
+                        "container-max": "1440px"
+                    },
+                    "fontFamily": {
+                        "h2": ["Outfit"],
+                        "h3": ["Outfit"],
+                        "h1": ["Outfit"],
+                        "body-md": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "h2": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "h3": ["24px", { "lineHeight": "1.3", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "h1": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background-color: rgba(11, 17, 32, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(185, 26, 36, 0.1);
+        }
+        .glass-panel:hover {
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 0.5px solid #e9c349;
+        }
+        .tactical-corner {
+            position: relative;
+        }
+        .tactical-corner::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            width: 12px;
+            height: 12px;
+            border-top: 2px solid #e9c349;
+            border-left: 2px solid #e9c349;
+            z-index: 10;
+        }
+        body {
+            background-color: #020617;
+            color: #dce1fb;
+        }
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            gap: 24px;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md antialiased min-h-screen overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-slate-950/60 backdrop-blur-xl font-sans tracking-tight border-b border-red-500/10">
+<div class="flex items-center gap-4">
+<span class="text-xl font-black tracking-tighter text-red-600 dark:text-red-500">PROJECT AMBER</span>
+</div>
+<div class="flex-1 flex justify-end mr-6">
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="w-full bg-surface-container-high/50 border-b-2 border-transparent focus:border-primary-container text-on-surface px-10 py-1.5 focus:outline-none transition-colors text-sm" placeholder="Search..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition-colors p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition-colors p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined">sensors</span>
+</button>
+<button class="text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition-colors p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined">wifi</span>
+</button>
+<button class="text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition-colors p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-full w-64 z-40 pt-20 flex flex-col bg-slate-950 dark:bg-slate-950 font-sans font-medium text-sm border-r border-red-500/10">
+<div class="px-6 mb-8 flex flex-col gap-1">
+<h2 class="text-lg font-bold text-yellow-500">ST. AMBER MEDICAL</h2>
+<span class="text-xs text-slate-400 uppercase tracking-widest">Command Center v4.1</span>
+</div>
+<div class="flex flex-col gap-2 flex-1">
+<a class="bg-red-600 text-white rounded-md mx-2 px-4 py-3 flex items-center gap-3 border-l-4 border-yellow-500" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                Overview
+            </a>
+<a class="text-slate-400 hover:text-slate-100 mx-2 px-4 py-3 flex items-center gap-3 hover:bg-slate-900 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">bed</span>
+                Beds
+            </a>
+<a class="text-slate-400 hover:text-slate-100 mx-2 px-4 py-3 flex items-center gap-3 hover:bg-slate-900 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">medical_services</span>
+                Specialists
+            </a>
+<a class="text-slate-400 hover:text-slate-100 mx-2 px-4 py-3 flex items-center gap-3 hover:bg-slate-900 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">assignment</span>
+                Patient Logs
+            </a>
+<a class="text-slate-400 hover:text-slate-100 mx-2 px-4 py-3 flex items-center gap-3 hover:bg-slate-900 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+</div>
+<div class="p-4 mt-auto">
+<button class="w-full bg-inverse-primary hover:bg-primary-container text-white py-3 rounded-md font-bold text-sm tracking-wide transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">warning</span>
+                Emergency Alert
+            </button>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-24 px-8 pb-12">
+<div class="max-w-[1440px] mx-auto">
+<!-- Page Header -->
+<div class="mb-8 flex justify-between items-end">
+<div>
+<h1 class="font-h1 text-h1 text-on-surface mb-2">Facility Overview</h1>
+<p class="font-body-lg text-body-lg text-tertiary-container">Real-time capacity and incoming trauma logistics.</p>
+</div>
+<div class="flex gap-4">
+<div class="glass-panel px-4 py-2 flex items-center gap-3 rounded-DEFAULT tactical-corner">
+<div class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></div>
+<span class="font-label-caps text-label-caps text-on-surface">DEFCON 3 STATUS</span>
+</div>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid-layout">
+<!-- Section 1: Bed Capacity (Spans 8 cols) -->
+<section class="col-span-12 lg:col-span-8 flex flex-col gap-6">
+<h2 class="font-h3 text-h3 text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">hotel</span>
+                        Live Bed Capacity
+                    </h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- ICU Card -->
+<div class="glass-panel rounded-lg p-6 tactical-corner flex flex-col relative overflow-hidden">
+<div class="flex justify-between items-start mb-4 relative z-10">
+<div>
+<h3 class="font-h2 text-h2 text-on-surface mb-1">ICU</h3>
+<span class="font-label-caps text-label-caps text-error">CRITICAL LOAD</span>
+</div>
+<span class="material-symbols-outlined text-error text-3xl">monitor_heart</span>
+</div>
+<div class="flex items-baseline gap-2 mb-4 relative z-10">
+<span class="font-h1 text-[56px] leading-none font-bold text-error">94%</span>
+<span class="font-body-md text-body-md text-tertiary-container">45/48 Beds</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden relative z-10">
+<div class="bg-error h-full w-[94%] relative">
+<div class="absolute inset-0 bg-white/20 animate-pulse"></div>
+</div>
+</div>
+<!-- Subtle background glow -->
+<div class="absolute bottom-0 right-0 w-32 h-32 bg-error/10 blur-3xl rounded-full"></div>
+</div>
+<!-- ER Card -->
+<div class="glass-panel rounded-lg p-6 flex flex-col relative overflow-hidden">
+<div class="flex justify-between items-start mb-4 relative z-10">
+<div>
+<h3 class="font-h2 text-h2 text-on-surface mb-1">ER</h3>
+<span class="font-label-caps text-label-caps text-secondary">ELEVATED</span>
+</div>
+<span class="material-symbols-outlined text-secondary text-3xl">emergency</span>
+</div>
+<div class="flex items-baseline gap-2 mb-4 relative z-10">
+<span class="font-h1 text-[56px] leading-none font-bold text-secondary">78%</span>
+<span class="font-body-md text-body-md text-tertiary-container">78/100 Beds</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden relative z-10">
+<div class="bg-secondary h-full w-[78%]"></div>
+</div>
+</div>
+<!-- General Ward Card -->
+<div class="glass-panel rounded-lg p-6 flex flex-col relative overflow-hidden">
+<div class="flex justify-between items-start mb-4 relative z-10">
+<div>
+<h3 class="font-h2 text-h2 text-on-surface mb-1">GEN</h3>
+<span class="font-label-caps text-label-caps text-tertiary">STABLE</span>
+</div>
+<span class="material-symbols-outlined text-tertiary text-3xl">bed</span>
+</div>
+<div class="flex items-baseline gap-2 mb-4 relative z-10">
+<span class="font-h1 text-[56px] leading-none font-bold text-on-surface">62%</span>
+<span class="font-body-md text-body-md text-tertiary-container">186/300 Beds</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden relative z-10">
+<div class="bg-tertiary h-full w-[62%]"></div>
+</div>
+</div>
+</div>
+<!-- High Priority Incoming Alerts -->
+<div class="mt-4">
+<h2 class="font-h3 text-h3 text-on-surface flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary-container">airport_shuttle</span>
+                            Incoming Amber Alerts
+                        </h2>
+<div class="flex flex-col gap-4">
+<!-- Alert Item 1 -->
+<div class="glass-panel p-4 rounded-lg flex items-center justify-between border-l-4 border-l-error bg-surface-container-low/40">
+<div class="flex items-center gap-6">
+<div class="flex flex-col items-center justify-center bg-surface-container w-16 h-16 rounded-DEFAULT">
+<span class="font-label-caps text-label-caps text-tertiary-container">ETA</span>
+<span class="font-h2 text-h2 text-error">04<span class="text-sm">m</span></span>
+</div>
+<div>
+<div class="flex items-center gap-3 mb-1">
+<span class="bg-error/20 text-error px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Level 1 Trauma</span>
+<span class="font-h3 text-h3 text-on-surface text-lg">Unit A-77</span>
+</div>
+<p class="font-body-md text-body-md text-tertiary-container text-sm">MVA, blunt force trauma. BP 80/50, HR 130.</p>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="bg-[#0B1120] border border-secondary text-on-surface px-4 py-2 rounded-DEFAULT font-label-caps text-label-caps hover:bg-surface-container transition-colors">
+                                        DETAILS
+                                    </button>
+<button class="bg-inverse-primary text-white px-6 py-2 rounded-DEFAULT font-label-caps text-label-caps hover:bg-primary-container transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_box</span>
+                                        CONFIRM BED
+                                    </button>
+</div>
+</div>
+<!-- Alert Item 2 -->
+<div class="glass-panel p-4 rounded-lg flex items-center justify-between border-l-4 border-l-secondary bg-surface-container-low/40">
+<div class="flex items-center gap-6">
+<div class="flex flex-col items-center justify-center bg-surface-container w-16 h-16 rounded-DEFAULT">
+<span class="font-label-caps text-label-caps text-tertiary-container">ETA</span>
+<span class="font-h2 text-h2 text-secondary">12<span class="text-sm">m</span></span>
+</div>
+<div>
+<div class="flex items-center gap-3 mb-1">
+<span class="bg-secondary/20 text-secondary px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Cardiac</span>
+<span class="font-h3 text-h3 text-on-surface text-lg">Unit B-12</span>
+</div>
+<p class="font-body-md text-body-md text-tertiary-container text-sm">Suspected STEMI. Vitals stable, awaiting cath lab.</p>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="bg-[#0B1120] border border-secondary text-on-surface px-4 py-2 rounded-DEFAULT font-label-caps text-label-caps hover:bg-surface-container transition-colors">
+                                        DETAILS
+                                    </button>
+<button class="bg-inverse-primary text-white px-6 py-2 rounded-DEFAULT font-label-caps text-label-caps hover:bg-primary-container transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_box</span>
+                                        CONFIRM BED
+                                    </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 2: Live Specialist Feed (Spans 4 cols) -->
+<section class="col-span-12 lg:col-span-4 flex flex-col h-full">
+<div class="glass-panel rounded-lg tactical-corner flex flex-col h-full overflow-hidden">
+<div class="p-6 border-b border-white/5 bg-surface-container-low/50">
+<h2 class="font-h3 text-h3 text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">groups</span>
+                                On-Site Specialists
+                            </h2>
+<p class="font-body-md text-body-md text-tertiary-container text-sm mt-1">Currently clocked in and available.</p>
+</div>
+<div class="flex-1 overflow-y-auto p-4 flex flex-col gap-3">
+<!-- Specialist 1 -->
+<div class="bg-surface-container/40 p-3 rounded border border-white/5 hover:border-secondary/30 transition-colors flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden border border-white/10">
+<img alt="Dr. Sarah Chen portrait" class="w-full h-full object-cover" data-alt="portrait of a female doctor in scrubs looking serious against a dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNWwcT9cvm6tbi5wbvyQsyotKgfW1TrP4BCuup7hlTzfcWaeoL8oCvAiJWfzYUv1xuf-feyqLroktT3a-zwLlAlU_dZ31LR4uYQZZEe_6uZvHx70Fg4TnwWD3P-8n3poLw-1Amp7sOm5Z4taIUiKjcP-BBLcmNEWT8TelzN_ShjcCYA0oPFJOzvN4Qy4HFFDB_X6Iaxp4TtPDB8U_07wG5qetGciRAEhWijciAwcdtwl9sZCn44aHaI9yuyCFcMYiGmBos6oPfFwXw"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h4 class="font-body-md text-body-md font-bold text-on-surface">Dr. Sarah Chen</h4>
+<div class="w-2 h-2 rounded-full bg-emerald-500 mt-1"></div>
+</div>
+<p class="font-label-caps text-label-caps text-secondary mt-1">TRAUMA SURGEON</p>
+</div>
+</div>
+<!-- Specialist 2 -->
+<div class="bg-surface-container/40 p-3 rounded border border-white/5 hover:border-secondary/30 transition-colors flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden border border-white/10">
+<img alt="Dr. Marcus Webb portrait" class="w-full h-full object-cover" data-alt="portrait of a male doctor in lab coat looking professional against a dark clinical background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUzvNDJ-rpqCzz-ftGSrgCo9VksWZrSwsMlgYTWyyd1xHKv6WLN3zGml1LsJE9Uai3TU-AiH2vJv8hu5sM-d69QtwSmnID7swTGMg1qOZ2uOw_WFVUdapZBaoc31d9FK7UUokoyi5PijwdZulz3RZNIzU21I62wfl4BrX6Y6HABoDHf4Ol_KrrtKBNWLLvgo2AXrEASGnHScgyhKPOmJMRwuqvVmFPLyZIJYOifmPIehHA8zxET22TN_2U-c7PxHCVlj3k1M91nxsK"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h4 class="font-body-md text-body-md font-bold text-on-surface">Dr. Marcus Webb</h4>
+<div class="w-2 h-2 rounded-full bg-emerald-500 mt-1"></div>
+</div>
+<p class="font-label-caps text-label-caps text-secondary mt-1">CARDIOLOGIST</p>
+</div>
+</div>
+<!-- Specialist 3 -->
+<div class="bg-surface-container/40 p-3 rounded border border-white/5 hover:border-secondary/30 transition-colors flex items-center gap-4 opacity-60">
+<div class="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden border border-white/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary-container">person</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h4 class="font-body-md text-body-md font-bold text-on-surface">Dr. Elena Rostova</h4>
+<div class="w-2 h-2 rounded-full bg-secondary mt-1"></div>
+</div>
+<p class="font-label-caps text-label-caps text-tertiary-container mt-1">NEUROLOGIST • IN SURGERY</p>
+</div>
+</div>
+<!-- Specialist 4 -->
+<div class="bg-surface-container/40 p-3 rounded border border-white/5 hover:border-secondary/30 transition-colors flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden border border-white/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary-container">person</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h4 class="font-body-md text-body-md font-bold text-on-surface">Dr. James Wilson</h4>
+<div class="w-2 h-2 rounded-full bg-emerald-500 mt-1"></div>
+</div>
+<p class="font-label-caps text-label-caps text-secondary mt-1">ANESTHESIOLOGIST</p>
+</div>
+</div>
+</div>
+<div class="p-4 border-t border-white/5">
+<button class="w-full bg-transparent border border-outline-variant text-on-surface py-2 rounded-DEFAULT font-label-caps text-label-caps hover:bg-surface-container transition-colors">
+                                VIEW FULL ROSTER
+                            </button>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+</body></html>

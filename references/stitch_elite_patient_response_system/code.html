@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Hospital Bed Management - Vanguard Command</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&amp;family=Outfit:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#690005",
+                        "background": "#0c1324",
+                        "on-secondary": "#3c2f00",
+                        "surface-bright": "#33394c",
+                        "surface": "#0c1324",
+                        "tertiary-container": "#8990a8",
+                        "on-primary-fixed-variant": "#930013",
+                        "on-background": "#dce1fb",
+                        "on-tertiary-fixed-variant": "#3f465c",
+                        "on-secondary-container": "#342800",
+                        "secondary": "#e9c349",
+                        "primary-fixed-dim": "#ffb3ad",
+                        "surface-container-highest": "#2e3447",
+                        "secondary-fixed-dim": "#e9c349",
+                        "on-tertiary-fixed": "#131b2e",
+                        "on-surface-variant": "#e4beba",
+                        "surface-container": "#191f31",
+                        "surface-tint": "#ffb3ad",
+                        "on-tertiary-container": "#22293d",
+                        "on-primary-container": "#5c0008",
+                        "on-error-container": "#ffdad6",
+                        "secondary-fixed": "#ffe088",
+                        "primary-container": "#ff5451",
+                        "outline-variant": "#5b403e",
+                        "primary-fixed": "#ffdad7",
+                        "on-secondary-fixed": "#241a00",
+                        "surface-container-low": "#151b2d",
+                        "outline": "#ab8986",
+                        "on-secondary-fixed-variant": "#574500",
+                        "tertiary-fixed": "#dae2fd",
+                        "on-surface": "#dce1fb",
+                        "inverse-on-surface": "#2a3043",
+                        "surface-container-high": "#23293c",
+                        "on-tertiary": "#283044",
+                        "primary": "#ffb3ad",
+                        "surface-container-lowest": "#070d1f",
+                        "surface-variant": "#2e3447",
+                        "tertiary-fixed-dim": "#bec6e0",
+                        "on-primary-fixed": "#410004",
+                        "tertiary": "#bec6e0",
+                        "error-container": "#93000a",
+                        "secondary-container": "#af8d11",
+                        "inverse-primary": "#b91a24",
+                        "inverse-surface": "#dce1fb",
+                        "surface-dim": "#0c1324",
+                        "on-primary": "#68000a",
+                        "error": "#ffb4ab"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin": "40px",
+                        "container-max": "1440px",
+                        "unit": "4px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "h3": ["Outfit"],
+                        "label-caps": ["Inter"],
+                        "h2": ["Outfit"],
+                        "h1": ["Outfit"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "h3": ["24px", { "lineHeight": "1.3", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                        "h2": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "h1": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen antialiased selection:bg-primary-container selection:text-on-primary-container flex">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-full z-50 flex flex-col bg-slate-950/60 backdrop-blur-xl border-r border-red-500/10 shadow-2xl shadow-red-900/20 w-64 hidden md:flex">
+<div class="p-6 border-b border-red-500/10">
+<h1 class="text-red-600 font-black tracking-tighter text-2xl font-h3 text-h3">VANGUARD</h1>
+<p class="font-sans uppercase tracking-wider text-xs font-bold text-red-500 mt-1">Hospital Command</p>
+</div>
+<div class="flex-1 overflow-y-auto py-4 flex flex-col gap-1">
+<a class="flex items-center space-x-3 text-slate-400 px-4 py-3 hover:text-slate-100 hover:bg-slate-800/40 hover:backdrop-blur-2xl transition-all duration-200 font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Overview</span>
+</a>
+<a class="flex items-center space-x-3 bg-red-500/10 text-red-500 border-l-2 border-amber-400 px-4 py-3 hover:bg-slate-800/40 hover:backdrop-blur-2xl transition-all duration-200 Active: scale-95 duration-100 ease-in font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined" data-icon="bed" style="font-variation-settings: 'FILL' 1;">bed</span>
+<span>Beds</span>
+</a>
+<a class="flex items-center space-x-3 text-slate-400 px-4 py-3 hover:text-slate-100 hover:bg-slate-800/40 hover:backdrop-blur-2xl transition-all duration-200 font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined" data-icon="medical_services">medical_services</span>
+<span>Specialists</span>
+</a>
+<a class="flex items-center space-x-3 text-slate-400 px-4 py-3 hover:text-slate-100 hover:bg-slate-800/40 hover:backdrop-blur-2xl transition-all duration-200 font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined" data-icon="assignment">assignment</span>
+<span>Patient Logs</span>
+</a>
+<a class="flex items-center space-x-3 text-slate-400 px-4 py-3 hover:text-slate-100 hover:bg-slate-800/40 hover:backdrop-blur-2xl transition-all duration-200 font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+</div>
+<div class="p-4 border-t border-red-500/10">
+<div class="flex items-center gap-3">
+<img alt="Command Chief Profile" class="w-10 h-10 rounded-full border border-surface-variant object-cover" data-alt="professional portrait of a medical chief in a dark tactical uniform with soft rim lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXy2LVlGZCX6_xOhOGahGv0ouq3NJ4q-dSLp8bX6ruLucUZJIQXoOBuS1i_ZfWpAYod8A3xwp3PVSdH9Ai7BdOB8Ne9PWZS5zOVyKCdhiMinbtBPK_SudR4Rw0PYp-vQtASGZ7Ec0PI5Gx5e5eOC2xkEOezrkElwpHh8b8CGsAPLc6C1ubGuddcCexWE23ks_C3JlGc84f5SOzesUVLWgB2CWKz9zD7ZRtHMjHw1mW4VHFc4bhLKIJgKeuQhU_6BqXGV01aLg9sFFG"/>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface">CMDR. HAYES</p>
+<p class="text-xs text-on-surface-variant opacity-70">Active Duty</p>
+</div>
+</div>
+</div>
+</nav>
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 md:left-64 right-0 h-16 border-b border-red-500/10 flex justify-between items-center px-8 w-full z-40 bg-slate-950/60 backdrop-blur-xl shadow-none">
+<div class="flex items-center gap-4">
+<!-- Mobile Menu Toggle (Hidden on MD+) -->
+<button class="md:hidden text-slate-300 p-2">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="flex items-center">
+<span class="material-symbols-outlined text-slate-300 mr-2 hidden md:block">search</span>
+<input class="bg-transparent border-none text-slate-300 font-sans tracking-tight text-sm font-medium focus:ring-0 placeholder:text-slate-500 hidden md:block" placeholder="Search beds, patients..." type="text"/>
+</div>
+</div>
+<div class="absolute left-1/2 transform -translate-x-1/2 md:hidden">
+<h1 class="text-amber-400 font-bold font-h3 text-h3 tracking-tighter">TACTICAL COMMAND</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-amber-400 font-bold border-l-2 border-amber-400 pl-4 hidden md:block font-h3 text-h3 tracking-tighter">TACTICAL COMMAND</span>
+<button class="text-slate-300 hover:bg-red-500/5 transition-colors p-2 rounded-DEFAULT Focus: border-b-red-500 outline-none">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-slate-300 hover:bg-red-500/5 transition-colors p-2 rounded-DEFAULT Focus: border-b-red-500 outline-none">
+<span class="material-symbols-outlined" data-icon="emergency_home">emergency_home</span>
+</button>
+<button class="text-slate-300 hover:bg-red-500/5 transition-colors p-2 rounded-DEFAULT Focus: border-b-red-500 outline-none md:hidden">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 pt-24 pb-12 px-6 md:px-10 ml-0 md:ml-64 max-w-container-max mx-auto w-full">
+<!-- Dashboard Header Section -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-margin gap-6">
+<div>
+<h2 class="font-h2 text-h2 text-on-surface mb-2">Bed Deployment Grid</h2>
+<p class="font-body-md text-body-md text-on-surface-variant opacity-80">Real-time occupancy and tactical asset tracking.</p>
+</div>
+<div class="flex gap-4">
+<button class="bg-[#0B1120] border border-secondary text-on-surface px-6 py-2 rounded-DEFAULT font-label-caps text-label-caps hover:bg-surface-variant transition-colors backdrop-blur-md bg-opacity-60 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">filter_list</span> Filter
+                </button>
+<button class="bg-primary-container text-on-primary-container px-6 py-2 rounded-DEFAULT font-label-caps text-label-caps hover:bg-primary transition-colors flex items-center gap-2 shadow-lg shadow-red-900/20">
+<span class="material-symbols-outlined text-[18px]">add</span> Deploy Asset
+                </button>
+</div>
+</div>
+<!-- Metric Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-gutter mb-margin">
+<!-- Metric Card 1 -->
+<div class="bg-[#0B1120] bg-opacity-60 backdrop-blur-md border border-red-500/10 rounded-lg p-6 relative overflow-hidden group hover:backdrop-blur-xl transition-all">
+<div class="absolute top-0 left-0 w-2 h-2 border-t-[1px] border-l-[1px] border-secondary"></div>
+<div class="flex justify-between items-start mb-4">
+<div class="text-on-surface-variant font-label-caps text-label-caps flex items-center gap-2">
+<span class="material-symbols-outlined text-red-500 text-[16px]">local_hospital</span> Total ICU
+                    </div>
+<span class="bg-red-500/20 text-red-500 font-label-caps text-label-caps px-2 py-1 rounded-DEFAULT">CRITICAL</span>
+</div>
+<div class="font-h1 text-h1 text-on-surface mb-1">42<span class="text-h3 font-h3 text-on-surface-variant opacity-50">/50</span></div>
+<div class="w-full bg-surface-container h-1 mt-4 rounded-full overflow-hidden">
+<div class="bg-red-500 h-full w-[84%]"></div>
+</div>
+</div>
+<!-- Metric Card 2 -->
+<div class="bg-[#0B1120] bg-opacity-60 backdrop-blur-md border border-red-500/10 rounded-lg p-6 relative overflow-hidden group hover:backdrop-blur-xl transition-all">
+<div class="absolute top-0 left-0 w-2 h-2 border-t-[1px] border-l-[1px] border-secondary"></div>
+<div class="flex justify-between items-start mb-4">
+<div class="text-on-surface-variant font-label-caps text-label-caps flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[16px]">healing</span> Surgical Ward
+                    </div>
+<span class="bg-secondary/20 text-secondary font-label-caps text-label-caps px-2 py-1 rounded-DEFAULT">HIGH LOAD</span>
+</div>
+<div class="font-h1 text-h1 text-on-surface mb-1">89<span class="text-h3 font-h3 text-on-surface-variant opacity-50">/120</span></div>
+<div class="w-full bg-surface-container h-1 mt-4 rounded-full overflow-hidden">
+<div class="bg-secondary h-full w-[74%]"></div>
+</div>
+</div>
+<!-- Metric Card 3 -->
+<div class="bg-[#0B1120] bg-opacity-60 backdrop-blur-md border border-red-500/10 rounded-lg p-6 relative overflow-hidden group hover:backdrop-blur-xl transition-all">
+<div class="absolute top-0 left-0 w-2 h-2 border-t-[1px] border-l-[1px] border-secondary"></div>
+<div class="flex justify-between items-start mb-4">
+<div class="text-on-surface-variant font-label-caps text-label-caps flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[16px]">hotel</span> General Ward
+                    </div>
+<span class="bg-tertiary/20 text-tertiary font-label-caps text-label-caps px-2 py-1 rounded-DEFAULT">STABLE</span>
+</div>
+<div class="font-h1 text-h1 text-on-surface mb-1">210<span class="text-h3 font-h3 text-on-surface-variant opacity-50">/300</span></div>
+<div class="w-full bg-surface-container h-1 mt-4 rounded-full overflow-hidden">
+<div class="bg-tertiary h-full w-[70%]"></div>
+</div>
+</div>
+<!-- Metric Card 4 -->
+<div class="bg-[#0B1120] bg-opacity-60 backdrop-blur-md border border-red-500/10 rounded-lg p-6 relative overflow-hidden group hover:backdrop-blur-xl transition-all">
+<div class="absolute top-0 left-0 w-2 h-2 border-t-[1px] border-l-[1px] border-secondary"></div>
+<div class="flex justify-between items-start mb-4">
+<div class="text-on-surface-variant font-label-caps text-label-caps flex items-center gap-2">
+<span class="material-symbols-outlined text-surface-tint text-[16px]">cleaning_services</span> Turnover
+                    </div>
+</div>
+<div class="font-h1 text-h1 text-on-surface mb-1">14</div>
+<p class="font-body-md text-body-md text-on-surface-variant opacity-80 mt-2">Beds currently in prep phase.</p>
+</div>
+</div>
+<!-- Section Title -->
+<h3 class="font-h3 text-h3 text-on-surface mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-red-500">grid_view</span> Tactical Bed Layout - ICU Alpha
+        </h3>
+<!-- Bed Grid (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-gutter">
+<!-- Bed Card: Occupied Critical -->
+<div class="bg-[#0B1120] bg-opacity-60 backdrop-blur-md border border-red-500/30 rounded-lg p-5 relative group hover:border-red-500 transition-colors">
+<div class="absolute top-0 right-0 w-16 h-16 bg-red-500/10 rounded-bl-full -z-10 blur-xl"></div>
+<div class="flex justify-between items-start mb-4 border-b border-surface-variant pb-3">
+<div>
+<div class="font-label-caps text-label-caps text-on-surface-variant opacity-70 mb-1">BED A-01</div>
+<div class="font-h3 text-h3 text-on-surface">ICU-Vent</div>
+</div>
+<span class="bg-red-500/20 text-red-500 font-label-caps text-label-caps px-2 py-1 rounded-DEFAULT border border-red-500/50">CRITICAL</span>
+</div>
+<div class="space-y-3 mb-4">
+<div class="flex justify-between text-sm">
+<span class="text-on-surface-variant opacity-70">Patient ID:</span>
+<span class="text-on-surface font-medium">#PT-8842-X</span>
+</div>
+<div class="flex justify-between text-sm">
+<span class="text-on-surface-variant opacity-70">Admitted:</span>
+<span class="text-on-surface font-medium">04:30 hrs</span>
+</div>
+<div class="flex items-center gap-2 mt-2 pt-2 border-t border-surface-variant/50">
+<img alt="Attending Doctor" class="w-6 h-6 rounded-full object-cover" data-alt="close up of doctor in scrubs with serious expression dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhZv4OGl20Wqmpo5zXlsg4eIlo-2ipH-lQMsAB2qfdf_T_xuS1QE6DqP2d5pCBBLD5awKuIL7phPBhYqb0IO9C1ugrzQqalmwe6XwpIo6PXcsEGeq5IMT9UjZXHKS0tTqYFRogvRhURJn7xvJTz-biNAq_PFtJY3MJMQiFW4eNW3WM6Iz1SdSGkJTC0zK4_VbPf8euny95BmrsWCpzoJ2qavbg7p1g0jUA-zDcWZpwvOeGMRmH3lUZWO6pL484PHf5LBHMapob1TEa"/>
+<span class="text-sm text-on-surface-variant">Dr. Vance (Attending)</span>
+</div>
+</div>
+<!-- Mini Chart area representing vitals -->
+<div class="h-12 w-full flex items-end gap-1 opacity-80">
+<div class="w-full h-1/2 bg-gradient-to-t from-red-900/40 to-transparent border-t border-red-500 relative">
+<div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjMDAwIiBmaWxsLW9wYWNpdHk9IjAiLz4KPGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIi8+Cjwvc3ZnPg==')]"></div>
+</div>
+</div>
+</div>
+<!-- Bed Card: Occupied Stable -->
+<div class="bg-[#0B1120] bg-opacity-60 backdrop-blur-md border border-surface-variant rounded-lg p-5 relative group hover:border-tertiary transition-colors">
+<div class="flex justify-between items-start mb-4 border-b border-surface-variant pb-3">
+<div>
+<div class="font-label-caps text-label-caps text-on-surface-variant opacity-70 mb-1">BED A-02</div>
+<div class="font-h3 text-h3 text-on-surface">ICU-Standard</div>
+</div>
+<span class="bg-tertiary/20 text-tertiary font-label-caps text-label-caps px-2 py-1 rounded-DEFAULT border border-tertiary/50">STABLE</span>
+</div>
+<div class="space-y-3 mb-4">
+<div class="flex justify-between text-sm">
+<span class="text-on-surface-variant opacity-70">Patient ID:</span>
+<span class="text-on-surface font-medium">#PT-9102-M</span>
+</div>
+<div class="flex justify-between text-sm">
+<span class="text-on-surface-variant opacity-70">Admitted:</span>
+<span class="text-on-surface font-medium">Yesterday</span>
+</div>
+<div class="flex items-center gap-2 mt-2 pt-2 border-t border-surface-variant/50">
+<img alt="Attending Nurse" class="w-6 h-6 rounded-full object-cover" data-alt="portrait of a nurse looking focused in a dimly lit hospital corridor" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-sXrd7Ssy0ZLuN_EhXLAnHkgQb3cUy1VhJs_ms8Oq3U0ipJD6SHc0jO9IoRRXCV5BOHFxGeCKOSdGKRkl1f1TgxMIHoYmNRb6VP6J4_aPR3GadvTlWcLcFvKR8LRkJjtjJ6xqqsYA7NZ6q56X-8x4QTzfaJjcspwlznrrZwbfQyeUcJxyPUadstOhxYFMvYY_1bZvrs0JcqfvBUTRDrGLECktgL9HRpi_OeFgqS4SCZehiG6RnkauazjChu8tXR6b-ReHMhk0NCAi"/>
+<span class="text-sm text-on-surface-variant">RN. Torres (Primary)</span>
+</div>
+</div>
+<div class="h-12 w-full flex items-center justify-center opacity-50 border-t border-surface-variant/30 mt-auto">
+<span class="material-symbols-outlined text-tertiary">monitor_heart</span>
+</div>
+</div>
+<!-- Bed Card: Cleaning -->
+<div class="bg-[#0B1120] bg-opacity-40 backdrop-blur-sm border border-secondary/20 rounded-lg p-5 relative group border-dashed">
+<div class="flex justify-between items-start mb-4 border-b border-surface-variant/50 pb-3">
+<div>
+<div class="font-label-caps text-label-caps text-on-surface-variant opacity-50 mb-1">BED A-03</div>
+<div class="font-h3 text-h3 text-on-surface opacity-70">ICU-Iso</div>
+</div>
+<span class="bg-secondary/10 text-secondary font-label-caps text-label-caps px-2 py-1 rounded-DEFAULT border border-secondary/30 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">autorenew</span> PREP
+                    </span>
+</div>
+<div class="flex flex-col items-center justify-center py-6 text-on-surface-variant opacity-60">
+<span class="material-symbols-outlined text-4xl mb-2 text-secondary">cleaning_services</span>
+<p class="font-label-caps text-label-caps text-center">Sanitation in progress<br/>Est. 15 mins</p>
+</div>
+</div>
+<!-- Bed Card: Available -->
+<div class="bg-surface-container-highest bg-opacity-20 backdrop-blur-sm border border-surface-variant rounded-lg p-5 relative group hover:border-surface-tint transition-colors flex flex-col justify-center items-center cursor-pointer">
+<div class="absolute top-4 left-4">
+<div class="font-label-caps text-label-caps text-on-surface-variant opacity-50">BED A-04</div>
+</div>
+<div class="absolute top-4 right-4">
+<span class="bg-surface-tint/10 text-surface-tint font-label-caps text-label-caps px-2 py-1 rounded-DEFAULT border border-surface-tint/30">READY</span>
+</div>
+<div class="w-16 h-16 rounded-full bg-surface-variant/30 flex items-center justify-center mb-4 mt-8 group-hover:bg-surface-tint/20 transition-colors">
+<span class="material-symbols-outlined text-surface-tint text-3xl">add</span>
+</div>
+<p class="font-h3 text-h3 text-on-surface opacity-80 text-center">Assign Patient</p>
+</div>
+<!-- Bed Card: Occupied Priority -->
+<div class="bg-[#0B1120] bg-opacity-60 backdrop-blur-md border border-secondary/30 rounded-lg p-5 relative group hover:border-secondary transition-colors">
+<div class="absolute top-0 right-0 w-16 h-16 bg-secondary/10 rounded-bl-full -z-10 blur-xl"></div>
+<div class="flex justify-between items-start mb-4 border-b border-surface-variant pb-3">
+<div>
+<div class="font-label-caps text-label-caps text-on-surface-variant opacity-70 mb-1">BED A-05</div>
+<div class="font-h3 text-h3 text-on-surface">ICU-Standard</div>
+</div>
+<span class="bg-secondary/20 text-secondary font-label-caps text-label-caps px-2 py-1 rounded-DEFAULT border border-secondary/50">PRIORITY</span>
+</div>
+<div class="space-y-3 mb-4">
+<div class="flex justify-between text-sm">
+<span class="text-on-surface-variant opacity-70">Patient ID:</span>
+<span class="text-on-surface font-medium">#PT-4421-Y</span>
+</div>
+<div class="flex justify-between text-sm">
+<span class="text-on-surface-variant opacity-70">Admitted:</span>
+<span class="text-on-surface font-medium">08:15 hrs</span>
+</div>
+<div class="flex items-center gap-2 mt-2 pt-2 border-t border-surface-variant/50">
+<img alt="Attending Doctor" class="w-6 h-6 rounded-full object-cover" data-alt="professional portrait of a confident male doctor in modern hospital setting dark tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAIIYOkAchecGbAhMfg636_wWpzb8OYsRwiCiWsAKcpStFlZex1VFVaE9kQN0jV3x6TKMSdE6vOD5JTd8ixwpdjFxbvvYmvr4DiRwSRcPI59x9llmkFd5etH_q2Dt8-HeNd5ZahyJfV-C0b5UsuI2QGmCNQv5lchApNP61g6K1IzToW-05F8CfFD0TfvtK1kOvUgOANc9EFburlvtncYFvZluhmKMC0BtFxaPryV5ofe5u7nCA3Rz1NkhY9p46Jbrn3vPT5qRm9eOj"/>
+<span class="text-sm text-on-surface-variant">Dr. Chen (Specialist)</span>
+</div>
+</div>
+<div class="h-12 w-full flex items-end gap-1 opacity-80">
+<div class="w-full h-[30%] bg-gradient-to-t from-secondary/40 to-transparent border-t border-secondary relative"></div>
+</div>
+</div>
+<!-- Bed Card: Occupied Stable -->
+<div class="bg-[#0B1120] bg-opacity-60 backdrop-blur-md border border-surface-variant rounded-lg p-5 relative group hover:border-tertiary transition-colors">
+<div class="flex justify-between items-start mb-4 border-b border-surface-variant pb-3">
+<div>
+<div class="font-label-caps text-label-caps text-on-surface-variant opacity-70 mb-1">BED A-06</div>
+<div class="font-h3 text-h3 text-on-surface">ICU-Standard</div>
+</div>
+<span class="bg-tertiary/20 text-tertiary font-label-caps text-label-caps px-2 py-1 rounded-DEFAULT border border-tertiary/50">STABLE</span>
+</div>
+<div class="space-y-3 mb-4">
+<div class="flex justify-between text-sm">
+<span class="text-on-surface-variant opacity-70">Patient ID:</span>
+<span class="text-on-surface font-medium">#PT-1129-L</span>
+</div>
+<div class="flex justify-between text-sm">
+<span class="text-on-surface-variant opacity-70">Admitted:</span>
+<span class="text-on-surface font-medium">2 Days Ago</span>
+</div>
+<div class="flex items-center gap-2 mt-2 pt-2 border-t border-surface-variant/50">
+<div class="w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center text-xs text-on-surface">JS</div>
+<span class="text-sm text-on-surface-variant">RN. Smith (Relief)</span>
+</div>
+</div>
+<div class="h-12 w-full flex items-center justify-center opacity-50 border-t border-surface-variant/30 mt-auto">
+<span class="material-symbols-outlined text-tertiary">monitor_heart</span>
+</div>
+</div>
+</div>
+</main>
+</body></html>

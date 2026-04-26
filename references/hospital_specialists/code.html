@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Specialist Directory - Tactical Command</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&amp;family=Outfit:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#690005",
+                        "background": "#0c1324",
+                        "on-secondary": "#3c2f00",
+                        "surface-bright": "#33394c",
+                        "surface": "#0c1324",
+                        "tertiary-container": "#8990a8",
+                        "on-primary-fixed-variant": "#930013",
+                        "on-background": "#dce1fb",
+                        "on-tertiary-fixed-variant": "#3f465c",
+                        "on-secondary-container": "#342800",
+                        "secondary": "#e9c349",
+                        "primary-fixed-dim": "#ffb3ad",
+                        "surface-container-highest": "#2e3447",
+                        "secondary-fixed-dim": "#e9c349",
+                        "on-tertiary-fixed": "#131b2e",
+                        "on-surface-variant": "#e4beba",
+                        "surface-container": "#191f31",
+                        "surface-tint": "#ffb3ad",
+                        "on-tertiary-container": "#22293d",
+                        "on-primary-container": "#5c0008",
+                        "on-error-container": "#ffdad6",
+                        "secondary-fixed": "#ffe088",
+                        "primary-container": "#ff5451",
+                        "outline-variant": "#5b403e",
+                        "primary-fixed": "#ffdad7",
+                        "on-secondary-fixed": "#241a00",
+                        "surface-container-low": "#151b2d",
+                        "outline": "#ab8986",
+                        "on-secondary-fixed-variant": "#574500",
+                        "tertiary-fixed": "#dae2fd",
+                        "on-surface": "#dce1fb",
+                        "inverse-on-surface": "#2a3043",
+                        "surface-container-high": "#23293c",
+                        "on-tertiary": "#283044",
+                        "primary": "#ffb3ad",
+                        "surface-container-lowest": "#070d1f",
+                        "surface-variant": "#2e3447",
+                        "tertiary-fixed-dim": "#bec6e0",
+                        "on-primary-fixed": "#410004",
+                        "tertiary": "#bec6e0",
+                        "error-container": "#93000a",
+                        "secondary-container": "#af8d11",
+                        "inverse-primary": "#b91a24",
+                        "inverse-surface": "#dce1fb",
+                        "surface-dim": "#0c1324",
+                        "on-primary": "#68000a",
+                        "error": "#ffb4ab"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin": "40px",
+                        "container-max": "1440px",
+                        "unit": "4px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "h3": ["Outfit"],
+                        "label-caps": ["Inter"],
+                        "h2": ["Outfit"],
+                        "h1": ["Outfit"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "h3": ["24px", {"lineHeight": "1.3", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                        "label-caps": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                        "h2": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "h1": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background-color: rgba(11, 17, 32, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 84, 81, 0.1);
+        }
+        .glow-critical {
+            background-color: rgba(255, 84, 81, 0.15);
+            color: #ffb3ad;
+            border: 1px solid rgba(255, 84, 81, 0.3);
+        }
+        .glow-priority {
+            background-color: rgba(233, 195, 73, 0.15);
+            color: #e9c349;
+            border: 1px solid rgba(233, 195, 73, 0.3);
+        }
+        .glow-standby {
+            background-color: rgba(220, 225, 251, 0.1);
+            color: #dce1fb;
+            border: 1px solid rgba(220, 225, 251, 0.2);
+        }
+        .tactical-card {
+            position: relative;
+            transition: all 0.2s ease-in-out;
+        }
+        .tactical-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 8px;
+            height: 8px;
+            border-top: 2px solid #e9c349;
+            border-left: 2px solid #e9c349;
+            opacity: 0.7;
+        }
+        .tactical-card:hover {
+            backdrop-filter: blur(24px);
+            border: 0.5px solid #e9c349;
+            transform: translateY(-2px);
+        }
+        .tactical-input {
+            background-color: rgba(11, 17, 32, 0.8);
+            border: none;
+            border-bottom: 2px solid rgba(255, 84, 81, 0.2);
+            color: #dce1fb;
+            transition: border-color 0.2s;
+        }
+        .tactical-input:focus {
+            outline: none;
+            border-bottom-color: #ff5451;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex antialiased">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-full z-50 flex flex-col h-screen w-64 border-r border-red-500/10 shadow-2xl shadow-red-900/20 bg-slate-950/60 backdrop-blur-xl hidden md:flex">
+<div class="p-6 border-b border-red-500/10 flex items-center space-x-4">
+<img alt="Command Chief Profile" class="w-12 h-12 rounded-full border-2 border-red-500/30 object-cover" data-alt="Portrait of a serious medical commander in dark uniform against a neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyBse3-ZZJaWpdqwreEeqFoZuBnavVujQRepx6IGnnUCDqPOzfgjOhc8stODLLmVTd1YhP5kZOml6K4_VzqF0XEZcyIMTB-sVNIpLBQW5eLagGooVakA89EUMWCI_f6PAyFRdyKRqFK8NV-rP8wcpuMpybB17u2TjGdDGdW8dk6M-67iyVF313pzxhpDy7U6exmst-cb3IcAbi7yCwBHVb6ecWgobU9cp64KeowltUPkJL5y_clIBRAZpaCkUWyIv0V4MzgVZUxpB_"/>
+<div>
+<div class="text-red-600 font-black tracking-tighter text-2xl font-h3 text-h3 leading-none">VANGUARD</div>
+<div class="text-slate-400 text-[10px] uppercase tracking-widest font-label-caps mt-1">Hospital Command</div>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto py-4 font-sans uppercase tracking-wider text-xs font-bold">
+<a class="flex items-center space-x-3 text-slate-400 px-4 py-3 hover:text-slate-100 hover:bg-slate-800/40 hover:backdrop-blur-2xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span>Overview</span>
+</a>
+<a class="flex items-center space-x-3 text-slate-400 px-4 py-3 hover:text-slate-100 hover:bg-slate-800/40 hover:backdrop-blur-2xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">bed</span>
+<span>Beds</span>
+</a>
+<a class="flex items-center space-x-3 bg-red-500/10 text-red-500 border-l-2 border-amber-400 px-4 py-3 Active: scale-95 duration-100 ease-in" href="#">
+<span class="material-symbols-outlined text-[20px]">medical_services</span>
+<span>Specialists</span>
+</a>
+<a class="flex items-center space-x-3 text-slate-400 px-4 py-3 hover:text-slate-100 hover:bg-slate-800/40 hover:backdrop-blur-2xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">assignment</span>
+<span>Patient Logs</span>
+</a>
+<a class="flex items-center space-x-3 text-slate-400 px-4 py-3 hover:text-slate-100 hover:bg-slate-800/40 hover:backdrop-blur-2xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span>Settings</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 md:ml-64 flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-8 w-full h-16 z-40 fixed top-0 left-0 md:left-64 right-0 border-b border-red-500/10 shadow-none bg-slate-950/60 backdrop-blur-xl">
+<div class="flex items-center flex-1">
+<div class="text-amber-400 font-bold border-l-2 border-amber-400 pl-4 font-sans tracking-tight text-sm font-medium mr-8">
+                    TACTICAL COMMAND
+                </div>
+<div class="relative w-full max-w-md hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">search</span>
+<input class="tactical-input w-full pl-10 pr-4 py-2 text-sm rounded-DEFAULT focus: border-b-red-500 outline-none" placeholder="Search Specialists..." type="text"/>
+</div>
+</div>
+<div class="flex items-center space-x-2">
+<button class="p-2 text-slate-300 hover:bg-red-500/5 transition-colors rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<button class="p-2 text-slate-300 hover:bg-red-500/5 transition-colors rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">emergency_home</span>
+</button>
+<button class="p-2 text-slate-300 hover:bg-red-500/5 transition-colors rounded-full flex items-center justify-center md:hidden">
+<span class="material-symbols-outlined text-[20px]">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 mt-16 p-gutter md:p-margin max-w-container-max mx-auto w-full">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 space-y-4 md:space-y-0">
+<div>
+<h1 class="font-h1 text-h1 text-on-background">Specialist Roster</h1>
+<p class="font-body-md text-body-md text-tertiary mt-2">Live tracking of available medical personnel.</p>
+</div>
+<div class="flex space-x-3">
+<button class="flex items-center space-x-2 bg-surface-container-high border border-outline-variant text-on-surface px-4 py-2 rounded-DEFAULT hover:bg-surface-bright transition-colors font-label-caps text-label-caps">
+<span class="material-symbols-outlined text-[16px]">filter_list</span>
+<span>Filter</span>
+</button>
+<button class="flex items-center space-x-2 bg-primary-container text-on-primary-container px-4 py-2 rounded-DEFAULT hover:opacity-90 transition-opacity font-label-caps text-label-caps">
+<span class="material-symbols-outlined text-[16px]">add</span>
+<span>Request Consult</span>
+</button>
+</div>
+</div>
+<!-- Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Summary Card -->
+<div class="col-span-1 md:col-span-12 lg:col-span-4 glass-panel rounded-lg p-6 flex flex-col justify-between min-h-[200px]">
+<div>
+<h2 class="font-h3 text-h3 text-on-background mb-4">Availability Overview</h2>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<div class="font-h2 text-h2 text-primary">12</div>
+<div class="font-label-caps text-label-caps text-tertiary uppercase mt-1">On Call</div>
+</div>
+<div>
+<div class="font-h2 text-h2 text-secondary">4</div>
+<div class="font-label-caps text-label-caps text-tertiary uppercase mt-1">In Surgery</div>
+</div>
+<div>
+<div class="font-h2 text-h2 text-on-surface">8</div>
+<div class="font-label-caps text-label-caps text-tertiary uppercase mt-1">Standby</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Roster Section -->
+<div class="col-span-1 md:col-span-12 lg:col-span-8 flex flex-col space-y-6">
+<h3 class="font-h3 text-h3 text-on-background border-b border-outline-variant pb-2 inline-block">Trauma &amp; Surgery</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<!-- Specialist Card 1 -->
+<div class="glass-panel tactical-card rounded-lg p-5 flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center overflow-hidden">
+<img alt="Dr. Sarah Chen" class="w-full h-full object-cover" data-alt="Portrait of a female surgeon in scrubs looking focused in a clinical setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHOvdBAdXvVnL6oj-FEfWdDTbWDD53Ik8A-0Nt56nZtu7LtgDlg0k249zVIOlTbxYurVOvkdwAeCsUIKUzipYVSQYZKqXWqyuEm5qfObEWla-KGn5qh3o6UoVU9LEzVwXoG97DU9j5q0IX2EjA_CtcOc1kzKv90nkbUJf76FzpDtmdm6mMuKlWm0bPdXKeP1mu44WOV-svdPAxwrxF2T81HaKbwiSsDmxQ8CxvEe1Z-jEHLft5mBYi_FJDo_SGeV66Scf14C2w4dbf"/>
+</div>
+<div>
+<div class="font-body-lg text-body-lg font-bold text-on-background leading-tight">Dr. Sarah Chen</div>
+<div class="font-label-caps text-label-caps text-primary uppercase mt-1">Trauma Surgeon</div>
+</div>
+</div>
+<span class="px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider glow-critical flex items-center space-x-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+<span>OR 3</span>
+</span>
+</div>
+<div class="mt-auto pt-4 border-t border-outline-variant flex justify-between items-center">
+<div class="text-sm text-tertiary flex items-center space-x-1">
+<span class="material-symbols-outlined text-[16px]">timer</span>
+<span>Est. 45m remaining</span>
+</div>
+<div class="flex space-x-2">
+<button class="p-1.5 rounded bg-surface-container-highest hover:bg-surface-bright text-on-surface transition-colors" title="Page">
+<span class="material-symbols-outlined text-[18px]">pages</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Specialist Card 2 -->
+<div class="glass-panel tactical-card rounded-lg p-5 flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center overflow-hidden">
+<img alt="Dr. Marcus Webb" class="w-full h-full object-cover" data-alt="Portrait of a male doctor in dark scrubs standing in a hospital corridor" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCW6sOHrN6bIFHEU4xKkBHVNXuhDGtr2VdD0Z6t7w00yG0ePuqSE37h6dXqTGVPlU9nqONctbAqAhoklM5wuTeRhn8ZYzA0ceM3gag-01lutdGta9QD_H8hNu3Fzgb0TI0w3X-EBt2Nw6IeT_WEHdwwW5pOGW5YciDWWsWIBD9Yk5yVng2HvEYvUaSMMpX__RTjIF0l0Hz3rE3Nhz3Sl15QhC_0XFMCTxRxvRu7nOM27eTpFj0POqSCxFWCqCk3e_To-V96XK7Vx0Ro"/>
+</div>
+<div>
+<div class="font-body-lg text-body-lg font-bold text-on-background leading-tight">Dr. Marcus Webb</div>
+<div class="font-label-caps text-label-caps text-secondary uppercase mt-1">Neurosurgeon</div>
+</div>
+</div>
+<span class="px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider glow-priority">On Call</span>
+</div>
+<div class="mt-auto pt-4 border-t border-outline-variant flex justify-between items-center">
+<div class="text-sm text-tertiary flex items-center space-x-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+<span>ICU East Wing</span>
+</div>
+<div class="flex space-x-2">
+<button class="p-1.5 rounded bg-surface-container-highest hover:bg-surface-bright text-on-surface transition-colors" title="Message">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+</button>
+<button class="p-1.5 rounded bg-primary-container text-on-primary-container hover:opacity-90 transition-opacity" title="Urgent Page">
+<span class="material-symbols-outlined text-[18px]">campaign</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<h3 class="font-h3 text-h3 text-on-background border-b border-outline-variant pb-2 inline-block mt-8">Cardiology</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<!-- Specialist Card 3 -->
+<div class="glass-panel tactical-card rounded-lg p-5 flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-tertiary">person</span>
+</div>
+<div>
+<div class="font-body-lg text-body-lg font-bold text-on-background leading-tight">Dr. Elena Rostova</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant uppercase mt-1">Cardiologist</div>
+</div>
+</div>
+<span class="px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider glow-standby">Standby</span>
+</div>
+<div class="mt-auto pt-4 border-t border-outline-variant flex justify-between items-center">
+<div class="text-sm text-tertiary flex items-center space-x-1">
+<span class="material-symbols-outlined text-[16px]">home</span>
+<span>Off-site (15m ETA)</span>
+</div>
+<div class="flex space-x-2">
+<button class="p-1.5 rounded bg-surface-container-highest hover:bg-surface-bright text-on-surface transition-colors" title="Message">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>
