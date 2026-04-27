@@ -16,7 +16,7 @@ export function PublicFooter() {
           <Link className="text-slate-500 hover:text-primary transition-colors" href="#">Contact Us</Link>
         </div>
         <div className="text-xs font-medium uppercase tracking-wider text-slate-500 text-center md:text-right">
-          &copy; 2026 Omoluabi Verify. All rights reserved.
+          &copy; 2026 Omoluabi Labs. All rights reserved.
         </div>
       </div>
     </footer>
